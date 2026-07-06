@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://pdqctokjjk66"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x7p2l"]
+size = Vector2(66, 74)
+
+[node name="Player" type="CharacterBody2D" unique_id=1213999816]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2106856220]
+position = Vector2(23, 27)
+shape = SubResource("RectangleShape2D_x7p2l")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1100170800]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1777852088]
