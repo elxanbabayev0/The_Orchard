@@ -7,7 +7,10 @@ UI_PRICE,Price: %d
 UI_OWNED,You have: %d
 UI_SELL,Sell
 UI_CLOSE,Close
-UI_MERCHANT_BUYS_NOTHING,This merchant doesn't buy anything.
+UI_MERCHANT_NOTHING_TO_TRADE,This merchant has nothing to trade.
+UI_TRADE_SELL_HEADER,Sell to %s
+UI_TRADE_BUY_HEADER,Buy from %s
+UI_BUY,Buy
 ITEM_GILAS,Sweet Cherry
 ITEM_GILAS_DESC,"Sweet, dark red cherries."
 TREE_GILAS,Sweet Cherry Tree

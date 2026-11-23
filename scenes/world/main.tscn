@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/money_display.tscn" id="8_moneydisplay"]
 [ext_resource type="PackedScene" path="res://scenes/npc/merchant.tscn" id="9_merchant"]
 [ext_resource type="Resource" path="res://scenes/items/types/gilas.tres" id="10_gilasitem"]
-[ext_resource type="PackedScene" path="res://scenes/ui/sell_window.tscn" id="11_sellwindow"]
+[ext_resource type="PackedScene" path="res://scenes/ui/trade_window.tscn" id="11_tradewindow"]
 [ext_resource type="Resource" path="res://scenes/trees/types/alca.tres" id="12_alca"]
 [ext_resource type="Resource" path="res://scenes/items/types/alca.tres" id="13_alcaitem"]
 [ext_resource type="Resource" path="res://scenes/trees/types/visne.tres" id="14_visne"]
@@ -19,6 +19,11 @@
 [ext_resource type="Resource" path="res://scenes/items/types/tut.tres" id="17_tutitem"]
 [ext_resource type="Resource" path="res://scenes/trees/types/albali.tres" id="18_albali"]
 [ext_resource type="Resource" path="res://scenes/items/types/albali.tres" id="19_albaliitem"]
+[ext_resource type="Resource" path="res://scenes/items/types/gilas_sapling.tres" id="20_gilassapling"]
+[ext_resource type="Resource" path="res://scenes/items/types/alca_sapling.tres" id="21_alcasapling"]
+[ext_resource type="Resource" path="res://scenes/items/types/visne_sapling.tres" id="22_visnesapling"]
+[ext_resource type="Resource" path="res://scenes/items/types/tut_sapling.tres" id="23_tutsapling"]
+[ext_resource type="Resource" path="res://scenes/items/types/albali_sapling.tres" id="24_albalisapling"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -102,6 +107,7 @@ y_sort_enabled = true
 [node name="Bruno" parent="Entities/NPCs" instance=ExtResource("9_merchant")]
 position = Vector2(-288, -64)
 buys = Array[Resource]([ExtResource("10_gilasitem"), ExtResource("13_alcaitem"), ExtResource("15_visneitem"), ExtResource("17_tutitem"), ExtResource("19_albaliitem")])
+sells = Array[Resource]([ExtResource("20_gilassapling"), ExtResource("21_alcasapling"), ExtResource("22_visnesapling"), ExtResource("23_tutsapling"), ExtResource("24_albalisapling")])
 
 [node name="Player" parent="Entities" instance=ExtResource("1_player")]
 
@@ -128,6 +134,6 @@ script = ExtResource("4_clocklabel")
 
 [node name="ItemPopups" parent="UI" instance=ExtResource("7_itempopups")]
 
-[node name="SellWindow" parent="UI" instance=ExtResource("11_sellwindow")]
+[node name="TradeWindow" parent="UI" instance=ExtResource("11_tradewindow")]
 
-[connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/SellWindow" method="open"]
+[connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/TradeWindow" method="open"]

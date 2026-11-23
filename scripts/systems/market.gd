@@ -66,6 +66,26 @@ func sell(item: ItemData, amount: int) -> int:
 	return total
 
 
+## Shop price of ONE unit the player can buy (e.g. a sapling). Fixed for now.
+## 0 = this item cannot be bought.
+func get_buy_price(item: ItemData) -> int:
+	if item == null:
+		return 0
+	return item.base_price
+
+
+## Buys items from a merchant into the Inventory.
+## All-or-nothing: returns false (and nothing changes) if the player cannot pay.
+func buy(item: ItemData, amount: int) -> bool:
+	var price := get_buy_price(item)
+	if amount <= 0 or price <= 0:
+		return false
+	if not Wallet.spend_money(price * amount):
+		return false
+	Inventory.add_item(item, amount)
+	return true
+
+
 ## Today's random factor for an item (e.g. 1.15 = 15% above the base price).
 ## Useful for the UI to show if today is a good or bad day to sell.
 func get_daily_factor(item: ItemData) -> float:

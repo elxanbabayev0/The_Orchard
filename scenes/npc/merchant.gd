@@ -4,15 +4,17 @@ extends StaticBody2D
 ## stall to trade. (Decision: for now the merchant is always on the farm,
 ## in a fixed spot.) The first merchant is Bruno.
 ##
-## Which items this merchant buys is set in the Inspector (`buys`), so
-## future buyers with their own tastes can reuse this scene.
+## What this merchant buys and sells is set in the Inspector (`buys`, `sells`),
+## so future merchants with their own goods can reuse this scene.
 
-## Emitted when the player wants to trade. Connected to SellWindow.open in main.tscn.
+## Emitted when the player wants to trade. Connected to TradeWindow.open in main.tscn.
 signal trade_requested(merchant: Merchant)
 
 @export var display_name: String = "Bruno"
-## Items this merchant is willing to buy.
+## Items this merchant is willing to buy from the player (e.g. fruit).
 @export var buys: Array[ItemData] = []
+## Items this merchant sells to the player (e.g. saplings).
+@export var sells: Array[ItemData] = []
 
 @onready var name_label: Label = $NameLabel
 
