@@ -47,7 +47,7 @@ func get_sell_total(item: ItemData, amount: int) -> int:
 	var total := 0
 	var saturation := _get_saturation(item)
 	for i in amount:
-		total += _unit_price(item, saturation + i * _saturation_per_unit())
+		total += _unit_price(item, saturation + i * _saturation_per_unit(item))
 	return total
 
 
@@ -62,7 +62,7 @@ func sell(item: ItemData, amount: int) -> int:
 		return 0
 	Wallet.add_money(total)
 	GameEvents.item_sold.emit(item, amount, total) # XP, Oona's tasks...
-	_saturation[item.id] = _get_saturation(item) + amount * _saturation_per_unit()
+	_saturation[item.id] = _get_saturation(item) + amount * _saturation_per_unit(item)
 	prices_changed.emit(item)
 	return total
 
@@ -110,9 +110,10 @@ func _unit_price(item: ItemData, saturation: float) -> int:
 	return maxi(1, roundi(price))
 
 
-## How much one sold unit lowers the price. Skill: "selling lowers prices slower".
-func _saturation_per_unit() -> float:
-	return maxf(0.0, 1.0 - Characters.get_bonus(SkillData.Effect.PRICE_DROP))
+## How much one sold unit lowers the price: the item's own factor (e.g. Midnight
+## Morello 0.5) × the skill "selling lowers prices slower" (e.g. Elena).
+func _saturation_per_unit(item: ItemData) -> float:
+	return item.price_drop_factor * maxf(0.0, 1.0 - Characters.get_bonus(SkillData.Effect.PRICE_DROP))
 
 
 func _get_saturation(item: ItemData) -> float:

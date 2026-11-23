@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scenes/items/item_data.gd" id="1_itemdata"]
+
+[sub_resource type="Gradient" id="Gradient_icon"]
+colors = PackedColorArray(0.12, 0.04, 0.1, 1, 0.2, 0.05, 0.12, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_icon"]
+gradient = SubResource("Gradient_icon")
+width = 48
+height = 48
+
+[resource]
+script = ExtResource("1_itemdata")
+id = &"midnight_albali"
+display_name = "ITEM_MIDNIGHT_ALBALI"
+category = 0
+icon = SubResource("GradientTexture2D_icon")
+description = "ITEM_MIDNIGHT_ALBALI_DESC"
+base_price = 20
+price_drop_factor = 0.5
+rare = true

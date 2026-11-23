@@ -101,3 +101,18 @@ QUEST_GOAL_GROW_SAPLINGS_ONE,Grow a sapling into a fruit tree
 QUEST_GOAL_GROW_SAPLINGS_ITEM_ONE,Grow a sapling into a fruit tree (%s)
 QUEST_GOAL_HAVE_TREES_ONE,Have a fruit tree in your orchard
 QUEST_GOAL_HAVE_TREES_ITEM_ONE,Have a %s tree
+ITEM_GOLDEN_GILAS,Golden Sweet Cherry
+ITEM_GOLDEN_GILAS_DESC,"Sweet yellow cherries with a red blush."
+TREE_GOLDEN_GILAS,Golden Sweet Cherry Tree
+ITEM_GOLDEN_GILAS_SAPLING,Golden Sweet Cherry Sapling
+ITEM_GOLDEN_GILAS_SAPLING_DESC,Plant it to grow a Golden Sweet Cherry Tree.
+ITEM_SNOW_TUT,Snow Mulberry
+ITEM_SNOW_TUT_DESC,"Pale, honey-sweet white mulberries."
+TREE_SNOW_TUT,Snow Mulberry Tree
+ITEM_SNOW_TUT_SAPLING,Snow Mulberry Sapling
+ITEM_SNOW_TUT_SAPLING_DESC,Plant it to grow a Snow Mulberry Tree.
+ITEM_MIDNIGHT_ALBALI,Midnight Morello
+ITEM_MIDNIGHT_ALBALI_DESC,"Almost black, rich sour cherries."
+TREE_MIDNIGHT_ALBALI,Midnight Morello Tree
+ITEM_MIDNIGHT_ALBALI_SAPLING,Midnight Morello Sapling
+ITEM_MIDNIGHT_ALBALI_SAPLING_DESC,Plant it to grow a Midnight Morello Tree.

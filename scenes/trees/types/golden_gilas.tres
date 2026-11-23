@@ -1,0 +1,60 @@
+[gd_resource type="Resource" script_class="TreeData" format=3]
+
+[ext_resource type="Script" path="res://scenes/trees/tree_data.gd" id="1_treedata"]
+[ext_resource type="Resource" path="res://scenes/items/types/golden_gilas.tres" id="2_gilasitem"]
+
+[sub_resource type="Gradient" id="Gradient_sapling"]
+colors = PackedColorArray(0.6, 0.8, 0.4, 1, 0.6, 0.8, 0.4, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_sapling"]
+gradient = SubResource("Gradient_sapling")
+width = 32
+height = 64
+
+[sub_resource type="Gradient" id="Gradient_young"]
+colors = PackedColorArray(0.35, 0.6, 0.3, 1, 0.35, 0.6, 0.3, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_young"]
+gradient = SubResource("Gradient_young")
+width = 96
+height = 160
+
+[sub_resource type="Gradient" id="Gradient_flowering"]
+colors = PackedColorArray(0.95, 0.8, 0.85, 1, 0.95, 0.8, 0.85, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_flowering"]
+gradient = SubResource("Gradient_flowering")
+width = 128
+height = 192
+
+[sub_resource type="Gradient" id="Gradient_unripe"]
+colors = PackedColorArray(0.75, 0.8, 0.35, 1, 0.75, 0.8, 0.35, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_unripe"]
+gradient = SubResource("Gradient_unripe")
+width = 128
+height = 192
+
+[sub_resource type="Gradient" id="Gradient_ripe"]
+colors = PackedColorArray(0.98, 0.8, 0.25, 1, 0.9, 0.35, 0.2, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ripe"]
+gradient = SubResource("Gradient_ripe")
+width = 128
+height = 192
+
+[resource]
+script = ExtResource("1_treedata")
+id = &"golden_gilas"
+display_name = "TREE_GOLDEN_GILAS"
+sapling_days = 0.1
+young_days = 0.1
+flowering_days = 0.1
+unripe_days = 0.1
+fruit = ExtResource("2_gilasitem")
+harvest_yield = 4
+sapling_texture = SubResource("GradientTexture2D_sapling")
+young_texture = SubResource("GradientTexture2D_young")
+flowering_texture = SubResource("GradientTexture2D_flowering")
+unripe_texture = SubResource("GradientTexture2D_unripe")
+ripe_texture = SubResource("GradientTexture2D_ripe")

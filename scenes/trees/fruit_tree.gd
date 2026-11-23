@@ -42,7 +42,8 @@ func advance_time(amount: float) -> void:
 	if stage == Stage.RIPE:
 		return # Ripe fruit waits on the tree until harvested.
 	# Skill: trees grow faster (e.g. +20%) while that character is active.
-	stage_time += amount * (1.0 + Characters.get_bonus(SkillData.Effect.GROWTH_SPEED))
+	# Tree type speed (e.g. Snow Mulberry) × skill bonus (e.g. Freya's +20%).
+	stage_time += amount * data.growth_speed * (1.0 + Characters.get_bonus(SkillData.Effect.GROWTH_SPEED))
 	# "while", not "if": a big time jump can pass several stages at once.
 	while stage != Stage.RIPE and stage_time >= _get_stage_duration(stage):
 		stage_time -= _get_stage_duration(stage)

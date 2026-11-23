@@ -17,6 +17,10 @@ extends Resource
 ## Time from young tree until mature tree. After this the fruit cycle starts.
 @export var young_days: float = 1.0
 
+## How fast this tree grows compared to normal (1.0 = normal, 1.3 = 30% faster —
+## e.g. Snow Mulberry's trait). Affects every stage.
+@export_range(0.1, 5.0, 0.05) var growth_speed: float = 1.0
+
 @export_group("Fruit cycle (repeats)")
 ## Time the tree spends flowering.
 @export var flowering_days: float = 1.0

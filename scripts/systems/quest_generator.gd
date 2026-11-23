@@ -77,12 +77,12 @@ func _pick_template(previous_goal: int) -> QuestTemplate:
 	return choices.back()
 
 
-## A random item of a category (fruit for filters, sapling for rewards).
-## Later: rare varieties must be excluded here (they only come from story chapters).
+## A random COMMON item of a category (fruit for filters, sapling for rewards).
+## Rare varieties are never used: they only come from story chapters.
 func _random_item(category: ItemData.Category) -> ItemData:
 	var items: Array[ItemData] = []
 	for item in Registry.get_all_items():
-		if item.category == category:
+		if item.category == category and not item.rare:
 			items.append(item)
 	if items.is_empty():
 		return null
