@@ -87,7 +87,7 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · sapling prices · planting range / farm boundaries · moving or removing trees (later) · separate sapling-seller NPC (later, name approved by user) · save/load · names of future characters / buyer NPCs (foreign, user approves) · more UI languages later (e.g. Azerbaijani) and whether fruit names get translated then · game font (must support all chosen languages) · sound and music · target platforms (PC / mobile).
+Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · sapling prices · planting range / farm boundaries · moving or removing trees (later) · separate sapling-seller NPC (later, name approved by user) · manual save / multiple save slots UI (later) · settings menu (later) · names of future characters / buyer NPCs (foreign, user approves) · more UI languages later (e.g. Azerbaijani) and whether fruit names get translated then · game font (must support all chosen languages) · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -243,3 +243,16 @@ Add new decisions here in this format:
 - **Status:** Confirmed
 - **Affected systems:** `ItemData` (sapling items, category `SAPLING`, link to the `TreeData` they grow into), `Merchant` (`sells` list), trade/sell window (needs a buy side), `Wallet.spend_money`, `Inventory`, new placement mode (ghost preview, grid snap, free-spot check, range check), `FruitTree` instances created at runtime under `Entities/Trees`, translation keys for sapling names and buy UI
 - **Notes:** Sapling prices, the planting range and farm boundaries are **not decided** (test values; the current ground is the placeholder `Ground` rect). Moving/removing trees, land expansion, tools, processing and buildings are later topics. Tilling soil with a tool before planting was not chosen (too close to other well-known farming games). Saplings planted at runtime will need save/load later (not decided).
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Save / load
+- **Decision:**
+  1. **When:** automatic — on every new game day (`GameClock.day_changed`) and when the player quits. No manual save button for now.
+  2. **Slots:** one save for now, but the code works with a slot name (e.g. `"slot_1"`), so more slots can be added later without rewriting.
+  3. **Format:** JSON text file in `user://` (on Windows: `%APPDATA%\Godot\app_userdata\The Orchard\`), with a `version` number so old saves can be upgraded later.
+  4. **Start of the game:** a simple main menu — "Continue" (only if a save exists), "New Game", "Quit".
+- **Status:** Confirmed
+- **Affected systems:** new save system (likely an autoload), new main menu scene (becomes the project's main scene), `GameClock` (day, minute), `Wallet` (money), `Inventory` (id → amount), `Market` (daily factors, saturation), trees (every tree: type id, position, stage, stage time — all trees under `Entities/Trees` are saved; on load the scene's trees are replaced, so the trees placed in `main.tscn` are the "new game" starting orchard), item/tree lookup by `id` (needs a registry of all `ItemData` / `TreeData` files), translation keys for menu texts
+- **Notes:** Godot `Resource` (`.tres`) files were rejected as a save format because they can carry script code (security risk when sharing saves). Binary was rejected for being hard to read/debug. Cheating by editing the JSON is acceptable in a single-player game. Manual saving, multiple slots in the UI and a settings menu (language, sound) are later topics.
