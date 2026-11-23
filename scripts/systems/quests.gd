@@ -7,6 +7,10 @@ extends Node
 ## This script only keeps the task state. Oona herself (coming and going,
 ## talking) is a separate NPC that calls start_next() and claim_reward().
 ## Progress comes from GameEvents and only counts while a task is active.
+##
+## Written tasks (scenes/quests/types/) come first, in `order`. When none is
+## left, Oona gives generated everyday tasks (QuestGenerator), so she never runs
+## out (decision "After Oona's tasks"). Story chapters come later.
 
 ## Oona gave a new task.
 signal quest_started(quest: QuestData)
@@ -20,8 +24,11 @@ signal quest_rewarded(quest: QuestData)
 ## The task being worked on (null = none).
 var _active: QuestData = null
 var _progress: int = 0
-## ids of finished (rewarded) tasks.
+## ids of finished (rewarded) WRITTEN tasks (generated ones are not listed).
 var _finished: Array[StringName] = []
+## Goal of the last task given (-1 = none): the generator does not repeat it.
+var _last_goal: int = -1
+var _generator := QuestGenerator.new()
 
 
 ## Same as FruitTree.GROUP (not referenced directly: autoloads compile early).
@@ -54,8 +61,8 @@ func is_finished(quest: QuestData) -> bool:
 	return quest != null and _finished.has(quest.id)
 
 
-## The next task Oona would give (lowest `order` not finished yet), or null if
-## she has nothing left. What happens after the last task is not decided.
+## The next WRITTEN task (lowest `order` not finished yet), or null when all
+## written tasks are done (then start_next() generates one).
 func get_next() -> QuestData:
 	var best: QuestData = null
 	for quest in Registry.get_all_quests():
@@ -66,15 +73,19 @@ func get_next() -> QuestData:
 	return best
 
 
-## Oona gives the next task. Returns it, or null if a task is already active
-## or there is nothing left.
+## Oona gives the next task: the next written one, or a generated one when
+## none is left. Returns it, or null if a task is already active (or there are
+## no templates at all).
 func start_next() -> QuestData:
 	if _active != null:
 		return null
 	var quest := get_next()
 	if quest == null:
+		quest = _generator.generate(Progression.level, _last_goal)
+	if quest == null:
 		return null
 	_active = quest
+	_last_goal = quest.goal
 	_progress = 0
 	quest_started.emit(quest)
 	quest_progressed.emit(quest, _progress)
@@ -89,7 +100,8 @@ func claim_reward() -> bool:
 	var quest := _active
 	_active = null
 	_progress = 0
-	_finished.append(quest.id)
+	if not is_generated(quest):
+		_finished.append(quest.id)
 	if quest.reward_xp > 0:
 		Progression.add_xp(quest.reward_xp)
 	if quest.reward_item != null and quest.reward_amount > 0:
@@ -147,6 +159,31 @@ func _add_progress(amount: int) -> void:
 		quest_done.emit(_active)
 
 
+func is_generated(quest: QuestData) -> bool:
+	return quest != null and quest.id == QuestGenerator.GENERATED_ID
+
+
+## Rebuilds a generated task from QuestData.to_dict() data. Broken values are
+## fixed: unknown goal → null; unknown items are dropped; numbers kept sensible.
+func _generated_from_dict(data: Dictionary) -> QuestData:
+	var goal_value := int(data.get("goal", -1))
+	if goal_value < 0 or goal_value >= QuestData.Goal.size():
+		return null
+	var quest := QuestData.new()
+	quest.id = QuestGenerator.GENERATED_ID
+	quest.goal = goal_value as QuestData.Goal
+	quest.target = maxi(1, int(data.get("target", 1)))
+	quest.filter_item = _item_or_null(str(data.get("filter", "")))
+	quest.reward_xp = maxi(0, int(data.get("reward_xp", 0)))
+	quest.reward_item = _item_or_null(str(data.get("reward_item", "")))
+	quest.reward_amount = maxi(0, int(data.get("reward_amount", 1)))
+	return quest
+
+
+func _item_or_null(id_text: String) -> ItemData:
+	return Registry.get_item(StringName(id_text)) if id_text != "" else null
+
+
 # --- Save / load -------------------------------------------------------------
 # load_save_data({}) = new-game state (no task, nothing finished).
 
@@ -154,11 +191,15 @@ func get_save_data() -> Dictionary:
 	var finished := []
 	for id in _finished:
 		finished.append(String(id))
-	return {
+	var data := {
 		"active": String(_active.id) if _active != null else "",
 		"progress": _progress,
 		"finished": finished,
+		"last_goal": _last_goal,
 	}
+	if is_generated(_active):
+		data["generated"] = _active.to_dict() # no file to find it by id
+	return data
 
 
 func load_save_data(data: Dictionary) -> void:
@@ -167,8 +208,15 @@ func load_save_data(data: Dictionary) -> void:
 		var quest := Registry.get_quest(StringName(str(id_text)))
 		if quest != null and not _finished.has(quest.id):
 			_finished.append(quest.id)
-	var active_text := str(data.get("active", ""))
-	_active = Registry.get_quest(StringName(active_text)) if active_text != "" else null
+	_last_goal = int(data.get("last_goal", -1))
+	var active_id := StringName(str(data.get("active", "")))
+	if active_id == QuestGenerator.GENERATED_ID:
+		var saved = data.get("generated", {})
+		_active = _generated_from_dict(saved) if saved is Dictionary else null
+	elif active_id != &"":
+		_active = Registry.get_quest(active_id)
+	else:
+		_active = null
 	if _active != null and _finished.has(_active.id):
 		_active = null
 	_progress = clampi(int(data.get("progress", 0)), 0, _active.target) if _active != null else 0

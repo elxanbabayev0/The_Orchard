@@ -60,3 +60,20 @@ func get_description() -> String:
 	if filter_item != null:
 		return text % [target, tr(filter_item.display_name)] if text.count("%") >= 2 else text % tr(filter_item.display_name)
 	return text % target if text.contains("%") else text
+
+
+# --- Generated tasks in save files --------------------------------------------
+# Written tasks are saved by id. Generated ones (QuestGenerator) have no file,
+# so all their parameters are saved instead. Rebuilding them needs the Registry,
+# so that part lives in Quests (data resources must not use autoloads: they can
+# be compiled before the autoloads exist).
+
+func to_dict() -> Dictionary:
+	return {
+		"goal": goal,
+		"target": target,
+		"filter": String(filter_item.id) if filter_item != null else "",
+		"reward_xp": reward_xp,
+		"reward_item": String(reward_item.id) if reward_item != null else "",
+		"reward_amount": reward_amount,
+	}
