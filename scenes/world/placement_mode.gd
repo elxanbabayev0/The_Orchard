@@ -22,8 +22,8 @@ const FRUIT_TREE_SCENE := preload("res://scenes/trees/fruit_tree.tscn")
 @export var player: Node2D
 ## New trees are added here (must be inside the Y-sorted Entities node).
 @export var trees_parent: Node2D
-## Saplings can only be planted on this ground area.
-@export var ground: Control
+## Saplings can only be planted where this ground has a tile.
+@export var ground: Ground
 
 ## The sapling being placed (null = placement mode is off).
 var _item: ItemData = null
@@ -102,7 +102,7 @@ func can_place_at(spot: Vector2) -> bool:
 	if player.global_position.distance_to(spot) > get_plant_range():
 		return false
 	# 2) On the farm ground (checked at the middle of the tile).
-	if ground != null and not ground.get_global_rect().has_point(spot - Vector2(0, TILE_SIZE / 2.0)):
+	if ground != null and not ground.has_ground_at(spot - Vector2(0, TILE_SIZE / 2.0)):
 		return false
 	# 3) Nothing standing there: ask the physics engine if any body overlaps
 	#    the footprint rectangle just above the spot.

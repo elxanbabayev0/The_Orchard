@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/invitation_window.tscn" id="28_invitation"]
 [ext_resource type="Script" path="res://scenes/world/family_members.gd" id="29_family"]
 [ext_resource type="PackedScene" path="res://scenes/ui/active_character_display.tscn" id="30_activechar"]
+[ext_resource type="PackedScene" path="res://scenes/world/ground/ground.tscn" id="31_ground"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -50,13 +51,7 @@ height = 64
 
 [node name="PauseLayer" parent="." instance=ExtResource("26_pausemenu")]
 
-[node name="Ground" type="ColorRect" parent="."]
-offset_left = -1000.0
-offset_top = -1000.0
-offset_right = 1000.0
-offset_bottom = 1000.0
-mouse_filter = 2
-color = Color(0.55, 0.72, 0.4, 1)
+[node name="Ground" parent="." instance=ExtResource("31_ground")]
 
 [node name="Entities" type="Node2D" parent="."]
 y_sort_enabled = true

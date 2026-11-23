@@ -19,8 +19,8 @@ const FREE_AREA_SIZE := Vector2(56, 32)
 
 ## Set in main.tscn.
 @export var player: Node2D
-## Arrivals must stand on this ground area.
-@export var ground: Control
+## Arrivals must stand where this ground has a tile.
+@export var ground: Ground
 
 ## Characters waiting for a spot. Physics queries are safest in _physics_process,
 ## and that only runs while the game is not paused (the invitation window pauses it).
@@ -56,7 +56,7 @@ func _find_arrival_spot() -> Vector2:
 
 
 func _is_free(spot: Vector2) -> bool:
-	if ground != null and not ground.get_global_rect().has_point(spot):
+	if ground != null and not ground.has_ground_at(spot):
 		return false
 	var query := PhysicsShapeQueryParameters2D.new()
 	query.shape = _free_area
