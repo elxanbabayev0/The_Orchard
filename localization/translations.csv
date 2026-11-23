@@ -144,3 +144,10 @@ QUEST_GOAL_INVITE_FAMILY,Invite %d family members
 QUEST_GOAL_INVITE_FAMILY_ONE,Invite a family member
 QUEST_GOAL_SWITCH_CHARACTER,Switch characters %d times
 QUEST_GOAL_SWITCH_CHARACTER_ONE,Switch to a family member
+ITEM_FROST_VISNE,Frost Cherry
+ITEM_FROST_VISNE_DESC,"Pale pink sour cherries with a frosty shine."
+TREE_FROST_VISNE,Frost Cherry Tree
+ITEM_FROST_VISNE_SAPLING,Frost Cherry Sapling
+ITEM_FROST_VISNE_SAPLING_DESC,Plant it to grow a Frost Cherry Tree.
+ITEM_FROST_VISNE_CUTTING,Frost Cherry Cutting
+ITEM_FROST_VISNE_CUTTING_DESC,"Plant it, or graft it onto a Sour Cherry Tree."

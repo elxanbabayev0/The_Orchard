@@ -38,6 +38,7 @@
 [ext_resource type="Resource" path="res://scenes/items/types/snow_tut.tres" id="36_snowtut"]
 [ext_resource type="Resource" path="res://scenes/items/types/midnight_albali.tres" id="37_midnightalbali"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tree_action_menu.tscn" id="38_treemenu"]
+[ext_resource type="Resource" path="res://scenes/items/types/frost_visne.tres" id="39_frostvisne"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -116,7 +117,7 @@ y_sort_enabled = true
 
 [node name="Bruno" parent="Entities/NPCs" instance=ExtResource("9_merchant")]
 position = Vector2(-288, -64)
-buys = Array[Resource]([ExtResource("10_gilasitem"), ExtResource("13_alcaitem"), ExtResource("15_visneitem"), ExtResource("17_tutitem"), ExtResource("19_albaliitem"), ExtResource("35_goldengilas"), ExtResource("36_snowtut"), ExtResource("37_midnightalbali")])
+buys = Array[Resource]([ExtResource("10_gilasitem"), ExtResource("13_alcaitem"), ExtResource("15_visneitem"), ExtResource("17_tutitem"), ExtResource("19_albaliitem"), ExtResource("35_goldengilas"), ExtResource("36_snowtut"), ExtResource("37_midnightalbali"), ExtResource("39_frostvisne")])
 sells = Array[Resource]([ExtResource("20_gilassapling"), ExtResource("21_alcasapling"), ExtResource("22_visnesapling"), ExtResource("23_tutsapling"), ExtResource("24_albalisapling")])
 
 [node name="Family" type="Node2D" parent="Entities" node_paths=PackedStringArray("player", "ground")]

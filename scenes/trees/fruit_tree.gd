@@ -176,10 +176,11 @@ func _get_stage_duration(for_stage: Stage) -> float:
 			return data.sapling_days
 		Stage.YOUNG:
 			return data.young_days
+		# The fruit cycle can be faster for some varieties (Frost Cherry).
 		Stage.FLOWERING:
-			return data.flowering_days
+			return data.flowering_days / data.fruit_cycle_speed
 		Stage.UNRIPE:
-			return data.unripe_days
+			return data.unripe_days / data.fruit_cycle_speed
 		_:
 			return INF # RIPE has no duration: it waits.
 

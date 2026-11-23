@@ -21,6 +21,11 @@ extends Resource
 ## e.g. Snow Mulberry's trait). Affects every stage.
 @export_range(0.1, 5.0, 0.05) var growth_speed: float = 1.0
 
+## How fast only the FRUIT CYCLE runs (flowering + unripe) compared to normal
+## (1.0 = normal, 1.4 = 40% faster — e.g. Frost Cherry's trait). The first
+## growing up is not affected. Works together with growth_speed.
+@export_range(0.1, 5.0, 0.05) var fruit_cycle_speed: float = 1.0
+
 @export_group("Fruit cycle (repeats)")
 ## Time the tree spends flowering.
 @export var flowering_days: float = 1.0
