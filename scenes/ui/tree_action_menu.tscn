@@ -40,6 +40,11 @@ auto_translate_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
 
+[node name="GraftButton" type="Button" parent="Margin/VBox/Buttons"]
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+
 [node name="CloseButton" type="Button" parent="Margin/VBox/Buttons"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 22

@@ -129,3 +129,4 @@ UI_TREE_HARVEST,Harvest
 UI_TREE_TAKE_CUTTING,Take cutting
 UI_TREE_CUTTING_WAIT,Take cutting (%d days)
 UI_TREE_CUTTING_WAIT_ONE,Take cutting (1 day)
+UI_TREE_GRAFT,Graft: %s

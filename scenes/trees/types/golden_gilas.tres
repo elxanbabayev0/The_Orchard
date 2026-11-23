@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scenes/trees/tree_data.gd" id="1_treedata"]
 [ext_resource type="Resource" path="res://scenes/items/types/golden_gilas.tres" id="2_gilasitem"]
 
+[ext_resource type="Resource" path="res://scenes/trees/types/gilas.tres" id="3_basetree"]
 [sub_resource type="Gradient" id="Gradient_sapling"]
 colors = PackedColorArray(0.6, 0.8, 0.4, 1, 0.6, 0.8, 0.4, 1)
 
@@ -51,6 +52,7 @@ sapling_days = 0.1
 young_days = 0.1
 flowering_days = 0.1
 unripe_days = 0.1
+variety_of = ExtResource("3_basetree")
 fruit = ExtResource("2_gilasitem")
 harvest_yield = 4
 sapling_texture = SubResource("GradientTexture2D_sapling")

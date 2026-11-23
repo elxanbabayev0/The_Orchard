@@ -33,6 +33,12 @@ extends Resource
 ## How many fruits one harvest gives.
 @export var harvest_yield: int = 3
 
+@export_group("Variety")
+## For rare varieties: the common tree type it is a variety of (Golden Sweet
+## Cherry → Sweet Cherry). Its cuttings can be grafted onto trees of that type.
+## Empty for common trees.
+@export var variety_of: TreeData
+
 @export_group("Visuals")
 ## One picture per stage. The bottom edge of each picture is placed on the
 ## tree's origin (the bottom of the trunk), following the "origin on the ground" rule.

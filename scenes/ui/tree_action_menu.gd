@@ -15,6 +15,7 @@ var _tree: Node2D = null
 @onready var title_label: Label = $Margin/VBox/TitleLabel
 @onready var harvest_button: Button = $Margin/VBox/Buttons/HarvestButton
 @onready var cutting_button: Button = $Margin/VBox/Buttons/CuttingButton
+@onready var graft_button: Button = $Margin/VBox/Buttons/GraftButton
 @onready var close_button: Button = $Margin/VBox/Buttons/CloseButton
 
 
@@ -34,6 +35,12 @@ func _ready() -> void:
 		if is_instance_valid(tree):
 			tree.take_cutting()
 	)
+	graft_button.pressed.connect(func() -> void:
+		var tree := _tree
+		hide()
+		if is_instance_valid(tree):
+			tree.graft()
+	)
 	close_button.pressed.connect(hide)
 	visibility_changed.connect(func() -> void:
 		if not visible:
@@ -48,11 +55,18 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 ## Opens the menu for a FruitTree (duck typed: can_harvest, can_take_cutting,
-## get_cutting_days_left, harvest, take_cutting, data).
+## get_cutting_days_left, get_graft_cutting, harvest, take_cutting, graft, data).
+## Rare trees show "Take cutting"; common trees show "Graft" when the player has
+## a matching cutting.
 func open(tree: Node2D) -> void:
 	_tree = tree
 	title_label.text = tr(tree.data.display_name)
 	harvest_button.disabled = not tree.can_harvest()
+	var graft_cutting: ItemData = tree.get_graft_cutting()
+	graft_button.visible = graft_cutting != null
+	if graft_cutting != null:
+		graft_button.text = tr("UI_TREE_GRAFT") % tr(graft_cutting.grows_into.fruit.display_name) # "Graft: Golden Sweet Cherry"
+	cutting_button.visible = Registry.get_cutting_for(tree.data) != null
 	cutting_button.disabled = not tree.can_take_cutting()
 	var days_left: int = tree.get_cutting_days_left()
 	if days_left <= 0:
@@ -67,4 +81,7 @@ func open(tree: Node2D) -> void:
 	var screen_point := tree.get_global_transform_with_canvas().origin
 	position = screen_point - Vector2(size.x / 2.0, ABOVE_TREE + size.y)
 	position = position.clamp(Vector2.ZERO, get_viewport_rect().size - size)
-	(harvest_button if not harvest_button.disabled else cutting_button if not cutting_button.disabled else close_button).grab_focus()
+	for button in [harvest_button, cutting_button, graft_button, close_button]:
+		if button.visible and not button.disabled:
+			button.grab_focus()
+			break

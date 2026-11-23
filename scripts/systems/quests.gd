@@ -47,6 +47,7 @@ func _ready() -> void:
 	GameEvents.item_sold.connect(_on_item_sold)
 	GameEvents.sapling_planted.connect(_on_sapling_planted)
 	GameEvents.tree_grown.connect(_on_tree_grown)
+	GameEvents.tree_grafted.connect(func(_type: TreeData, _tree: Node2D) -> void: _refresh_tree_count())
 
 
 # --- State -------------------------------------------------------------------

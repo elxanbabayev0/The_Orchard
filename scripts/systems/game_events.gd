@@ -24,3 +24,6 @@ signal sapling_planted(sapling: ItemData, tree: Node2D)
 ## Happens only once in every tree's life.
 @warning_ignore("unused_signal")
 signal tree_grown(tree_type: TreeData, tree: Node2D)
+## A common tree was grafted and is now `tree_type` (a rare variety).
+@warning_ignore("unused_signal")
+signal tree_grafted(tree_type: TreeData, tree: Node2D)

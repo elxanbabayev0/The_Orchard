@@ -67,7 +67,7 @@ func advance_time(amount: float) -> void:
 ## (Harvest / Take cutting); every other tree just harvests when ripe.
 func interact(_player: Node) -> void:
 	var menu := get_tree().get_first_node_in_group(ACTION_MENU_GROUP)
-	if menu != null and _offers_cuttings():
+	if menu != null and (_offers_cuttings() or can_graft()):
 		menu.open(self)
 	elif can_harvest():
 		harvest()
@@ -93,6 +93,38 @@ func can_take_cutting() -> bool:
 ## Whole game days until the next cutting (0 = ready now).
 func get_cutting_days_left() -> int:
 	return ceili(cutting_cooldown)
+
+
+## Grafting: a cutting from the Inventory whose variety belongs to this (common,
+## grown) tree's type, e.g. a Golden Sweet Cherry Cutting for a Sweet Cherry tree.
+## null if grafting is not possible here.
+func get_graft_cutting() -> ItemData:
+	if stage < Stage.FLOWERING or not Quests.is_feature_unlocked(CUTTINGS_FEATURE):
+		return null
+	for item in Inventory.get_items():
+		if item.category == ItemData.Category.CUTTING and item.grows_into != null \
+				and item.grows_into.variety_of == data:
+			return item
+	return null
+
+
+func can_graft() -> bool:
+	return get_graft_cutting() != null
+
+
+## Grafts a matching cutting onto this tree: it becomes the rare variety, goes
+## back to FLOWERING (fruit is lost) and its cutting cooldown starts (decision:
+## same rules as taking a cutting). Returns false if not possible.
+func graft() -> bool:
+	var cutting := get_graft_cutting()
+	if cutting == null or not Inventory.remove_item(cutting, 1):
+		return false
+	data = cutting.grows_into
+	cutting_cooldown = CUTTING_COOLDOWN_DAYS
+	stage_time = 0.0
+	_set_stage(Stage.FLOWERING)
+	GameEvents.tree_grafted.emit(data, self) # Oona's "have N trees" tasks...
+	return true
 
 
 ## Gives one cutting to the Inventory. The tree goes back to FLOWERING (any
