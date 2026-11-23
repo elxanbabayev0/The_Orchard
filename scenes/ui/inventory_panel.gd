@@ -1,0 +1,66 @@
+extends PanelContainer
+## Inventory panel. Opens / closes with the "toggle_inventory" action.
+## Lists every item in the Inventory with its icon, name and amount.
+## Texts and look are placeholders: UI language and style are not decided.
+
+const ICON_SIZE := Vector2(48, 48)
+const FONT_SIZE := 26
+
+@onready var rows: VBoxContainer = $Margin/VBox/Rows
+@onready var empty_label: Label = $Margin/VBox/EmptyLabel
+
+
+func _ready() -> void:
+	hide()
+	Inventory.inventory_changed.connect(_on_inventory_changed)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_inventory"):
+		visible = not visible
+		if visible:
+			_refresh()
+		# Stop other nodes from also reacting to this key press.
+		get_viewport().set_input_as_handled()
+
+
+func _on_inventory_changed(_item: ItemData, _new_amount: int) -> void:
+	# No need to rebuild the list while nobody can see it.
+	if visible:
+		_refresh()
+
+
+## Rebuilds the whole list. Simple and fast enough for a small inventory.
+func _refresh() -> void:
+	for child in rows.get_children():
+		child.queue_free()
+	var items := Inventory.get_items()
+	empty_label.visible = items.is_empty()
+	for item in items:
+		rows.add_child(_make_row(item))
+
+
+## One row: [icon]  Name ............ × amount
+func _make_row(item: ItemData) -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 16)
+
+	var icon := TextureRect.new()
+	icon.texture = item.icon
+	icon.custom_minimum_size = ICON_SIZE
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(icon)
+
+	var name_label := Label.new()
+	name_label.text = item.display_name
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.add_theme_font_size_override("font_size", FONT_SIZE)
+	row.add_child(name_label)
+
+	var amount_label := Label.new()
+	amount_label.text = "× %d" % Inventory.get_count(item)
+	amount_label.add_theme_font_size_override("font_size", FONT_SIZE)
+	row.add_child(amount_label)
+
+	return row
