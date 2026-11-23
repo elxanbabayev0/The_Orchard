@@ -35,11 +35,11 @@ The full original design notes (in Azerbaijani) are in `docs/The_Orchard_Project
 Balance details (growth times, energy, inventory size, currency, levels) are **not decided**.
 
 ## Confirmed content
-- **Fruits:** alça (cherry plum), vişnə (sour cherry), tut (mulberry), albalı (morello cherry), gilas (sweet cherry) and its varieties. The system must support adding more trees, fruits and varieties later.
+- **Fruits:** alça (cherry plum), vişnə (sour cherry), tut (mulberry), albalı (morello cherry), gilas (sweet cherry) and its varieties. The system must support adding more trees, fruits and varieties later. **In the game, fruit names are shown in English** (Cherry Plum, Sour Cherry, Mulberry, Morello Cherry, Sweet Cherry) — confirmed 2026-11-23, see Decision log.
 - **Characters:** the player starts with their own character. Other characters are unlocked with XP. Each character will have unique skills that affect gameplay (the skill list, XP costs and unlock order are **not decided**).
-- **Merchant Orxan:** buys the player's produce. His prices are meant to be **dynamic** and may be affected by what other players sell for. How this works technically (multiplayer, server, price formula) is **not decided** — do not assume multiplayer exists.
+- **Merchant** (was "Orxan" — the user asked to rename him; new name **pending**, see Decision log): buys the player's produce. Prices are **dynamic**: daily market price + the player's own sales (confirmed 2026-11-23, see Decision log). Prices based on other real players would need multiplayer/a server, which is **not decided** — do not assume multiplayer exists.
 - **Buyer NPCs:** more buyers with their own personalities are planned. Names, looks, dialogue and order mechanics are not decided.
-- **Family tree** (keep names and relations exactly as written; roles/ages/personalities are not decided):
+- **Family tree** — keep the **relations** exactly as written. The **names below are old working names**: all names in the game must be foreign (mixed international) names (confirmed 2026-11-23, see Decision log). New names are **pending** — do not invent them without the user's approval. Roles/ages/personalities are not decided.
   ```
   Zöhrə
   ├── Gulnarə: Elman, Elxan, Elnaz, Eltac
@@ -74,7 +74,7 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · dynamic pricing implementation · save/load · sound and music · target platforms (PC / mobile).
+Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · save/load · new character names (pending, user approves) · UI language (fruit names are English; rest not decided) · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -166,3 +166,28 @@ Add new decisions here in this format:
 - **Status:** Confirmed
 - **Affected systems:** new `ItemData` resource (replaces the temporary `fruit_id` in `TreeData`), new `Inventory` autoload (`add_item`, `remove_item`, `get_count`, `has_item`, `inventory_changed` signal), harvesting (`FruitTree.harvested` → inventory), UI (inventory panel, harvest pop-up), future save/load and merchant selling
 - **Notes:** Slots/stack limits, capacity limits and a storage building were postponed: they depend on the economy and farm expansion, which are not decided. The public functions (`add_item` etc.) are meant to stay the same if the inventory later moves to slots, so mostly the UI would change. If a storage building is added later, it must not copy Hay Day's barn/silo capacity model. The key that opens the panel (suggested: **I**) and the UI style are suggestions, not decisions. No item quality yet (postponed earlier).
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Merchant, money and selling
+- **Decision:**
+  1. **Money:** no currency name for now — just a money icon and a number. The name can be chosen later without code changes.
+  2. **Dynamic prices (single-player):** daily market + supply/demand. Every morning each fruit's price changes randomly within a range around its base price; on top of that, selling a lot of one fruit lowers its price, which slowly recovers over game days.
+  3. **How selling works:** a sell window. Press interact near the merchant → a window lists each fruit with its current price and lets the player choose how many to sell.
+  4. **Where / when:** for now the merchant is always on the farm in a fixed spot (e.g. a stall). A schedule tied to `GameClock` (e.g. only 08:00–18:00) can come later.
+- **Status:** Confirmed
+- **Affected systems:** new money/wallet system (likely an autoload), `ItemData` (needs a base price), new market/price system (daily price + sales effect, listens to `GameClock.day_changed`), merchant NPC scene (`interact(player)`), sell window UI, `Inventory.remove_item` (all-or-nothing)
+- **Notes:** Starting money, base prices, the random range and how fast prices drop/recover are balance numbers and are **not decided** (temporary test values). Prices from other real players are not possible without multiplayer; the model should allow adding that later. A "sell box emptied overnight" was rejected because it is too close to other well-known farming games. Idea (not a decision): with seasons, fruit could be cheaper in its own season. The merchant's name is being changed (was "Orxan"); the new name is pending.
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Names in the game
+- **Decision:**
+  1. **All character names in the game are foreign names** of mixed international origin (different characters may come from different countries, e.g. Marco, Sofia, Leon, Yuki).
+  2. This applies to **everyone**: the merchant (was "Orxan"), future buyer NPCs and the **whole family tree**. The family **relations stay exactly the same**; only the names are replaced.
+  3. **Fruit names are shown in English in the game** (Cherry Plum, Sour Cherry, Mulberry, Morello Cherry, Sweet Cherry).
+- **Status:** Confirmed
+- **Affected systems:** characters / NPCs, family tree, merchant, `ItemData.display_name` of every fruit (e.g. `items/types/gilas.tres` "Gilas" → "Sweet Cherry"), harvest pop-ups and inventory panel (they show `display_name`)
+- **Notes:** The new names themselves are **not chosen yet** — the user approves every name; do not invent official names. The old names (Orxan, Zöhrə, Gulnarə, …) remain only in `docs/The_Orchard_Project_Context.md` as original notes. **Not decided:** the language of the rest of the UI (currently placeholder Azerbaijani texts such as "İnventar", "Boşdur", "Gün"), and whether internal ids / file names (e.g. `&"gilas"`, `gilas.tres`) should also become English — ids are never shown to the player.
