@@ -7,6 +7,8 @@ extends Control
 @onready var continue_button: Button = $Center/VBox/ContinueButton
 @onready var new_game_button: Button = $Center/VBox/NewGameButton
 @onready var quit_button: Button = $Center/VBox/QuitButton
+## Debug only: loads the test save (tools/make_test_save.gd). Never shown in exported games.
+@onready var test_save_button: Button = $Center/VBox/TestSaveButton
 @onready var confirm_dialog: ConfirmationDialog = $ConfirmNewGame
 @onready var name_entry: Control = $NameEntry
 @onready var name_edit: LineEdit = $NameEntry/Center/Panel/Margin/VBox/NameEdit
@@ -18,10 +20,12 @@ func _ready() -> void:
 	# No game time passes while the player is in the menu.
 	GameClock.paused = true
 	continue_button.visible = SaveManager.has_save()
+	test_save_button.visible = OS.is_debug_build() and SaveManager.has_save(SaveManager.TEST_SLOT)
 
 	continue_button.pressed.connect(SaveManager.continue_game)
 	new_game_button.pressed.connect(_on_new_game_pressed)
 	quit_button.pressed.connect(get_tree().quit)
+	test_save_button.pressed.connect(SaveManager.continue_game.bind(SaveManager.TEST_SLOT))
 	confirm_dialog.confirmed.connect(_show_name_entry)
 
 	name_edit.text_changed.connect(func(_text: String) -> void: _update_start_button())

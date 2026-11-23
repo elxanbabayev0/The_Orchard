@@ -10,6 +10,9 @@ extends Node
 const SAVE_VERSION := 1
 const SAVE_FOLDER := "user://saves/"
 const DEFAULT_SLOT := "slot_1"
+## Debug only: the test save made by tools/make_test_save.gd (main menu shows a
+## "Load test save" button in editor runs when this file exists).
+const TEST_SLOT := "test"
 ## The world scene the menu starts.
 const WORLD_SCENE := "res://scenes/world/main.tscn"
 const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
@@ -19,6 +22,12 @@ const TREES_PATH := "Entities/Trees"
 const FAMILY_PATH := "Entities/Family"
 const PLAYER_PATH := "Entities/Player"
 const FRUIT_TREE_SCENE := preload("res://scenes/trees/fruit_tree.tscn")
+
+
+## The slot the running game belongs to: autosaves and "save on quit" write here.
+## "" = no slot (e.g. main.tscn started directly with F6): then nothing is saved,
+## so a test run can never overwrite a real save.
+var current_slot: String = ""
 
 
 func _ready() -> void:
@@ -37,6 +46,7 @@ func continue_game(slot: String = DEFAULT_SLOT) -> void:
 
 
 func _start_world(load_save: bool, slot: String, player_name: String) -> void:
+	current_slot = slot
 	_reset_systems()
 	if not load_save:
 		Characters.set_player_name(player_name)
@@ -77,8 +87,14 @@ func has_save(slot: String = DEFAULT_SLOT) -> bool:
 	return FileAccess.file_exists(_path(slot))
 
 
-## Writes the whole game state to the slot's file. Returns false on failure.
-func save_game(slot: String = DEFAULT_SLOT) -> bool:
+## Writes the whole game state to the slot's file (default: current_slot).
+## Returns false on failure or when there is no slot.
+func save_game(slot: String = "") -> bool:
+	if slot == "":
+		slot = current_slot
+	if slot == "":
+		print("SaveManager: not saving — this world was not started from the menu (no slot).")
+		return false
 	var trees_container := _get_trees_container()
 	if trees_container == null:
 		return false # not in the world (e.g. in a menu): nothing to save
@@ -125,7 +141,9 @@ func save_game(slot: String = DEFAULT_SLOT) -> bool:
 
 ## Reads the slot's file and restores the game state. Returns false on failure
 ## (no file, broken file, or a save from a newer game version).
-func load_game(slot: String = DEFAULT_SLOT) -> bool:
+func load_game(slot: String = "") -> bool:
+	if slot == "":
+		slot = current_slot
 	var trees_container := _get_trees_container()
 	if trees_container == null or not has_save(slot):
 		return false

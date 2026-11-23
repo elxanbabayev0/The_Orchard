@@ -59,6 +59,13 @@ size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 32
 text = "UI_MENU_NEW_GAME"
 
+[node name="TestSaveButton" type="Button" parent="Center/VBox"]
+custom_minimum_size = Vector2(360, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 22
+text = "UI_MENU_LOAD_TEST_SAVE"
+
 [node name="QuitButton" type="Button" parent="Center/VBox"]
 custom_minimum_size = Vector2(360, 64)
 layout_mode = 2
