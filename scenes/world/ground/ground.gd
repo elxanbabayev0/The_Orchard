@@ -10,9 +10,16 @@ extends TileMapLayer
 ##
 ## Other systems only ask the two questions below, never read tiles directly.
 
+## Other nodes find the ground through this group (e.g. FootstepEffects in the
+## player scene, which cannot point to main.tscn with a NodePath).
+const GROUP := &"ground"
 const SURFACE_LAYER := "surface"
 ## Returned where there is no ground tile at all.
 const NO_SURFACE := &""
+
+
+func _ready() -> void:
+	add_to_group(GROUP)
 
 
 ## Is there a ground tile under this world point?
