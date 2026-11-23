@@ -36,3 +36,15 @@ func spend_money(amount: int) -> bool:
 
 func can_afford(amount: int) -> bool:
 	return money >= amount
+
+
+# --- Save / load -------------------------------------------------------------
+# load_save_data({}) = new-game state.
+
+func get_save_data() -> Dictionary:
+	return {"money": money}
+
+
+func load_save_data(data: Dictionary) -> void:
+	money = int(data.get("money", STARTING_MONEY))
+	money_changed.emit(money, 0)

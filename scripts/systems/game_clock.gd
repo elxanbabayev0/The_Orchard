@@ -69,3 +69,21 @@ func get_minute() -> int:
 ## How far through the day we are: 0.0 = midnight, 0.5 = noon, 1.0 = next midnight.
 func get_day_progress() -> float:
 	return minute_of_day / MINUTES_PER_DAY
+
+
+# --- Save / load -------------------------------------------------------------
+# Every system has the same two functions. load_save_data({}) = new-game state.
+
+func get_save_data() -> Dictionary:
+	return {
+		"day": day,
+		"minute_of_day": minute_of_day,
+	}
+
+
+func load_save_data(data: Dictionary) -> void:
+	# JSON gives every number back as a float, so whole numbers are turned back with int().
+	day = int(data.get("day", 1))
+	minute_of_day = float(data.get("minute_of_day", start_hour * 60.0))
+	# Only refresh the clock label. day_changed is NOT emitted: no new day has started.
+	minute_changed.emit(day, get_hour(), get_minute())

@@ -117,3 +117,33 @@ func _on_time_advanced(delta_days: float) -> void:
 	# Saturation fades a little with every bit of game time (prices recover).
 	for id in _saturation.keys():
 		_saturation[id] = maxf(0.0, _saturation[id] - RECOVERY_PER_DAY * delta_days)
+
+
+# --- Save / load -------------------------------------------------------------
+# load_save_data({}) = new-game state (fresh prices, no saturation).
+
+func get_save_data() -> Dictionary:
+	return {
+		"daily_factor": _to_text_keys(_daily_factor),
+		"saturation": _to_text_keys(_saturation),
+	}
+
+
+func load_save_data(data: Dictionary) -> void:
+	_daily_factor.clear()
+	_saturation.clear()
+	var factors: Dictionary = data.get("daily_factor", {})
+	for id_text in factors:
+		_daily_factor[StringName(id_text)] = float(factors[id_text])
+	var saturation: Dictionary = data.get("saturation", {})
+	for id_text in saturation:
+		_saturation[StringName(id_text)] = float(saturation[id_text])
+	prices_changed.emit(null)
+
+
+## JSON keys must be plain text, so StringName keys are turned into String.
+func _to_text_keys(table: Dictionary) -> Dictionary:
+	var result := {}
+	for key in table:
+		result[String(key)] = table[key]
+	return result

@@ -114,3 +114,25 @@ func _update_visuals() -> void:
 		sprite.offset = Vector2(0, -texture.get_height() / 2.0)
 	# Debug text so we can see the stage while there is no real art.
 	stage_label.text = Stage.keys()[stage]
+
+
+# --- Save / load -------------------------------------------------------------
+# "type" and the position are used by whoever re-creates the tree when loading
+# (it sets `data` from the Registry and the position before add_child).
+# load_save_data() itself only restores the growth state, after the tree is in the scene.
+
+func get_save_data() -> Dictionary:
+	return {
+		"type": String(data.id),
+		"x": global_position.x,
+		"y": global_position.y,
+		"stage": stage,
+		"stage_time": stage_time,
+	}
+
+
+func load_save_data(saved: Dictionary) -> void:
+	# clampi(): a broken or very old save can never put the tree in a stage that does not exist.
+	stage = clampi(int(saved.get("stage", Stage.SAPLING)), 0, Stage.size() - 1) as Stage
+	stage_time = float(saved.get("stage_time", 0.0))
+	_update_visuals()
