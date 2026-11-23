@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/npc/merchant.gd" id="1_merchant"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_counter"]
+size = Vector2(160, 32)
+
+[sub_resource type="Gradient" id="Gradient_person"]
+colors = PackedColorArray(0.25, 0.45, 0.7, 1, 0.25, 0.45, 0.7, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_person"]
+gradient = SubResource("Gradient_person")
+width = 64
+height = 110
+
+[sub_resource type="Gradient" id="Gradient_counter"]
+colors = PackedColorArray(0.55, 0.38, 0.22, 1, 0.55, 0.38, 0.22, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_counter"]
+gradient = SubResource("Gradient_counter")
+width = 160
+height = 56
+
+[node name="Merchant" type="StaticBody2D"]
+script = ExtResource("1_merchant")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_counter")
+
+[node name="PersonSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -95)
+texture = SubResource("GradientTexture2D_person")
+
+[node name="CounterSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -28)
+texture = SubResource("GradientTexture2D_counter")
+
+[node name="NameLabel" type="Label" parent="."]
+offset_left = -80.0
+offset_top = -186.0
+offset_right = 80.0
+offset_bottom = -158.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "Bruno"
+horizontal_alignment = 1

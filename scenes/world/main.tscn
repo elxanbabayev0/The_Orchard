@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_panel.tscn" id="6_invpanel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/item_popups.tscn" id="7_itempopups"]
 [ext_resource type="PackedScene" path="res://scenes/ui/money_display.tscn" id="8_moneydisplay"]
+[ext_resource type="PackedScene" path="res://scenes/npc/merchant.tscn" id="9_merchant"]
+[ext_resource type="Resource" path="res://scenes/items/types/gilas.tres" id="10_gilasitem"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -68,6 +70,13 @@ y_sort_enabled = true
 [node name="Gilas1" parent="Entities/Trees" instance=ExtResource("2_fruittree")]
 position = Vector2(352, 192)
 data = ExtResource("3_gilas")
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+y_sort_enabled = true
+
+[node name="Bruno" parent="Entities/NPCs" instance=ExtResource("9_merchant")]
+position = Vector2(-288, -64)
+buys = Array[Resource]([ExtResource("10_gilasitem")])
 
 [node name="Player" parent="Entities" instance=ExtResource("1_player")]
 
