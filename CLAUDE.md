@@ -56,9 +56,15 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 5. The ground (`Ground`, later `TileMapLayer`s for soil/grass) stays **outside** `Entities`, so it is always drawn behind everything.
 
 ## Current technical state (verify — may be outdated)
-- Main scene: `scenes/world/main.tscn` → `Main` (`Node2D`) with `Ground` (placeholder `ColorRect`) and `Entities` (Y-sorted: `Obstacles/Box1`, `Obstacles/Box2`, `Player` instance).
-- Player: `scenes/player/player.tscn` (`CharacterBody2D` + `CollisionShape2D` + `Sprite2D` + `Camera2D`), placeholder 64×110, origin at the feet.
+- Main scene: `scenes/world/main.tscn` → `Main` (`Node2D`) with `Ground` (placeholder `ColorRect`) and `Entities` (Y-sorted: `Obstacles/Box1`, `Obstacles/Box2`, `Trees/Gilas1`, `Player` instance).
+- Player: `scenes/player/player.tscn` (`CharacterBody2D` + `CollisionShape2D` + `Sprite2D` + `Camera2D` + `InteractionArea` (`Area2D`, circle r=40 at the feet)), placeholder 64×110, origin at the feet.
 - Movement: `scenes/player/player.gd`, speed `200`, `Input.get_vector("move_left", "move_right", "move_up", "move_down")`. Actions are bound to physical WASD + arrow keys in `project.godot`.
+- Interaction: `interact` action (physical **E** — a suggestion, not a confirmed control scheme). On press, the player calls `interact(player)` on the nearest body in `InteractionArea` that has that method (duck typing: any tree / NPC / door becomes interactable just by having `interact(player)`).
+- Trees (`scenes/trees/`):
+  - `tree_data.gd` → `class_name TreeData` (`Resource`): id, display name, stage durations (seconds for now, game days later), `fruit_id` (temporary, until an item system exists), `harvest_yield`, one texture per stage.
+  - `types/gilas.tres` → the first tree type (test values: 5 s per stage, yield 3, placeholder gradient textures).
+  - `fruit_tree.tscn` / `fruit_tree.gd` → `class_name FruitTree` (`StaticBody2D`). **Not** named `Tree`, because Godot already has a built-in `Tree` UI class. Stages `SAPLING → YOUNG → FLOWERING → UNRIPE → RIPE`; ripe waits; `harvest()` returns the amount, goes back to `FLOWERING` and emits `harvested(fruit_id, amount)`. Time is fed through `advance_time(amount)` (currently from `_process(delta)`, later from the game clock). `StageLabel` is a temporary debug label.
+- No inventory yet: harvests are only printed to the Output panel.
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)

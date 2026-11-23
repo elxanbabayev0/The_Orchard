@@ -8,6 +8,9 @@ extends StaticBody2D
 ## which starts again from FLOWERING after a harvest.
 enum Stage { SAPLING, YOUNG, FLOWERING, UNRIPE, RIPE }
 
+## Emitted after a successful harvest. The future inventory will listen to this.
+signal harvested(fruit_id: StringName, amount: int)
+
 @export var data: TreeData
 
 var stage: Stage = Stage.SAPLING
@@ -42,6 +45,32 @@ func advance_time(amount: float) -> void:
 		_set_stage((stage + 1) as Stage)
 	if stage == Stage.RIPE:
 		stage_time = 0.0
+
+
+## Called by the player when they press the interact key near this tree.
+func interact(_player: Node) -> void:
+	if can_harvest():
+		harvest()
+	else:
+		print("%s is not ripe yet (%s)." % [data.display_name, Stage.keys()[stage]])
+
+
+func can_harvest() -> bool:
+	return stage == Stage.RIPE
+
+
+## Picks the ripe fruit and starts the fruit cycle again from FLOWERING.
+## Returns how many fruits were picked (0 if nothing was ripe).
+func harvest() -> int:
+	if not can_harvest():
+		return 0
+	var amount := data.harvest_yield
+	stage_time = 0.0
+	_set_stage(Stage.FLOWERING)
+	harvested.emit(data.fruit_id, amount)
+	# Temporary: there is no inventory yet, so just show it in the Output panel.
+	print("Harvested %d x %s" % [amount, data.fruit_id])
+	return amount
 
 
 func _set_stage(new_stage: Stage) -> void:
