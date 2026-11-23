@@ -5,8 +5,9 @@ extends Resource
 ## (fruits, varieties, later tools or products) can be added without new code.
 ## The inventory counts items by their `id`.
 
-## Broad item groups (useful later for sorting / filtering the inventory).
-enum Category { FRUIT, OTHER }
+## Broad item groups (useful for sorting / filtering the inventory).
+## New categories must be added at the END: .tres files store the number, not the name.
+enum Category { FRUIT, OTHER, SAPLING }
 
 ## Unique, never-changing name used in code and save files (e.g. &"gilas").
 @export var id: StringName = &""
@@ -20,7 +21,13 @@ enum Category { FRUIT, OTHER }
 @export var description: String = ""
 
 @export_group("Economy")
-## The "normal" price of one item. The merchant's real price changes every day
-## around this value and drops when the player sells a lot (see the market system).
-## 0 = cannot be sold. Values are TEMPORARY test numbers — balance is not decided.
+## The "normal" price of one item.
+## - Items the player SELLS (fruit): the merchant's real price changes every day
+##   around this value and drops when the player sells a lot (see Market).
+## - Items the player BUYS (saplings): the shop price (fixed for now).
+## 0 = no price (cannot be traded). Values are TEMPORARY test numbers — balance is not decided.
 @export_range(0, 100000, 1) var base_price: int = 0
+
+@export_group("Planting")
+## For saplings: the tree type this sapling grows into when planted. Empty for other items.
+@export var grows_into: TreeData

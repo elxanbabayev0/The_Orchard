@@ -23,3 +23,13 @@ TREE_TUT,Mulberry Tree
 ITEM_ALBALI,Morello Cherry
 ITEM_ALBALI_DESC,"Dark, deep-red sour cherries."
 TREE_ALBALI,Morello Cherry Tree
+ITEM_GILAS_SAPLING,Sweet Cherry Sapling
+ITEM_GILAS_SAPLING_DESC,Plant it to grow a Sweet Cherry Tree.
+ITEM_ALCA_SAPLING,Cherry Plum Sapling
+ITEM_ALCA_SAPLING_DESC,Plant it to grow a Cherry Plum Tree.
+ITEM_VISNE_SAPLING,Sour Cherry Sapling
+ITEM_VISNE_SAPLING_DESC,Plant it to grow a Sour Cherry Tree.
+ITEM_TUT_SAPLING,Mulberry Sapling
+ITEM_TUT_SAPLING_DESC,Plant it to grow a Mulberry Tree.
+ITEM_ALBALI_SAPLING,Morello Cherry Sapling
+ITEM_ALBALI_SAPLING_DESC,Plant it to grow a Morello Cherry Tree.
