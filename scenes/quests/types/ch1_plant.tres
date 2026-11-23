@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scenes/quests/quest_data.gd" id="1_questdata"]
+[ext_resource type="Resource" path="res://scenes/items/types/alca_sapling.tres" id="2_reward"]
+
+[resource]
+script = ExtResource("1_questdata")
+id = &"ch1_plant"
+chapter = 1
+order = 3
+goal = 0
+target = 2
+line = "QUEST_LINE_CH1_PLANT"
+reward_xp = 30
+reward_item = ExtResource("2_reward")
+reward_amount = 1

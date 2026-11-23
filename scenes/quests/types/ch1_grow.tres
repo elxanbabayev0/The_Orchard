@@ -1,14 +1,16 @@
 [gd_resource type="Resource" script_class="QuestData" format=3]
 
 [ext_resource type="Script" path="res://scenes/quests/quest_data.gd" id="1_questdata"]
-[ext_resource type="Resource" path="res://scenes/items/types/tut_sapling.tres" id="2_reward"]
+[ext_resource type="Resource" path="res://scenes/items/types/gilas_sapling.tres" id="2_reward"]
 
 [resource]
 script = ExtResource("1_questdata")
-id = &"sell_twenty"
-order = 3
-goal = 3
-target = 20
+id = &"ch1_grow"
+chapter = 1
+order = 4
+goal = 4
+target = 2
+line = "QUEST_LINE_CH1_GROW"
 reward_xp = 40
 reward_item = ExtResource("2_reward")
 reward_amount = 1

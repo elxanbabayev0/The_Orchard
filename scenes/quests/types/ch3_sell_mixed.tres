@@ -1,17 +1,16 @@
 [gd_resource type="Resource" script_class="QuestData" format=3]
 
 [ext_resource type="Script" path="res://scenes/quests/quest_data.gd" id="1_questdata"]
-[ext_resource type="Resource" path="res://scenes/items/types/midnight_albali_sapling.tres" id="2_reward"]
-[ext_resource type="Resource" path="res://scenes/items/types/albali.tres" id="3_filter"]
+[ext_resource type="Resource" path="res://scenes/items/types/alca_sapling.tres" id="2_reward"]
 
 [resource]
 script = ExtResource("1_questdata")
-id = &"c3_sell_morello"
+id = &"ch3_sell_mixed"
 chapter = 3
 order = 3
 goal = 3
-target = 40
-filter_item = ExtResource("3_filter")
-reward_xp = 100
+target = 30
+line = "QUEST_LINE_CH3_SELL_MIXED"
+reward_xp = 40
 reward_item = ExtResource("2_reward")
 reward_amount = 1

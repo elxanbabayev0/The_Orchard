@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ChapterData" format=3]
+
+[ext_resource type="Script" path="res://scenes/quests/chapter_data.gd" id="1_chapter"]
+
+[resource]
+script = ExtResource("1_chapter")
+number = 4
+start_lines = Array[String](["CH4_START_1", "CH4_START_2", "CH4_START_3"])
+end_lines = Array[String](["CH4_END_1", "CH4_END_2", "CH4_END_3"])

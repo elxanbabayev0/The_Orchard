@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="QuestData" format=3]
+
+[ext_resource type="Script" path="res://scenes/quests/quest_data.gd" id="1_questdata"]
+
+[resource]
+script = ExtResource("1_questdata")
+id = &"ch4_invite"
+chapter = 4
+order = 1
+goal = 9
+target = 1
+line = "QUEST_LINE_CH4_INVITE"
+reward_xp = 40

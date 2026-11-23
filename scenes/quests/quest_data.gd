@@ -36,6 +36,9 @@ enum Goal {
 ## Optional: only this item counts (a sapling for PLANT_SAPLINGS, a fruit for
 ## the others; for tree goals: trees that grow this fruit). Empty = any.
 @export var filter_item: ItemData
+## HAVE_TREES only: count only grown trees (flowering or later) — also the ones
+## that grew before the task started (e.g. "Have a grown Golden Sweet Cherry tree").
+@export var grown_only: bool = false
 ## Oona's line when she gives this task (a translation KEY; empty = her general
 ## "I have a task for you" line — generated tasks have none).
 @export var line: String = ""
@@ -62,6 +65,8 @@ func counts_tree(tree_type: TreeData) -> bool:
 ## because the CSV translation table has no plural forms.
 func get_description() -> String:
 	var key := "QUEST_GOAL_%s" % Goal.keys()[goal]
+	if goal == Goal.HAVE_TREES and grown_only:
+		key = "QUEST_GOAL_HAVE_GROWN_TREES"
 	if filter_item != null:
 		key += "_ITEM"
 	if target == 1 and tr(key + "_ONE") != key + "_ONE":

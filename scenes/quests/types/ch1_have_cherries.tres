@@ -6,11 +6,13 @@
 
 [resource]
 script = ExtResource("1_questdata")
-id = &"have_three_cherries"
-order = 6
+id = &"ch1_have_cherries"
+chapter = 1
+order = 5
 goal = 5
-target = 3
+target = 4
 filter_item = ExtResource("3_filter")
+line = "QUEST_LINE_CH1_HAVE_CHERRIES"
 reward_xp = 50
 reward_item = ExtResource("2_reward")
 reward_amount = 1

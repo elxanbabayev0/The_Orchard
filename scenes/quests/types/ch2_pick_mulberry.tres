@@ -1,17 +1,18 @@
 [gd_resource type="Resource" script_class="QuestData" format=3]
 
 [ext_resource type="Script" path="res://scenes/quests/quest_data.gd" id="1_questdata"]
-[ext_resource type="Resource" path="res://scenes/items/types/snow_tut_sapling.tres" id="2_reward"]
+[ext_resource type="Resource" path="res://scenes/items/types/tut_sapling.tres" id="2_reward"]
 [ext_resource type="Resource" path="res://scenes/items/types/tut.tres" id="3_filter"]
 
 [resource]
 script = ExtResource("1_questdata")
-id = &"c2_sell_mulberry"
+id = &"ch2_pick_mulberry"
 chapter = 2
-order = 3
-goal = 3
-target = 30
+order = 4
+goal = 2
+target = 15
 filter_item = ExtResource("3_filter")
-reward_xp = 80
+line = "QUEST_LINE_CH2_PICK_MULBERRY"
+reward_xp = 30
 reward_item = ExtResource("2_reward")
 reward_amount = 1

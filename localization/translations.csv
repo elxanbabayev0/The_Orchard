@@ -151,3 +151,48 @@ ITEM_FROST_VISNE_SAPLING,Frost Cherry Sapling
 ITEM_FROST_VISNE_SAPLING_DESC,Plant it to grow a Frost Cherry Tree.
 ITEM_FROST_VISNE_CUTTING,Frost Cherry Cutting
 ITEM_FROST_VISNE_CUTTING_DESC,"Plant it, or graft it onto a Sour Cherry Tree."
+CH1_START_1,"So you're Rosa's grandchild! I'm Oona. Your grandmother and I go back a long, long way."
+CH1_START_2,"I've just come from a sunny valley in the south, where cherry trees grow between old stone walls."
+CH1_START_3,"I brought something special from there. But first, let me see how you look after this orchard."
+CH1_END_1,"When Rosa and I were girls, we planted the very first tree of this orchard together. A Sweet Cherry, right where the path bends."
+CH1_END_2,She said one day this orchard would be full of trees from all over the world. I think it's time.
+CH2_START_1,"I'm back! This time I went high into the mountains, to a garden where monks keep silkworms."
+CH2_START_2,"Silkworms eat mulberry leaves, you know. And there I found a mulberry as white as snow."
+CH2_START_3,"But first, show me you remember the trick I taught you."
+CH2_END_1,"Rosa was the one who taught me to graft, you know. Her hands were always green with sap."
+CH2_END_2,"I was hopeless at first. She just laughed and said: trees forgive, if you try again."
+CH3_START_1,"This time I travelled north, to a village by a dark lake. They grow a Morello there that's almost black."
+CH3_START_2,"The villagers sell it at a market that never seems to close. Clever traders, all of them."
+CH3_START_3,Let me see if you can trade as well as you grow.
+CH3_END_1,Rosa and I used to carry baskets of cherries to the town market. She always sold more than me.
+CH3_END_2,Her secret? She talked to every buyer as if they were an old friend.
+CH4_START_1,"My longest journey yet — far north, where the snow never quite melts."
+CH4_START_2,"There I saw sour cherries blooming at the very edge of the snow. Pale pink, as if made of frost."
+CH4_START_3,A tree like that needs many hands. Have you called your family yet?
+CH4_END_1,Do you know why I started travelling? I promised Rosa I'd bring the world's seeds back to her orchard.
+CH4_END_2,"Golden, Snow, Midnight, Frost... and there are so many more out there."
+CH4_END_3,"Keep the orchard growing, dear. I'll keep walking."
+QUEST_LINE_CH1_HARVEST,"Your trees are heavy with fruit. Go on, pick them."
+QUEST_LINE_CH1_SELL,Bruno at the stall buys fruit. Sell him ten.
+QUEST_LINE_CH1_PLANT,Bruno sells saplings too. Plant two — anywhere you like.
+QUEST_LINE_CH1_GROW,Now the hardest part of gardening: patience.
+QUEST_LINE_CH1_HAVE_CHERRIES,Four Sweet Cherry trees — then you're ready for my gift.
+QUEST_LINE_CH2_GROW_GOLDEN,Has my golden sapling grown up yet? Let's see.
+QUEST_LINE_CH2_TAKE_CUTTING,Take a cutting from your golden tree. Gently!
+QUEST_LINE_CH2_GRAFT,Now graft it onto a Sweet Cherry tree. Watch it change.
+QUEST_LINE_CH2_PICK_MULBERRY,Mulberries are soft — pick them while they're sweet.
+QUEST_LINE_CH2_HAVE_MULBERRY,"Three Mulberry trees, and the white one will feel at home."
+QUEST_LINE_CH3_HARVEST_MORELLO,Morellos first. Pick them dark and ripe.
+QUEST_LINE_CH3_SELL_MORELLO,Watch Bruno's prices — they change every day.
+QUEST_LINE_CH3_SELL_MIXED,Sell too much of one fruit and the price drops. Mix them!
+QUEST_LINE_CH3_PLANT_MORELLO,More Morello trees — the dark one likes company.
+QUEST_LINE_CH3_EARN,Earn three hundred at the market. Then it's yours.
+QUEST_LINE_CH4_INVITE,Rosa's children and grandchildren — invite one of them.
+QUEST_LINE_CH4_SWITCH,Let them work the orchard too. Everyone has a gift.
+QUEST_LINE_CH4_PICK_SOUR,Sour cherries make the best jam — Rosa's favourite.
+QUEST_LINE_CH4_GROW_THREE,Grow three more. The orchard is filling up!
+QUEST_LINE_CH4_HAVE_SOUR,Three Sour Cherry trees — the frost one will be happy here.
+QUEST_GOAL_HAVE_GROWN_TREES,Have %d grown fruit trees
+QUEST_GOAL_HAVE_GROWN_TREES_ONE,Have a grown fruit tree
+QUEST_GOAL_HAVE_GROWN_TREES_ITEM,Have %d grown %s trees
+QUEST_GOAL_HAVE_GROWN_TREES_ITEM_ONE,Have a grown %s tree

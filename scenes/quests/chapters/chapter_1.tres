@@ -6,3 +6,5 @@
 script = ExtResource("1_chapter")
 number = 1
 unlocks = Array[StringName]([&"cuttings"])
+start_lines = Array[String](["CH1_START_1", "CH1_START_2", "CH1_START_3"])
+end_lines = Array[String](["CH1_END_1", "CH1_END_2"])

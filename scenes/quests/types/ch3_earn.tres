@@ -1,15 +1,16 @@
 [gd_resource type="Resource" script_class="QuestData" format=3]
 
 [ext_resource type="Script" path="res://scenes/quests/quest_data.gd" id="1_questdata"]
-[ext_resource type="Resource" path="res://scenes/items/types/alca_sapling.tres" id="2_reward"]
+[ext_resource type="Resource" path="res://scenes/items/types/midnight_albali_sapling.tres" id="2_reward"]
 
 [resource]
 script = ExtResource("1_questdata")
-id = &"c3_grow_three"
+id = &"ch3_earn"
 chapter = 3
-order = 2
-goal = 4
-target = 3
+order = 5
+goal = 8
+target = 300
+line = "QUEST_LINE_CH3_EARN"
 reward_xp = 60
 reward_item = ExtResource("2_reward")
 reward_amount = 1

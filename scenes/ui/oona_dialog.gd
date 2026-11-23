@@ -56,7 +56,9 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 					_add_line(tr(key))
 				for feature in _chapter_done.unlocks:
 					_add_line(tr("UI_OONA_UNLOCK_%s" % String(feature).to_upper()), HIGHLIGHT)
-			_add_line(tr("UI_OONA_CHAPTER_DONE"))
+			# After the LAST chapter its own end scene already says goodbye.
+			if Quests.get_current_chapter() != null:
+				_add_line(tr("UI_OONA_CHAPTER_DONE"))
 		OonaVisits.Talk.REWARD_LAST:
 			_add_reward()
 			_add_line(tr("UI_OONA_NO_TASKS"))

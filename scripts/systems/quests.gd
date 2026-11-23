@@ -261,6 +261,7 @@ func _on_sapling_planted(sapling: ItemData, _tree: Node2D) -> void:
 func _on_tree_grown(tree_type: TreeData, _tree: Node2D) -> void:
 	if _active != null and _active.goal == QuestData.Goal.GROW_SAPLINGS and _active.counts_tree(tree_type):
 		_add_progress(1)
+	_refresh_tree_count() # HAVE_TREES with grown_only: one more grown tree
 
 
 ## HAVE_TREES is a state, not an event: count the matching trees in the world.
@@ -269,8 +270,12 @@ func _refresh_tree_count() -> void:
 		return
 	var count := 0
 	for tree in get_tree().get_nodes_in_group(TREE_GROUP):
-		if not tree.is_queued_for_deletion() and _active.counts_tree(tree.get("data")):
-			count += 1
+		if tree.is_queued_for_deletion() or not _active.counts_tree(tree.get("data")):
+			continue
+		# grown_only: FLOWERING (2) or later (same numbers as FruitTree.Stage).
+		if _active.grown_only and int(tree.get("stage")) < 2:
+			continue
+		count += 1
 	if count > _progress:
 		_add_progress(count - _progress)
 

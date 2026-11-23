@@ -2,16 +2,15 @@
 
 [ext_resource type="Script" path="res://scenes/quests/quest_data.gd" id="1_questdata"]
 [ext_resource type="Resource" path="res://scenes/items/types/tut_sapling.tres" id="2_reward"]
-[ext_resource type="Resource" path="res://scenes/items/types/tut.tres" id="3_filter"]
 
 [resource]
 script = ExtResource("1_questdata")
-id = &"c2_pick_mulberry"
-chapter = 2
-order = 1
-goal = 2
-target = 20
-filter_item = ExtResource("3_filter")
-reward_xp = 40
+id = &"ch1_sell"
+chapter = 1
+order = 2
+goal = 3
+target = 10
+line = "QUEST_LINE_CH1_SELL"
+reward_xp = 30
 reward_item = ExtResource("2_reward")
 reward_amount = 1

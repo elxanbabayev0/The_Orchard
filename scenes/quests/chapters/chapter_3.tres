@@ -5,3 +5,5 @@
 [resource]
 script = ExtResource("1_chapter")
 number = 3
+start_lines = Array[String](["CH3_START_1", "CH3_START_2", "CH3_START_3"])
+end_lines = Array[String](["CH3_END_1", "CH3_END_2"])
