@@ -3,11 +3,14 @@ extends Node
 ## (Decisions: the player starts as Rosa's grandchild with a name they type in;
 ## family members are unlocked with level "invitations"; a parent must be
 ## invited before their children; Rosa is not playable.)
-## Switching the active character comes in the next step.
+## One character is "active" (the one the player controls); the player can
+## switch to their own character or to any invited family member.
 
 signal player_name_changed(new_name: String)
 ## Emitted when a family member accepts an invitation.
 signal character_unlocked(character: CharacterData)
+## Emitted when the player switches to another character (also after loading).
+signal active_character_changed(character: CharacterData)
 
 ## id of the player's own character file (scenes/characters/types/player.tres).
 const PLAYER_CHARACTER_ID := &"player"
@@ -17,6 +20,8 @@ const MAX_NAME_LENGTH := 16
 var player_name: String = ""
 ## ids of invited family members, in the order they came.
 var _unlocked: Array[StringName] = []
+## id of the character the player controls right now.
+var _active_id: StringName = PLAYER_CHARACTER_ID
 
 
 func set_player_name(new_name: String) -> void:
@@ -29,9 +34,30 @@ func clean_name(raw_name: String) -> String:
 	return raw_name.strip_edges().left(MAX_NAME_LENGTH)
 
 
-## The character the player is controlling right now (only the player's own for now).
+## The character the player is controlling right now.
 func get_active() -> CharacterData:
-	return Registry.get_character(PLAYER_CHARACTER_ID)
+	return Registry.get_character(_active_id)
+
+
+func is_active(character: CharacterData) -> bool:
+	return character != null and character.id == _active_id
+
+
+## Playable = the player's own character or an invited family member.
+func can_switch_to(character: CharacterData) -> bool:
+	if character == null:
+		return false
+	return character.id == PLAYER_CHARACTER_ID or is_unlocked(character)
+
+
+## Makes another character the active one. Returns false (nothing changes)
+## if that character is not playable or is already active.
+func switch_to(character: CharacterData) -> bool:
+	if not can_switch_to(character) or is_active(character):
+		return false
+	_active_id = character.id
+	active_character_changed.emit(character)
+	return true
 
 
 ## A character's shown name: the typed-in name for the player's own character.
@@ -113,7 +139,7 @@ func get_save_data() -> Dictionary:
 	var unlocked := []
 	for id in _unlocked:
 		unlocked.append(String(id))
-	return {"player_name": player_name, "unlocked": unlocked}
+	return {"player_name": player_name, "unlocked": unlocked, "active": String(_active_id)}
 
 
 func load_save_data(data: Dictionary) -> void:
@@ -124,4 +150,10 @@ func load_save_data(data: Dictionary) -> void:
 		# Skip unknown ids, duplicates and anyone who is not invitable.
 		if character != null and character.invitable and not _unlocked.has(character.id):
 			_unlocked.append(character.id)
+	# The active character must be playable; otherwise fall back to the player's own.
+	# (Older saves have no "active" key → the player's own character.)
+	var active_text := str(data.get("active", ""))
+	var active := Registry.get_character(StringName(active_text)) if active_text != "" else null
+	_active_id = active.id if can_switch_to(active) else PLAYER_CHARACTER_ID
 	player_name_changed.emit(player_name)
+	active_character_changed.emit(get_active())

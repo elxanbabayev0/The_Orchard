@@ -13,6 +13,7 @@ func _ready() -> void:
 	Characters.player_name_changed.connect(func(_new_name: String) -> void:
 		_apply_character(Characters.get_active())
 	)
+	Characters.active_character_changed.connect(_apply_character)
 
 
 ## Shows the active character: its picture and its name above the head.
