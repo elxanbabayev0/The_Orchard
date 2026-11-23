@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TreeData" format=3]
+
+[ext_resource type="Script" path="res://scenes/trees/tree_data.gd" id="1_treedata"]
+
+[resource]
+script = ExtResource("1_treedata")
+id = &"gilas"
+display_name = "Gilas"
+sapling_duration = 5.0
+young_duration = 5.0
+flowering_duration = 5.0
+unripe_duration = 5.0
+fruit_id = &"gilas"
+harvest_yield = 3
