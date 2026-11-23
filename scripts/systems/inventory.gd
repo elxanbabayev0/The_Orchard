@@ -24,8 +24,6 @@ func add_item(item: ItemData, amount: int = 1) -> void:
 	_amounts[item.id] = get_count(item) + amount
 	item_added.emit(item, amount)
 	inventory_changed.emit(item, _amounts[item.id])
-	# Temporary: shows the result in the Output panel until the inventory UI exists.
-	print("Inventory: %s = %d" % [item.display_name, _amounts[item.id]])
 
 
 ## Removes items. Returns false (and removes nothing) if there are not enough.
