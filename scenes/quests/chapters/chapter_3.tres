@@ -5,4 +5,3 @@
 [resource]
 script = ExtResource("1_chapter")
 number = 3
-required_level = 5

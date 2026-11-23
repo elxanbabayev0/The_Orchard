@@ -117,7 +117,6 @@ TREE_MIDNIGHT_ALBALI,Midnight Morello Tree
 ITEM_MIDNIGHT_ALBALI_SAPLING,Midnight Morello Sapling
 ITEM_MIDNIGHT_ALBALI_SAPLING_DESC,Plant it to grow a Midnight Morello Tree.
 UI_OONA_CHAPTER_DONE,"That was my last task for now. I must travel on and find more seeds. I'll be back in a few days with some small everyday tasks."
-UI_OONA_NEXT_CHAPTER,"When you reach level %d, I'll have something special for you."
 UI_OONA_UNLOCK_CUTTINGS,"Before I go, let me teach you an old orchard trick: take a cutting from a grown rare tree. Plant it, or graft it onto a common tree of the same fruit."
 ITEM_GOLDEN_GILAS_CUTTING,Golden Sweet Cherry Cutting
 ITEM_GOLDEN_GILAS_CUTTING_DESC,"Plant it, or graft it onto a Sweet Cherry Tree."

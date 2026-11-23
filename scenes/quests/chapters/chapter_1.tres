@@ -5,5 +5,4 @@
 [resource]
 script = ExtResource("1_chapter")
 number = 1
-required_level = 1
 unlocks = Array[StringName]([&"cuttings"])

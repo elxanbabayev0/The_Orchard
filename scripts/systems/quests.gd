@@ -10,10 +10,10 @@ extends Node
 ##
 ## Written tasks (scenes/quests/types/) belong to story chapters
 ## (scenes/quests/chapters/) and come first: chapter by chapter, in `order`.
-## A chapter opens when the player reaches its required level. While no written
-## task is available (waiting for a level, or all chapters done), Oona gives
-## generated everyday tasks (QuestGenerator), so she never runs out
-## (decision "After Oona's tasks").
+## After a chapter Oona travels; then she gives EVERYDAY_TASKS_BETWEEN_CHAPTERS
+## generated everyday tasks, and then the next chapter starts (decision "Story
+## chapters: content plan" — no level gates). When all chapters are done she
+## keeps giving generated tasks (QuestGenerator), so she never runs out.
 
 ## Oona gave a new task.
 signal quest_started(quest: QuestData)
@@ -40,6 +40,11 @@ var _generator := QuestGenerator.new()
 
 ## Same as FruitTree.GROUP (not referenced directly: autoloads compile early).
 const TREE_GROUP := &"fruit_trees"
+## Generated everyday tasks between two story chapters. TEMPORARY test value.
+const EVERYDAY_TASKS_BETWEEN_CHAPTERS := 2
+
+## Generated tasks rewarded since the last story chapter ended.
+var _everyday_since_chapter: int = 0
 
 
 func _ready() -> void:
@@ -85,11 +90,32 @@ func get_next() -> QuestData:
 
 # --- Chapters ----------------------------------------------------------------
 
-## A chapter is open when it exists and the player has its required level.
-## (Lower chapters always come first because get_next() picks the lowest.)
+## A chapter is open when it exists, every earlier chapter is complete and,
+## after the previous chapter, enough everyday tasks were done. (Chapter 1 is
+## open from the start.)
 func is_chapter_open(number: int) -> bool:
-	var chapter := Registry.get_chapter(number)
-	return chapter != null and Progression.level >= chapter.required_level
+	if Registry.get_chapter(number) == null:
+		return false
+	for chapter in Registry.get_all_chapters():
+		if chapter.number < number and not is_chapter_complete(chapter.number):
+			return false
+	var first_chapter: ChapterData = Registry.get_all_chapters().front()
+	var is_first := first_chapter.number == number
+	if is_first or is_chapter_complete(number):
+		return true
+	# A chapter already started stays open (one of its tasks is finished or active).
+	if _has_started(number):
+		return true
+	return _everyday_since_chapter >= EVERYDAY_TASKS_BETWEEN_CHAPTERS
+
+
+func _has_started(number: int) -> bool:
+	if _active != null and not is_generated(_active) and _active.chapter == number:
+		return true
+	for quest in Registry.get_all_quests():
+		if quest.chapter == number and is_finished(quest):
+			return true
+	return false
 
 
 ## Every written task of this chapter has been rewarded.
@@ -121,15 +147,6 @@ func is_feature_unlocked(feature: StringName) -> bool:
 	return false
 
 
-## The level the player needs for the next story chapter, or 0 if no chapter is
-## waiting for a level (one is open, or all are done). Oona mentions it.
-func get_next_chapter_level() -> int:
-	var chapter := get_current_chapter()
-	if chapter == null or is_chapter_open(chapter.number):
-		return 0
-	return chapter.required_level
-
-
 ## Oona gives the next task: the next written one, or a generated one when
 ## none is left. Returns it, or null if a task is already active (or there are
 ## no templates at all).
@@ -157,7 +174,9 @@ func claim_reward() -> bool:
 	var quest := _active
 	_active = null
 	_progress = 0
-	if not is_generated(quest):
+	if is_generated(quest):
+		_everyday_since_chapter += 1
+	else:
 		_finished.append(quest.id)
 	if quest.reward_xp > 0:
 		Progression.add_xp(quest.reward_xp)
@@ -167,6 +186,7 @@ func claim_reward() -> bool:
 	if not is_generated(quest) and is_chapter_complete(quest.chapter):
 		var chapter := Registry.get_chapter(quest.chapter)
 		if chapter != null:
+			_everyday_since_chapter = 0 # the count starts again after each chapter
 			chapter_completed.emit(chapter)
 			for feature in chapter.unlocks:
 				feature_unlocked.emit(feature)
@@ -260,6 +280,7 @@ func get_save_data() -> Dictionary:
 		"progress": _progress,
 		"finished": finished,
 		"last_goal": _last_goal,
+		"everyday_since_chapter": _everyday_since_chapter,
 	}
 	if is_generated(_active):
 		data["generated"] = _active.to_dict() # no file to find it by id
@@ -273,6 +294,7 @@ func load_save_data(data: Dictionary) -> void:
 		if quest != null and not _finished.has(quest.id):
 			_finished.append(quest.id)
 	_last_goal = int(data.get("last_goal", -1))
+	_everyday_since_chapter = maxi(0, int(data.get("everyday_since_chapter", 0)))
 	var active_id := StringName(str(data.get("active", "")))
 	if active_id == QuestGenerator.GENERATED_ID:
 		var saved = data.get("generated", {})

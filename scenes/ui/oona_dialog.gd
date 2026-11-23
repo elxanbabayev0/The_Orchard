@@ -66,10 +66,6 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 			_add_line(tr("UI_OONA_NO_TASKS"))
 		_:
 			_add_line(tr("UI_OONA_NO_TASKS"))
-	# While a story chapter waits for a level, Oona says when it comes.
-	var next_level := Quests.get_next_chapter_level()
-	if next_level > 0 and result != OonaVisits.Talk.REMINDER:
-		_add_line(tr("UI_OONA_NEXT_CHAPTER") % next_level)
 	_rewarded = null
 	_chapter_done = null
 	show()
