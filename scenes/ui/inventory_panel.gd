@@ -1,7 +1,12 @@
 extends PanelContainer
 ## Inventory panel. Opens / closes with the "toggle_inventory" action.
 ## Lists every item in the Inventory with its icon, name and amount.
+## Saplings get a "Plant" button that starts the placement mode.
 ## Texts come from translation keys (localization/translations.csv); the look is a placeholder.
+
+## Emitted when the player presses "Plant" on a sapling.
+## Connected to PlacementMode.start in main.tscn.
+signal plant_requested(item: ItemData)
 
 const ICON_SIZE := Vector2(48, 48)
 const FONT_SIZE := 26
@@ -40,7 +45,7 @@ func _refresh() -> void:
 		rows.add_child(_make_row(item))
 
 
-## One row: [icon]  Name ............ × amount
+## One row: [icon]  Name ............ × amount  [Plant]  (button only for saplings)
 func _make_row(item: ItemData) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 16)
@@ -62,5 +67,15 @@ func _make_row(item: ItemData) -> HBoxContainer:
 	amount_label.text = "× %d" % Inventory.get_count(item)
 	amount_label.add_theme_font_size_override("font_size", FONT_SIZE)
 	row.add_child(amount_label)
+
+	if item.category == ItemData.Category.SAPLING and item.grows_into != null:
+		var plant_button := Button.new()
+		plant_button.text = tr("UI_PLANT")
+		plant_button.add_theme_font_size_override("font_size", FONT_SIZE)
+		plant_button.pressed.connect(func() -> void:
+			hide() # close the panel so the player can see where to plant
+			plant_requested.emit(item)
+		)
+		row.add_child(plant_button)
 
 	return row

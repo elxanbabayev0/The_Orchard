@@ -24,6 +24,7 @@
 [ext_resource type="Resource" path="res://scenes/items/types/visne_sapling.tres" id="22_visnesapling"]
 [ext_resource type="Resource" path="res://scenes/items/types/tut_sapling.tres" id="23_tutsapling"]
 [ext_resource type="Resource" path="res://scenes/items/types/albali_sapling.tres" id="24_albalisapling"]
+[ext_resource type="PackedScene" path="res://scenes/world/placement_mode.tscn" id="25_placement"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -111,6 +112,11 @@ sells = Array[Resource]([ExtResource("20_gilassapling"), ExtResource("21_alcasap
 
 [node name="Player" parent="Entities" instance=ExtResource("1_player")]
 
+[node name="PlacementMode" parent="." node_paths=PackedStringArray("player", "trees_parent", "ground") instance=ExtResource("25_placement")]
+player = NodePath("../Entities/Player")
+trees_parent = NodePath("../Entities/Trees")
+ground = NodePath("../Ground")
+
 [node name="DayNightTint" type="CanvasModulate" parent="."]
 script = ExtResource("5_daynight")
 day_colors = SubResource("Gradient_daynight")
@@ -137,3 +143,4 @@ script = ExtResource("4_clocklabel")
 [node name="TradeWindow" parent="UI" instance=ExtResource("11_tradewindow")]
 
 [connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/TradeWindow" method="open"]
+[connection signal="plant_requested" from="UI/InventoryPanel" to="PlacementMode" method="start"]

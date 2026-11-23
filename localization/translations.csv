@@ -36,3 +36,5 @@ ITEM_TUT_SAPLING,Mulberry Sapling
 ITEM_TUT_SAPLING_DESC,Plant it to grow a Mulberry Tree.
 ITEM_ALBALI_SAPLING,Morello Cherry Sapling
 ITEM_ALBALI_SAPLING_DESC,Plant it to grow a Morello Cherry Tree.
+UI_PLANT,Plant
+UI_PLACEMENT_HINT,Left click: plant   ·   Right click / Esc: cancel

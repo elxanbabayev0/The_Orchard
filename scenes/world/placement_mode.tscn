@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/world/placement_mode.gd" id="1_placement"]
+
+[node name="PlacementMode" type="Node2D"]
+script = ExtResource("1_placement")
+
+[node name="Ghost" type="Sprite2D" parent="."]
+
+[node name="HintLayer" type="CanvasLayer" parent="."]
+
+[node name="Hint" type="Label" parent="HintLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -500.0
+offset_top = 16.0
+offset_right = 500.0
+offset_bottom = 60.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "UI_PLACEMENT_HINT"
+horizontal_alignment = 1
