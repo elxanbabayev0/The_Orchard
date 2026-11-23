@@ -7,7 +7,7 @@ extends StaticBody2D
 ## Which items this merchant buys is set in the Inspector (`buys`), so
 ## future buyers with their own tastes can reuse this scene.
 
-## Emitted when the player wants to trade. The sell window will listen to this.
+## Emitted when the player wants to trade. Connected to SellWindow.open in main.tscn.
 signal trade_requested(merchant: Merchant)
 
 @export var display_name: String = "Bruno"
@@ -24,7 +24,3 @@ func _ready() -> void:
 ## Called by the player when they press the interact key near the stall.
 func interact(_player: Node) -> void:
 	trade_requested.emit(self)
-	# Temporary: there is no sell window yet, so show today's prices in the Output panel.
-	print("%s: Today's prices:" % display_name)
-	for item in buys:
-		print("  %s: %d (you have %d)" % [item.display_name, Market.get_price(item), Inventory.get_count(item)])

@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/money_display.tscn" id="8_moneydisplay"]
 [ext_resource type="PackedScene" path="res://scenes/npc/merchant.tscn" id="9_merchant"]
 [ext_resource type="Resource" path="res://scenes/items/types/gilas.tres" id="10_gilasitem"]
+[ext_resource type="PackedScene" path="res://scenes/ui/sell_window.tscn" id="11_sellwindow"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -102,3 +103,7 @@ script = ExtResource("4_clocklabel")
 [node name="InventoryPanel" parent="UI" instance=ExtResource("6_invpanel")]
 
 [node name="ItemPopups" parent="UI" instance=ExtResource("7_itempopups")]
+
+[node name="SellWindow" parent="UI" instance=ExtResource("11_sellwindow")]
+
+[connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/SellWindow" method="open"]
