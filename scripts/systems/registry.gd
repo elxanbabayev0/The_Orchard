@@ -11,6 +11,7 @@ const TREE_FOLDER := "res://scenes/trees/types/"
 const CHARACTER_FOLDER := "res://scenes/characters/types/"
 const QUEST_FOLDER := "res://scenes/quests/types/"
 const QUEST_TEMPLATE_FOLDER := "res://scenes/quests/templates/"
+const CHAPTER_FOLDER := "res://scenes/quests/chapters/"
 
 ## id -> ItemData
 var _items: Dictionary[StringName, ItemData] = {}
@@ -22,6 +23,8 @@ var _characters: Dictionary[StringName, CharacterData] = {}
 var _quests: Dictionary[StringName, QuestData] = {}
 ## Templates for generated tasks (no ids: they are never saved by id).
 var _quest_templates: Array[QuestTemplate] = []
+## Oona's story chapters, sorted by number.
+var _chapters: Array[ChapterData] = []
 
 
 func _ready() -> void:
@@ -40,6 +43,10 @@ func _ready() -> void:
 	for resource in _load_folder(QUEST_TEMPLATE_FOLDER):
 		if resource is QuestTemplate:
 			_quest_templates.append(resource)
+	for resource in _load_folder(CHAPTER_FOLDER):
+		if resource is ChapterData:
+			_chapters.append(resource)
+	_chapters.sort_custom(func(a: ChapterData, b: ChapterData) -> bool: return a.number < b.number)
 
 
 ## Returns the quest with this id, or null (with a warning) if there is none.
@@ -48,6 +55,19 @@ func get_quest(id: StringName) -> QuestData:
 		push_warning("Registry: unknown quest id '%s'." % id)
 		return null
 	return _quests[id]
+
+
+## All story chapters, sorted by number.
+func get_all_chapters() -> Array[ChapterData]:
+	return _chapters.duplicate()
+
+
+## The chapter with this number, or null.
+func get_chapter(number: int) -> ChapterData:
+	for chapter in _chapters:
+		if chapter.number == number:
+			return chapter
+	return null
 
 
 func get_all_quest_templates() -> Array[QuestTemplate]:

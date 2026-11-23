@@ -11,6 +11,8 @@ const HIGHLIGHT := Color(1.0, 0.88, 0.35)
 ## The task Oona just rewarded (remembered from Quests.quest_rewarded, which
 ## fires inside OonaVisits.talk(), right before this window opens).
 var _rewarded: QuestData = null
+## Set when that reward finished a story chapter (Quests.chapter_completed).
+var _chapter_done: ChapterData = null
 
 @onready var portrait: TextureRect = $Margin/HBox/Portrait
 @onready var lines: VBoxContainer = $Margin/HBox/VBox/Lines
@@ -22,6 +24,7 @@ func _ready() -> void:
 	UIState.track(self)
 	close_button.pressed.connect(hide)
 	Quests.quest_rewarded.connect(func(quest: QuestData) -> void: _rewarded = quest)
+	Quests.chapter_completed.connect(func(chapter: ChapterData) -> void: _chapter_done = chapter)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -44,6 +47,8 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 			_add_task()
 		OonaVisits.Talk.REWARD_AND_TASK:
 			_add_reward()
+			if _chapter_done != null:
+				_add_line(tr("UI_OONA_CHAPTER_DONE")) # she "goes on a journey"
 			_add_line(tr("UI_OONA_NEXT_TASK"))
 			_add_task()
 		OonaVisits.Talk.REWARD_LAST:
@@ -51,7 +56,12 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 			_add_line(tr("UI_OONA_NO_TASKS"))
 		_:
 			_add_line(tr("UI_OONA_NO_TASKS"))
+	# While a story chapter waits for a level, Oona says when it comes.
+	var next_level := Quests.get_next_chapter_level()
+	if next_level > 0 and result != OonaVisits.Talk.REMINDER:
+		_add_line(tr("UI_OONA_NEXT_CHAPTER") % next_level)
 	_rewarded = null
+	_chapter_done = null
 	show()
 	close_button.grab_focus() # Enter / Space closes too
 

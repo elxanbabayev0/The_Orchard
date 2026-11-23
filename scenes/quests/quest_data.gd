@@ -21,7 +21,9 @@ enum Goal {
 
 ## Unique, never-changing name used in save files (e.g. &"plant_two").
 @export var id: StringName = &""
-## Oona gives her tasks in this order (lowest first).
+## Story chapter this written task belongs to (see ChapterData). Generated tasks: 0.
+@export var chapter: int = 1
+## Oona gives the tasks of a chapter in this order (lowest first).
 @export var order: int = 0
 @export var goal: Goal = Goal.PLANT_SAPLINGS
 ## How many (saplings, harvests, fruit...). TEMPORARY test values.

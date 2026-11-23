@@ -8,9 +8,12 @@ extends Node
 ## talking) is a separate NPC that calls start_next() and claim_reward().
 ## Progress comes from GameEvents and only counts while a task is active.
 ##
-## Written tasks (scenes/quests/types/) come first, in `order`. When none is
-## left, Oona gives generated everyday tasks (QuestGenerator), so she never runs
-## out (decision "After Oona's tasks"). Story chapters come later.
+## Written tasks (scenes/quests/types/) belong to story chapters
+## (scenes/quests/chapters/) and come first: chapter by chapter, in `order`.
+## A chapter opens when the player reaches its required level. While no written
+## task is available (waiting for a level, or all chapters done), Oona gives
+## generated everyday tasks (QuestGenerator), so she never runs out
+## (decision "After Oona's tasks").
 
 ## Oona gave a new task.
 signal quest_started(quest: QuestData)
@@ -20,6 +23,8 @@ signal quest_progressed(quest: QuestData, progress: int)
 signal quest_done(quest: QuestData)
 ## Oona gave the reward; the task is finished.
 signal quest_rewarded(quest: QuestData)
+## The last task of a story chapter was rewarded (Oona "goes on a journey").
+signal chapter_completed(chapter: ChapterData)
 
 ## The task being worked on (null = none).
 var _active: QuestData = null
@@ -61,16 +66,55 @@ func is_finished(quest: QuestData) -> bool:
 	return quest != null and _finished.has(quest.id)
 
 
-## The next WRITTEN task (lowest `order` not finished yet), or null when all
-## written tasks are done (then start_next() generates one).
+## The next WRITTEN task: lowest chapter first, then lowest `order`, only from
+## chapters that are open for the player's level. null when none is available
+## (then start_next() generates a task).
 func get_next() -> QuestData:
 	var best: QuestData = null
 	for quest in Registry.get_all_quests():
-		if is_finished(quest) or quest == _active:
+		if is_finished(quest) or quest == _active or not is_chapter_open(quest.chapter):
 			continue
-		if best == null or quest.order < best.order:
+		if best == null or quest.chapter < best.chapter \
+				or (quest.chapter == best.chapter and quest.order < best.order):
 			best = quest
 	return best
+
+
+# --- Chapters ----------------------------------------------------------------
+
+## A chapter is open when it exists and the player has its required level.
+## (Lower chapters always come first because get_next() picks the lowest.)
+func is_chapter_open(number: int) -> bool:
+	var chapter := Registry.get_chapter(number)
+	return chapter != null and Progression.level >= chapter.required_level
+
+
+## Every written task of this chapter has been rewarded.
+func is_chapter_complete(number: int) -> bool:
+	var has_tasks := false
+	for quest in Registry.get_all_quests():
+		if quest.chapter == number:
+			has_tasks = true
+			if not is_finished(quest):
+				return false
+	return has_tasks
+
+
+## The first chapter that is not complete yet (null = all done).
+func get_current_chapter() -> ChapterData:
+	for chapter in Registry.get_all_chapters():
+		if not is_chapter_complete(chapter.number):
+			return chapter
+	return null
+
+
+## The level the player needs for the next story chapter, or 0 if no chapter is
+## waiting for a level (one is open, or all are done). Oona mentions it.
+func get_next_chapter_level() -> int:
+	var chapter := get_current_chapter()
+	if chapter == null or is_chapter_open(chapter.number):
+		return 0
+	return chapter.required_level
 
 
 ## Oona gives the next task: the next written one, or a generated one when
@@ -107,6 +151,10 @@ func claim_reward() -> bool:
 	if quest.reward_item != null and quest.reward_amount > 0:
 		Inventory.add_item(quest.reward_item, quest.reward_amount)
 	quest_rewarded.emit(quest)
+	if not is_generated(quest) and is_chapter_complete(quest.chapter):
+		var chapter := Registry.get_chapter(quest.chapter)
+		if chapter != null:
+			chapter_completed.emit(chapter)
 	return true
 
 
@@ -171,6 +219,7 @@ func _generated_from_dict(data: Dictionary) -> QuestData:
 		return null
 	var quest := QuestData.new()
 	quest.id = QuestGenerator.GENERATED_ID
+	quest.chapter = 0
 	quest.goal = goal_value as QuestData.Goal
 	quest.target = maxi(1, int(data.get("target", 1)))
 	quest.filter_item = _item_or_null(str(data.get("filter", "")))

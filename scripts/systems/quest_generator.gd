@@ -41,6 +41,7 @@ func generate(level: int, previous_goal: int = -1) -> QuestData:
 		return null
 	var quest := QuestData.new()
 	quest.id = GENERATED_ID
+	quest.chapter = 0 # not part of a story chapter
 	quest.goal = template.goal
 	var target := template.base_target + template.target_per_level * maxi(0, level - 1)
 	if FRUIT_GOALS.has(template.goal) and _rng.randf() < template.filter_chance:
