@@ -6,6 +6,7 @@ extends CharacterBody2D
 @onready var interaction_area: Area2D = $InteractionArea
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var name_label: Label = $NameLabel
+@onready var walk_bob: WalkBob = $WalkBob
 
 ## Which way the player looks. Changes while walking; kept when standing still.
 var facing: CharacterData.Facing = CharacterData.Facing.DOWN
@@ -43,10 +44,12 @@ func _update_picture() -> void:
 		return
 	sprite.texture = picture
 	# "Origin on the ground": the bottom of the picture sits on the feet.
-	sprite.position = Vector2(0, -picture.get_height() / 2.0)
+	# offset (not position) lifts the picture, so the sprite's pivot stays at the
+	# feet and WalkBob can hop / squash it around the feet.
+	sprite.offset = Vector2(0, -picture.get_height() / 2.0)
 
 
-func _physics_process(_delta):
+func _physics_process(delta: float) -> void:
 	var direction := Input.get_vector(
 		"move_left",
 		"move_right",
@@ -59,6 +62,8 @@ func _physics_process(_delta):
 	# Skill: faster walking while that character is active.
 	velocity = direction * speed * (1.0 + Characters.get_bonus(SkillData.Effect.WALK_SPEED))
 	move_and_slide()
+	# The real speed after collisions: walking into a wall = no steps.
+	walk_bob.update(delta, get_real_velocity().length() / speed)
 
 
 func _unhandled_input(event: InputEvent) -> void:

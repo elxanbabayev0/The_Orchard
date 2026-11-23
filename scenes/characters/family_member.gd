@@ -48,6 +48,6 @@ func _update_look() -> void:
 	if picture != null:
 		sprite.texture = picture
 		# "Origin on the ground": the bottom of the picture sits on the feet.
-		sprite.position = Vector2(0, -picture.get_height() / 2.0)
+		sprite.offset = Vector2(0, -picture.get_height() / 2.0)
 	name_label.text = Characters.get_display_name(character)
 	name = "Member_%s" % character.id

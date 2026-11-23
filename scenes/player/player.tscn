@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://pdqctokjjk66"]
 
 [ext_resource type="Script" uid="uid://c6x5hphljsyvw" path="res://scenes/player/player.gd" id="1_8afob"]
+[ext_resource type="Script" path="res://scenes/characters/walk_bob.gd" id="2_walkbob"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dovo2"]
 size = Vector2(40, 20)
@@ -24,10 +25,14 @@ position = Vector2(0, -10)
 shape = SubResource("RectangleShape2D_dovo2")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1100170800]
-position = Vector2(0, -55)
 texture = SubResource("GradientTexture2D_placeholder")
+offset = Vector2(0, -55)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1777852088]
+
+[node name="WalkBob" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("2_walkbob")
+sprite = NodePath("../Sprite2D")
 
 [node name="InteractionArea" type="Area2D" parent="."]
 position = Vector2(0, -10)

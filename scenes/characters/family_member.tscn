@@ -13,7 +13,7 @@ position = Vector2(0, -10)
 shape = SubResource("RectangleShape2D_feet")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -55)
+offset = Vector2(0, -55)
 
 [node name="NameLabel" type="Label" parent="."]
 auto_translate_mode = 2
