@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scenes/world/day_night_tint.gd" id="5_daynight"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_panel.tscn" id="6_invpanel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/item_popups.tscn" id="7_itempopups"]
+[ext_resource type="PackedScene" path="res://scenes/ui/money_display.tscn" id="8_moneydisplay"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -86,6 +87,8 @@ theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 32
 text = "Gün 1   06:00"
 script = ExtResource("4_clocklabel")
+
+[node name="MoneyDisplay" parent="UI" instance=ExtResource("8_moneydisplay")]
 
 [node name="InventoryPanel" parent="UI" instance=ExtResource("6_invpanel")]
 
