@@ -56,6 +56,11 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 4. All such objects live under `Main/Entities` (a `Node2D` with `y_sort_enabled = true`). Sub-group nodes inside it (like `Obstacles`) also need `y_sort_enabled = true`, so their children are sorted together with the player.
 5. The ground (`Ground`, later `TileMapLayer`s for soil/grass) stays **outside** `Entities`, so it is always drawn behind everything.
 
+**Player-facing text (localization rule)** — confirmed 2026-11-23:
+1. Never hard-code text the player sees. Use a translation key (e.g. `UI_SELL`, `ITEM_GILAS`) and add it to the translation CSV (`en` column for now).
+2. In scripts use `tr("KEY")` (with `%` formatting for numbers, e.g. `tr("UI_PRICE") % price`); in scenes put the key directly into a `Label`/`Button` text (Godot translates it automatically).
+3. Debug `print` messages, warnings and code comments are plain English and are not translated. Character names are not translated.
+
 ## Current technical state (verify — may be outdated)
 - Main scene: `scenes/world/main.tscn` → `Main` (`Node2D`) with `Ground` (placeholder `ColorRect`), `Entities` (Y-sorted: `Obstacles/Box1`, `Obstacles/Box2`, `Trees/Gilas1`, `NPCs/Bruno`, `Player` instance), `DayNightTint` and `UI` (`CanvasLayer`, does not move with the camera and is not tinted) → `ClockLabel`, `MoneyDisplay`, `InventoryPanel`, `ItemPopups`, `SellWindow`. Signal connection in the scene file: `Bruno.trade_requested` → `SellWindow.open`.
 - Autoloads (order matters — later ones use earlier ones in `_ready`): `GameClock`, `Inventory`, `Wallet`, `Market`.
@@ -77,11 +82,11 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Market: autoload **`Market`** (`scripts/systems/market.gd`). `price = base_price × daily factor × sales factor`, rounded, at least 1 (0 if `base_price` is 0). Daily factor: random per item, picked when first needed each day, cleared on `GameClock.day_changed`. Sales factor: `max(MIN_SALES_FACTOR, 1 − saturation × DROP_PER_UNIT)`; saturation += units sold and fades continuously via `GameClock.time_advanced`. TEMPORARY constants: `DAILY_RANGE 0.2`, `DROP_PER_UNIT 0.02`, `MIN_SALES_FACTOR 0.5`, `RECOVERY_PER_DAY 25`. API: `get_price(item)`, `get_sell_total(item, amount)` (each unit priced one by one, no side effects), `sell(item, amount)` (all-or-nothing via `Inventory.remove_item`, pays via `Wallet.add_money`, returns money earned or 0), `get_daily_factor(item)`. Signal: `prices_changed(item)` (`null` = new day).
 - Merchant (`scenes/npc/`): `merchant.tscn` / `merchant.gd` → `class_name Merchant` (`StaticBody2D`): stall + placeholder person, origin at the counter's bottom edge, collision only at the counter base; the person sprite is drawn before the counter so he stands behind it. `@export display_name` ("Bruno"), `@export buys: Array[ItemData]` (Bruno buys gilas) — reusable for future buyers. `interact(player)` emits `trade_requested(merchant)`.
 - Sell window: `scenes/ui/sell_window.tscn` / `.gd` (`PanelContainer`, centered; texts are placeholders). `open(merchant)` lists each item in `merchant.buys`: icon, name, "Qiymət", "Səndə", a `SpinBox` (0..owned, defaults to all), live total from `Market.get_sell_total`, "Sat" button → `Market.sell`. Rebuilds on `Inventory.inventory_changed` / `Market.prices_changed` while visible. Closes with "Bağla" or `ui_cancel` (Esc). The player can still move and the clock keeps running while it is open.
-- Not applied yet in code: fruit display names in English (gilas still shows "Gilas"), UI language (texts are placeholder Azerbaijani).
+- Not applied yet in code: English UI + localization (decided 2026-11-23 — texts are still hard-coded placeholder Azerbaijani, gilas still shows "Gilas").
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · save/load · names of future characters / buyer NPCs (foreign, user approves) · UI language (fruit names are English; rest not decided) · sound and music · target platforms (PC / mobile).
+Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · save/load · names of future characters / buyer NPCs (foreign, user approves) · more UI languages later (e.g. Azerbaijani) and whether fruit names get translated then · game font (must support all chosen languages) · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -214,3 +219,12 @@ Add new decisions here in this format:
 - **Status:** Confirmed
 - **Affected systems:** characters / NPCs, family tree, merchant, future dialogue and UI texts
 - **Notes:** Genders were kept from the old names (female: Rosa, Sofia, Elena, Yuki, Freya, Astrid, Hana, Aiko; male: Elio, Elias, Eloy, Henrik, Nils, Kenji, Bruno). The "El-" pattern of Sofia's four children was kept on purpose. Future characters and buyer NPCs also get foreign names, approved by the user. `docs/The_Orchard_Project_Context.md` still contains the old names as original notes.
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** UI language
+- **Decision:** Variant D — the game UI is **English for now**, but built **localization-ready** from the start with Godot's translation system: every player-facing text is a translation **key** (e.g. `UI_SELL`), and the real texts live in a translation table (CSV) that currently has only an `en` column. Adding another language later = adding a column, no code changes.
+- **Status:** Confirmed
+- **Affected systems:** all UI texts (clock label, inventory panel, item pop-ups, sell window, merchant name label), `ItemData.display_name` (becomes a key, e.g. `ITEM_GILAS` → "Sweet Cherry"), a new translation CSV registered in Project Settings → Localization → Translations, code uses `tr("KEY")` for texts built in scripts
+- **Notes:** Rule for new code: never hard-code player-facing text; always add a key to the translation table. Debug `print` messages and code comments stay plain English (not translated). Character names (Bruno, Rosa, …) are names, not translated. **Not decided:** which other languages come later (e.g. Azerbaijani), whether fruit names would be translated in those languages (the earlier decision says fruit names are shown in English), and the game font — it must support every chosen language's letters (for Azerbaijani: ə, ğ, ı, ö, ü, ç, ş).
