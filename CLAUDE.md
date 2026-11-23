@@ -47,9 +47,18 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
   └── Aytən: Vüqar, Nubar, Zəhrə
   ```
 
-## Previous technical state (verify — may be outdated)
-- `main.tscn` existed with a Player built from `CharacterBody2D`, `CollisionShape2D`, `Sprite2D`, `Camera2D`.
-- Movement speed `200`, direction from `Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")`.
+## Technical conventions (confirmed)
+**Origin on the ground (Y-sort rule)** — applies to every object that stands in the world (player, trees, buildings, NPCs, bushes, props):
+1. The node's origin (0, 0) is the point where the object touches the ground (player: feet; tree: bottom of the trunk; box: bottom edge).
+2. The `Sprite2D` is moved up so its bottom edge sits on the origin (e.g. a 64×110 sprite → `position = (0, -55)`).
+3. The collision shape covers only the "feet / base" part, not the whole picture, so the player can walk behind the top part of objects.
+4. All such objects live under `Main/Entities` (a `Node2D` with `y_sort_enabled = true`). Sub-group nodes inside it (like `Obstacles`) also need `y_sort_enabled = true`, so their children are sorted together with the player.
+5. The ground (`Ground`, later `TileMapLayer`s for soil/grass) stays **outside** `Entities`, so it is always drawn behind everything.
+
+## Current technical state (verify — may be outdated)
+- Main scene: `scenes/world/main.tscn` → `Main` (`Node2D`) with `Ground` (placeholder `ColorRect`) and `Entities` (Y-sorted: `Obstacles/Box1`, `Obstacles/Box2`, `Player` instance).
+- Player: `scenes/player/player.tscn` (`CharacterBody2D` + `CollisionShape2D` + `Sprite2D` + `Camera2D`), placeholder 64×110, origin at the feet.
+- Movement: `scenes/player/player.gd`, speed `200`, `Input.get_vector("move_left", "move_right", "move_up", "move_down")`. Actions are bound to physical WASD + arrow keys in `project.godot`.
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
@@ -97,3 +106,12 @@ Add new decisions here in this format:
 - **Status:** Confirmed
 - **Affected systems:** world/tiles (`TileSet` tile size 64), all art (painted to fit the 64 px grid), placeholders (player 32×32 and boxes 48×48 must be resized), `project.godot` display settings, camera
 - **Notes:** 64 px was chosen because hand-painted detail (fruit, growth stages) needs more pixels than pixel-art sizes like 32 px, while 128 px shows too little of the world and means too much art work for a solo developer. Rough size guidelines (suggestions, NOT confirmed): character ≈ 64 px wide × 100–120 px tall; mature tree ≈ 2 tiles wide × 3 tiles tall, trunk base on 1 tile. Painting art at 2× (128 px) and scaling down is still an open question — decide when the first real art is made.
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Draw order / origin convention (Y-sort)
+- **Decision:** Every world object has its origin on the ground, sprite shifted up, collision only on the base; all such objects live under the Y-sorted `Main/Entities` node. Full rule: see "Technical conventions".
+- **Status:** Confirmed
+- **Affected systems:** world scene structure, player, all future trees/buildings/NPCs/props, collision shapes
+- **Notes:** Needed for the 3/4 oblique view: objects lower on screen are drawn in front, and the player can walk behind the top part of trees and buildings.
