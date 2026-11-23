@@ -14,7 +14,7 @@ signal harvested(fruit_id: StringName, amount: int)
 @export var data: TreeData
 
 var stage: Stage = Stage.SAPLING
-## Time spent in the current stage (seconds for now, game days later).
+## Game days spent in the current stage.
 var stage_time: float = 0.0
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -24,17 +24,14 @@ var stage_time: float = 0.0
 func _ready() -> void:
 	if data == null:
 		push_error("FruitTree '%s' has no TreeData assigned." % name)
-		set_process(false)
 		return
 	_update_visuals()
+	# Grow together with the game clock (also pauses when the clock is paused).
+	GameClock.time_advanced.connect(advance_time)
 
 
-func _process(delta: float) -> void:
-	advance_time(delta)
-
-
-## Moves the tree forward in time.
-## Kept separate from _process so the game clock can drive it later.
+## Moves the tree forward by `amount` game days.
+## Called by GameClock.time_advanced; can also be called directly (tests, sleeping).
 func advance_time(amount: float) -> void:
 	if stage == Stage.RIPE:
 		return # Ripe fruit waits on the tree until harvested.
@@ -81,13 +78,13 @@ func _set_stage(new_stage: Stage) -> void:
 func _get_stage_duration(for_stage: Stage) -> float:
 	match for_stage:
 		Stage.SAPLING:
-			return data.sapling_duration
+			return data.sapling_days
 		Stage.YOUNG:
-			return data.young_duration
+			return data.young_days
 		Stage.FLOWERING:
-			return data.flowering_duration
+			return data.flowering_days
 		Stage.UNRIPE:
-			return data.unripe_duration
+			return data.unripe_days
 		_:
 			return INF # RIPE has no duration: it waits.
 
