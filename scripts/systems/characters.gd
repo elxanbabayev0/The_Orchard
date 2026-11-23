@@ -1,11 +1,13 @@
 extends Node
 ## Playable characters. Registered as the autoload "Characters".
-## (Decision: the player starts as Rosa's grandchild with a name they type in;
-## family members are unlocked later through level "invitations".)
-## For now it holds the player's name; unlocked characters and the active
-## character come in the next steps.
+## (Decisions: the player starts as Rosa's grandchild with a name they type in;
+## family members are unlocked with level "invitations"; a parent must be
+## invited before their children; Rosa is not playable.)
+## Switching the active character comes in the next step.
 
 signal player_name_changed(new_name: String)
+## Emitted when a family member accepts an invitation.
+signal character_unlocked(character: CharacterData)
 
 ## id of the player's own character file (scenes/characters/types/player.tres).
 const PLAYER_CHARACTER_ID := &"player"
@@ -13,6 +15,8 @@ const MAX_NAME_LENGTH := 16
 
 ## The name the player typed in at New Game.
 var player_name: String = ""
+## ids of invited family members, in the order they came.
+var _unlocked: Array[StringName] = []
 
 
 func set_player_name(new_name: String) -> void:
@@ -21,7 +25,7 @@ func set_player_name(new_name: String) -> void:
 
 
 ## Trims spaces at both ends and limits the length.
-static func clean_name(raw_name: String) -> String:
+func clean_name(raw_name: String) -> String:
 	return raw_name.strip_edges().left(MAX_NAME_LENGTH)
 
 
@@ -37,13 +41,87 @@ func get_display_name(character: CharacterData) -> String:
 	return character.display_name if character != null else ""
 
 
+# --- Invitations ---------------------------------------------------------------
+
+func is_unlocked(character: CharacterData) -> bool:
+	return character != null and _unlocked.has(character.id)
+
+
+## Family rule: invitable, not here yet, and the parent is already here
+## (a parent who cannot be invited — Rosa — does not block their children).
+func can_invite(character: CharacterData) -> bool:
+	if character == null or not character.invitable or is_unlocked(character):
+		return false
+	if character.parent_id == &"":
+		return true
+	var parent := Registry.get_character(character.parent_id)
+	return parent == null or not parent.invitable or is_unlocked(parent)
+
+
+## Everyone who could be invited right now, parents first, then by name.
+func get_invitable_now() -> Array[CharacterData]:
+	var result: Array[CharacterData] = []
+	for character in Registry.get_all_characters():
+		if can_invite(character):
+			result.append(character)
+	result.sort_custom(func(a: CharacterData, b: CharacterData) -> bool:
+		var depth_a := _family_depth(a)
+		var depth_b := _family_depth(b)
+		if depth_a != depth_b:
+			return depth_a < depth_b
+		return a.display_name < b.display_name
+	)
+	return result
+
+
+## Uses one invitation to bring a family member to the orchard.
+## Returns false (and nothing changes) if the rule does not allow it or no invitation is left.
+func invite(character: CharacterData) -> bool:
+	if not can_invite(character):
+		return false
+	if not Progression.use_invitation():
+		return false
+	_unlocked.append(character.id)
+	character_unlocked.emit(character)
+	return true
+
+
+## All invited family members, in the order they came.
+func get_unlocked() -> Array[CharacterData]:
+	var result: Array[CharacterData] = []
+	for id in _unlocked:
+		var character := Registry.get_character(id)
+		if character != null:
+			result.append(character)
+	return result
+
+
+## How many steps from the top of the family tree (Rosa = 0, her children = 1...).
+func _family_depth(character: CharacterData) -> int:
+	var depth := 0
+	var current := character
+	while current != null and current.parent_id != &"" and depth < 10:
+		current = Registry.get_character(current.parent_id)
+		depth += 1
+	return depth
+
+
 # --- Save / load -------------------------------------------------------------
 # load_save_data({}) = new-game state.
 
 func get_save_data() -> Dictionary:
-	return {"player_name": player_name}
+	var unlocked := []
+	for id in _unlocked:
+		unlocked.append(String(id))
+	return {"player_name": player_name, "unlocked": unlocked}
 
 
 func load_save_data(data: Dictionary) -> void:
 	player_name = clean_name(str(data.get("player_name", "")))
+	_unlocked.clear()
+	for id_text in data.get("unlocked", []):
+		var character := Registry.get_character(StringName(id_text))
+		# Skip unknown ids, duplicates and anyone who is not invitable.
+		if character != null and character.invitable and not _unlocked.has(character.id):
+			_unlocked.append(character.id)
 	player_name_changed.emit(player_name)

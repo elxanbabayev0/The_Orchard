@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CharacterData" format=3]
+
+[ext_resource type="Script" path="res://scenes/characters/character_data.gd" id="1_characterdata"]
+
+[sub_resource type="Gradient" id="Gradient_body"]
+colors = PackedColorArray(0.6, 0.6, 0.3, 1, 0.6, 0.6, 0.3, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_body"]
+gradient = SubResource("Gradient_body")
+width = 64
+height = 110
+
+[resource]
+script = ExtResource("1_characterdata")
+id = &"elias"
+display_name = "Elias"
+parent_id = &"sofia"
+texture = SubResource("GradientTexture2D_body")
+invitable = true

@@ -20,7 +20,7 @@ corner_radius_bottom_left = 4
 offset_left = 24.0
 offset_top = 128.0
 offset_right = 224.0
-offset_bottom = 196.0
+offset_bottom = 240.0
 mouse_filter = 2
 theme_override_constants/separation = 4
 script = ExtResource("1_leveldisplay")
@@ -39,3 +39,10 @@ mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_fill")
 show_percentage = false
+
+[node name="InviteButton" type="Button" parent="."]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 20
+text = ""

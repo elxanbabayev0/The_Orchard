@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/placement_mode.tscn" id="25_placement"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="26_pausemenu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/level_display.tscn" id="27_leveldisplay"]
+[ext_resource type="PackedScene" path="res://scenes/ui/invitation_window.tscn" id="28_invitation"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -148,5 +149,8 @@ script = ExtResource("4_clocklabel")
 
 [node name="TradeWindow" parent="UI" instance=ExtResource("11_tradewindow")]
 
+[node name="InvitationWindow" parent="UI" instance=ExtResource("28_invitation")]
+
 [connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/TradeWindow" method="open"]
 [connection signal="plant_requested" from="UI/InventoryPanel" to="PlacementMode" method="start"]
+[connection signal="invite_requested" from="UI/LevelDisplay" to="UI/InvitationWindow" method="open"]

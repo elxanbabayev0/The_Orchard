@@ -16,3 +16,4 @@ id = &"player"
 display_name = ""
 parent_id = &""
 texture = SubResource("GradientTexture2D_body")
+invitable = false

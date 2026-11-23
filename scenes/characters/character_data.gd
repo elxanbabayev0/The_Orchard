@@ -14,3 +14,6 @@ extends Resource
 @export var parent_id: StringName = &""
 ## Picture (placeholder for now). Drawn like the player sprite: bottom edge at the feet.
 @export var texture: Texture2D
+## Can this character be invited with a level invitation?
+## False for Rosa (background character) and for the player's own character.
+@export var invitable: bool = false

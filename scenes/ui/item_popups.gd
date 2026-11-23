@@ -1,7 +1,8 @@
 extends VBoxContainer
 ## Short messages at the bottom of the screen that fade out after a moment:
 ## - "[icon] +3 Sweet Cherry" every time items are added to the Inventory,
-## - "Level up! Level 2" when the player gains a level.
+## - "Level up! Level 2" when the player gains a level,
+## - "Sofia has come to the orchard!" when a family member accepts an invitation.
 ## Texts come from translation keys (localization/translations.csv); the look is a placeholder.
 
 ## How long a message stays fully visible (seconds).
@@ -16,10 +17,15 @@ const LEVEL_UP_COLOR := Color(1.0, 0.88, 0.35)
 func _ready() -> void:
 	Inventory.item_added.connect(_on_item_added)
 	Progression.level_up.connect(_on_level_up)
+	Characters.character_unlocked.connect(_on_character_unlocked)
 
 
 func _on_item_added(item: ItemData, amount: int) -> void:
 	show_message(tr("UI_ITEM_GAINED") % [amount, tr(item.display_name)], item.icon)
+
+
+func _on_character_unlocked(character: CharacterData) -> void:
+	show_message(tr("UI_CHARACTER_JOINED") % character.display_name, character.texture, LEVEL_UP_COLOR)
 
 
 func _on_level_up(new_level: int) -> void:
