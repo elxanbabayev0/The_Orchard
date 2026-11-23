@@ -8,6 +8,7 @@ extends Resource
 ## The tree grows continuously with the GameClock.
 
 @export var id: StringName = &""
+## Translation KEY of the tree's name (e.g. "TREE_GILAS"); shown with tr().
 @export var display_name: String = ""
 
 @export_group("Growth (happens once)")

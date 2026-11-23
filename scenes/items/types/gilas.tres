@@ -13,8 +13,8 @@ height = 48
 [resource]
 script = ExtResource("1_itemdata")
 id = &"gilas"
-display_name = "Gilas"
+display_name = "ITEM_GILAS"
 category = 0
 icon = SubResource("GradientTexture2D_icon")
-description = "Şirin, tünd qırmızı gilas."
+description = "ITEM_GILAS_DESC"
 base_price = 10

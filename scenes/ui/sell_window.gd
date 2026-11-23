@@ -3,7 +3,7 @@ extends PanelContainer
 ## Shows every item the merchant buys: today's price, how many the player has,
 ## how many to sell, the total, and a Sell button.
 ## (Decision: selling happens through a window, so dynamic prices are visible.)
-## Texts and look are placeholders: UI language and style are not decided.
+## Texts come from translation keys (localization/translations.csv); the look is a placeholder.
 
 const ICON_SIZE := Vector2(40, 40)
 const FONT_SIZE := 24
@@ -60,7 +60,7 @@ func _refresh() -> void:
 		rows.add_child(_make_row(item))
 
 
-## One row: [icon] Name | Qiymət: 10 | Səndə: 7 | [amount] | = 65 | [Sat]
+## One row: [icon] Name | Price: 10 | You have: 7 | [amount] | = 65 | [Sell]
 func _make_row(item: ItemData) -> HBoxContainer:
 	var owned := Inventory.get_count(item)
 
@@ -74,12 +74,12 @@ func _make_row(item: ItemData) -> HBoxContainer:
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	row.add_child(icon)
 
-	var name_label := _make_label(item.display_name)
+	var name_label := _make_label(tr(item.display_name))
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(name_label)
 
-	row.add_child(_make_label("Qiymət: %d" % Market.get_price(item)))
-	row.add_child(_make_label("Səndə: %d" % owned))
+	row.add_child(_make_label(tr("UI_PRICE") % Market.get_price(item)))
+	row.add_child(_make_label(tr("UI_OWNED") % owned))
 
 	# SpinBox = a number field with up/down arrows. Limited to what the player owns.
 	var amount_box := SpinBox.new()
@@ -94,7 +94,7 @@ func _make_row(item: ItemData) -> HBoxContainer:
 	row.add_child(total_label)
 
 	var sell_button := Button.new()
-	sell_button.text = "Sat"
+	sell_button.text = tr("UI_SELL")
 	sell_button.add_theme_font_size_override("font_size", FONT_SIZE)
 	row.add_child(sell_button)
 

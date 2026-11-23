@@ -1,7 +1,7 @@
 extends VBoxContainer
-## Shows a short "[icon] +3 Gilas" message every time items are added
+## Shows a short "[icon] +3 Sweet Cherry" message every time items are added
 ## to the Inventory. Each message stays for a moment, then fades out.
-## Texts and look are placeholders: UI language and style are not decided.
+## Texts come from translation keys (localization/translations.csv); the look is a placeholder.
 
 ## How long a message stays fully visible (seconds).
 const SHOW_TIME := 1.5
@@ -41,7 +41,7 @@ func _make_popup(item: ItemData, amount: int) -> HBoxContainer:
 	popup.add_child(icon)
 
 	var label := Label.new()
-	label.text = "+%d %s" % [amount, item.display_name]
+	label.text = tr("UI_ITEM_GAINED") % [amount, tr(item.display_name)]
 	label.add_theme_font_size_override("font_size", FONT_SIZE)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 8)

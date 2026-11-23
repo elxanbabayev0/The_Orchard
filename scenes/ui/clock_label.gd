@@ -1,6 +1,6 @@
 extends Label
 ## Shows the current game day and time. Updates only when the minute changes.
-## The text format is a placeholder: the game's UI language and style are not decided.
+## Text comes from the translation key UI_CLOCK (localization/translations.csv).
 
 
 func _ready() -> void:
@@ -13,4 +13,4 @@ func _on_minute_changed(_day: int, _hour: int, _minute: int) -> void:
 
 
 func _update_text() -> void:
-	text = "Gün %d   %02d:%02d" % [GameClock.day, GameClock.get_hour(), GameClock.get_minute()]
+	text = tr("UI_CLOCK") % [GameClock.day, GameClock.get_hour(), GameClock.get_minute()]

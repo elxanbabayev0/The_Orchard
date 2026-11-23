@@ -46,7 +46,7 @@ height = 192
 [resource]
 script = ExtResource("1_treedata")
 id = &"gilas"
-display_name = "Gilas"
+display_name = "TREE_GILAS"
 sapling_days = 0.1
 young_days = 0.1
 flowering_days = 0.1

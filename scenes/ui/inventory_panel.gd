@@ -1,7 +1,7 @@
 extends PanelContainer
 ## Inventory panel. Opens / closes with the "toggle_inventory" action.
 ## Lists every item in the Inventory with its icon, name and amount.
-## Texts and look are placeholders: UI language and style are not decided.
+## Texts come from translation keys (localization/translations.csv); the look is a placeholder.
 
 const ICON_SIZE := Vector2(48, 48)
 const FONT_SIZE := 26
@@ -53,7 +53,7 @@ func _make_row(item: ItemData) -> HBoxContainer:
 	row.add_child(icon)
 
 	var name_label := Label.new()
-	name_label.text = item.display_name
+	name_label.text = tr(item.display_name)
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.add_theme_font_size_override("font_size", FONT_SIZE)
 	row.add_child(name_label)

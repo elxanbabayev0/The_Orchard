@@ -71,6 +71,10 @@ toggle_inventory={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://localization/translations.en.translation")
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

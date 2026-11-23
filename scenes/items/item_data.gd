@@ -10,12 +10,14 @@ enum Category { FRUIT, OTHER }
 
 ## Unique, never-changing name used in code and save files (e.g. &"gilas").
 @export var id: StringName = &""
-## Name shown to the player.
+## Translation KEY of the name shown to the player (e.g. "ITEM_GILAS").
+## The real text is in localization/translations.csv; UI code shows it with tr().
 @export var display_name: String = ""
 @export var category: Category = Category.FRUIT
 ## Picture shown in the inventory and pop-ups.
 @export var icon: Texture2D
-@export_multiline var description: String = ""
+## Translation KEY of the description (e.g. "ITEM_GILAS_DESC").
+@export var description: String = ""
 
 @export_group("Economy")
 ## The "normal" price of one item. The merchant's real price changes every day

@@ -1,0 +1,13 @@
+keys,en
+UI_CLOCK,Day %d   %02d:%02d
+UI_INVENTORY_TITLE,Inventory
+UI_INVENTORY_EMPTY,Empty
+UI_ITEM_GAINED,+%d %s
+UI_PRICE,Price: %d
+UI_OWNED,You have: %d
+UI_SELL,Sell
+UI_CLOSE,Close
+UI_MERCHANT_BUYS_NOTHING,This merchant doesn't buy anything.
+ITEM_GILAS,Sweet Cherry
+ITEM_GILAS_DESC,"Sweet, dark red cherries."
+TREE_GILAS,Sweet Cherry Tree

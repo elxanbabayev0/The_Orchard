@@ -51,7 +51,7 @@ func interact(_player: Node) -> void:
 	if can_harvest():
 		harvest()
 	else:
-		print("%s is not ripe yet (%s)." % [data.display_name, Stage.keys()[stage]])
+		print("%s is not ripe yet (%s)." % [tr(data.display_name), Stage.keys()[stage]])
 
 
 func can_harvest() -> bool:
