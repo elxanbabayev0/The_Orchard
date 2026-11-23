@@ -132,7 +132,9 @@ func graft() -> bool:
 func take_cutting() -> bool:
 	if not can_take_cutting():
 		return false
-	Inventory.add_item(Registry.get_cutting_for(data), 1)
+	var cutting := Registry.get_cutting_for(data)
+	Inventory.add_item(cutting, 1)
+	GameEvents.cutting_taken.emit(cutting, self) # Oona's tasks...
 	cutting_cooldown = CUTTING_COOLDOWN_DAYS
 	stage_time = 0.0
 	_set_stage(Stage.FLOWERING)

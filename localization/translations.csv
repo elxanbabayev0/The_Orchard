@@ -130,3 +130,17 @@ UI_TREE_CUTTING_WAIT,Take cutting (%d days)
 UI_TREE_CUTTING_WAIT_ONE,Take cutting (1 day)
 UI_TREE_GRAFT,Graft: %s
 UI_MENU_LOAD_TEST_SAVE,Load test save (debug)
+QUEST_GOAL_TAKE_CUTTING,Take %d cuttings
+QUEST_GOAL_TAKE_CUTTING_ONE,Take a cutting
+QUEST_GOAL_TAKE_CUTTING_ITEM,Take %d × %s
+QUEST_GOAL_TAKE_CUTTING_ITEM_ONE,Take a %s
+QUEST_GOAL_GRAFT_TREE,Graft %d trees
+QUEST_GOAL_GRAFT_TREE_ONE,Graft a tree
+QUEST_GOAL_GRAFT_TREE_ITEM,Graft %d trees (%s)
+QUEST_GOAL_GRAFT_TREE_ITEM_ONE,Graft a tree (%s)
+QUEST_GOAL_EARN_MONEY,Earn %d money from sales
+QUEST_GOAL_EARN_MONEY_ITEM,Earn %d money selling %s
+QUEST_GOAL_INVITE_FAMILY,Invite %d family members
+QUEST_GOAL_INVITE_FAMILY_ONE,Invite a family member
+QUEST_GOAL_SWITCH_CHARACTER,Switch characters %d times
+QUEST_GOAL_SWITCH_CHARACTER_ONE,Switch to a family member

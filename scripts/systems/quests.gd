@@ -52,7 +52,10 @@ func _ready() -> void:
 	GameEvents.item_sold.connect(_on_item_sold)
 	GameEvents.sapling_planted.connect(_on_sapling_planted)
 	GameEvents.tree_grown.connect(_on_tree_grown)
-	GameEvents.tree_grafted.connect(func(_type: TreeData, _tree: Node2D) -> void: _refresh_tree_count())
+	GameEvents.tree_grafted.connect(_on_tree_grafted)
+	GameEvents.cutting_taken.connect(_on_cutting_taken)
+	GameEvents.character_switched.connect(_on_character_switched)
+	Characters.character_unlocked.connect(_on_character_unlocked)
 
 
 # --- State -------------------------------------------------------------------
@@ -205,9 +208,37 @@ func _on_fruit_harvested(fruit: ItemData, amount: int) -> void:
 			_add_progress(amount)
 
 
-func _on_item_sold(item: ItemData, amount: int, _money: int) -> void:
-	if _active != null and _active.goal == QuestData.Goal.SELL_FRUIT and _active.counts_item(item):
-		_add_progress(amount)
+func _on_item_sold(item: ItemData, amount: int, money: int) -> void:
+	if _active == null or not _active.counts_item(item):
+		return
+	match _active.goal:
+		QuestData.Goal.SELL_FRUIT:
+			_add_progress(amount)
+		QuestData.Goal.EARN_MONEY:
+			_add_progress(money)
+
+
+func _on_cutting_taken(cutting: ItemData, _tree: Node2D) -> void:
+	if _active != null and _active.goal == QuestData.Goal.TAKE_CUTTING and _active.counts_item(cutting):
+		_add_progress(1)
+
+
+func _on_tree_grafted(tree_type: TreeData, _tree: Node2D) -> void:
+	_refresh_tree_count() # HAVE_TREES: the orchard changed
+	# The cutting used is the one of the tree's new (rare) type.
+	if _active != null and _active.goal == QuestData.Goal.GRAFT_TREE \
+			and _active.counts_item(Registry.get_cutting_for(tree_type)):
+		_add_progress(1)
+
+
+func _on_character_unlocked(_character: CharacterData) -> void:
+	if _active != null and _active.goal == QuestData.Goal.INVITE_FAMILY:
+		_add_progress(1)
+
+
+func _on_character_switched(_character: CharacterData) -> void:
+	if _active != null and _active.goal == QuestData.Goal.SWITCH_CHARACTER:
+		_add_progress(1)
 
 
 func _on_sapling_planted(sapling: ItemData, _tree: Node2D) -> void:

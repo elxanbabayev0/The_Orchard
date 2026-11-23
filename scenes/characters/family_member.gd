@@ -39,6 +39,7 @@ func interact(player: Node2D) -> void:
 	# The character left behind keeps looking where the player was looking.
 	facing = player.facing
 	set_character(previous)
+	GameEvents.character_switched.emit(Characters.get_active()) # Oona's tasks...
 
 
 func _update_look() -> void:

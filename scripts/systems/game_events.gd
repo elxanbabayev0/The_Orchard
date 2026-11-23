@@ -27,3 +27,10 @@ signal tree_grown(tree_type: TreeData, tree: Node2D)
 ## A common tree was grafted and is now `tree_type` (a rare variety).
 @warning_ignore("unused_signal")
 signal tree_grafted(tree_type: TreeData, tree: Node2D)
+## The player took a `cutting` item from a rare tree.
+@warning_ignore("unused_signal")
+signal cutting_taken(cutting: ItemData, tree: Node2D)
+## The player switched to another character (only real switches on the farm —
+## NOT the active-character refresh after loading a save).
+@warning_ignore("unused_signal")
+signal character_switched(character: CharacterData)

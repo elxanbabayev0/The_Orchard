@@ -17,6 +17,11 @@ enum Goal {
 	GROW_SAPLINGS,  ## `target` saplings grow up into fruit trees (trees of `filter_item` fruit, if set)
 	HAVE_TREES,     ## have `target` fruit trees in the orchard (of `filter_item` fruit, if set) —
 	                ## counts the trees that are there, also the ones planted before the task
+	TAKE_CUTTING,   ## take `target` cuttings from rare trees (only `filter_item` cuttings, if set)
+	GRAFT_TREE,     ## graft `target` trees (only with `filter_item` cuttings, if set)
+	EARN_MONEY,     ## earn `target` money by selling (only selling `filter_item`, if set)
+	INVITE_FAMILY,  ## invite `target` family members
+	SWITCH_CHARACTER, ## switch characters `target` times (walk up to a family member, press E)
 }
 
 ## Unique, never-changing name used in save files (e.g. &"plant_two").
