@@ -49,6 +49,7 @@ func start(item: ItemData) -> void:
 	if item == null or item.grows_into == null or not Inventory.has_item(item):
 		return
 	_item = item
+	_can_place = false # never trust a result from an earlier placement session
 	var texture := item.grows_into.sapling_texture
 	ghost.texture = texture
 	# Same "origin on the ground" lift as FruitTree: the picture stands on the spot.
@@ -58,6 +59,7 @@ func start(item: ItemData) -> void:
 
 func cancel() -> void:
 	_item = null
+	_can_place = false
 	_set_active(false)
 
 
@@ -71,10 +73,15 @@ func _set_active(active: bool) -> void:
 
 ## Physics queries are safest in _physics_process, so the check happens here.
 func _physics_process(_delta: float) -> void:
-	_target = snap_to_grid(get_global_mouse_position())
+	_target = _get_mouse_spot()
 	_can_place = can_place_at(_target)
 	ghost.global_position = _target
 	ghost.modulate = COLOR_OK if _can_place else COLOR_BLOCKED
+
+
+## The tree spot under the mouse cursor.
+func _get_mouse_spot() -> Vector2:
+	return snap_to_grid(get_global_mouse_position())
 
 
 ## Turns any point into a tree spot: the middle of the tile horizontally and
@@ -119,6 +126,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _try_plant() -> void:
+	# Check again at the moment of the click: the values from the last physics
+	# frame can be out of date (e.g. a fast double click on "Plant" arrives before
+	# any physics frame of the new session, and a tree may have just been planted).
+	_target = _get_mouse_spot()
+	_can_place = can_place_at(_target)
 	if not _can_place:
 		return
 	# Take the sapling first; if it is somehow gone, stop.
