@@ -1,7 +1,7 @@
 extends PanelContainer
 ## Inventory panel. Opens / closes with the "toggle_inventory" action.
 ## Lists every item in the Inventory with its icon, name and amount.
-## Saplings get a "Plant" button that starts the placement mode.
+## Saplings and cuttings get a "Plant" button that starts the placement mode.
 ## Texts come from translation keys (localization/translations.csv); the look is a placeholder.
 
 ## Emitted when the player presses "Plant" on a sapling.
@@ -53,7 +53,7 @@ func _refresh() -> void:
 		rows.add_child(_make_row(item))
 
 
-## One row: [icon]  Name ............ × amount  [Plant]  (button only for saplings)
+## One row: [icon]  Name ............ × amount  [Plant]  (button only for plantable items)
 func _make_row(item: ItemData) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 16)
@@ -76,7 +76,7 @@ func _make_row(item: ItemData) -> HBoxContainer:
 	amount_label.add_theme_font_size_override("font_size", FONT_SIZE)
 	row.add_child(amount_label)
 
-	if item.category == ItemData.Category.SAPLING and item.grows_into != null:
+	if _is_plantable(item):
 		var plant_button := Button.new()
 		plant_button.text = tr("UI_PLANT")
 		plant_button.add_theme_font_size_override("font_size", FONT_SIZE)
@@ -87,3 +87,9 @@ func _make_row(item: ItemData) -> HBoxContainer:
 		row.add_child(plant_button)
 
 	return row
+
+
+## Saplings and cuttings that grow into a tree can be planted.
+func _is_plantable(item: ItemData) -> bool:
+	var kind_ok := item.category == ItemData.Category.SAPLING or item.category == ItemData.Category.CUTTING
+	return kind_ok and item.grows_into != null

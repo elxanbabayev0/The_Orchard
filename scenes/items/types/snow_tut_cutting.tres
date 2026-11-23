@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scenes/items/item_data.gd" id="1_itemdata"]
+[ext_resource type="Resource" path="res://scenes/trees/types/snow_tut.tres" id="2_tree"]
+
+[sub_resource type="Gradient" id="Gradient_icon"]
+offsets = PackedFloat32Array(0, 0.3, 0.31, 1)
+colors = PackedColorArray(0.97, 0.95, 0.88, 1, 0.97, 0.95, 0.88, 1, 0.45, 0.32, 0.2, 1, 0.45, 0.32, 0.2, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_icon"]
+gradient = SubResource("Gradient_icon")
+width = 48
+height = 48
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[resource]
+script = ExtResource("1_itemdata")
+id = &"snow_tut_cutting"
+display_name = "ITEM_SNOW_TUT_CUTTING"
+category = 3
+icon = SubResource("GradientTexture2D_icon")
+description = "ITEM_SNOW_TUT_CUTTING_DESC"
+base_price = 0
+grows_into = ExtResource("2_tree")
+rare = true

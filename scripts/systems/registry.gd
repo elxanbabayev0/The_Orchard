@@ -25,6 +25,10 @@ var _quests: Dictionary[StringName, QuestData] = {}
 var _quest_templates: Array[QuestTemplate] = []
 ## Oona's story chapters, sorted by number.
 var _chapters: Array[ChapterData] = []
+## tree type id -> the cutting item taken from that tree (rare trees only).
+## Built from the cuttings' `grows_into`, because a TreeData cannot point to its
+## cutting directly (tree -> cutting -> tree would be a circular resource reference).
+var _cuttings: Dictionary[StringName, ItemData] = {}
 
 
 func _ready() -> void:
@@ -47,6 +51,16 @@ func _ready() -> void:
 		if resource is ChapterData:
 			_chapters.append(resource)
 	_chapters.sort_custom(func(a: ChapterData, b: ChapterData) -> bool: return a.number < b.number)
+	for item in _items.values():
+		if item.category == ItemData.Category.CUTTING and item.grows_into != null:
+			_cuttings[item.grows_into.id] = item
+
+
+## The cutting a tree of this type gives, or null (common trees give none).
+func get_cutting_for(tree_type: TreeData) -> ItemData:
+	if tree_type == null:
+		return null
+	return _cuttings.get(tree_type.id, null)
 
 
 ## Returns the quest with this id, or null (with a warning) if there is none.

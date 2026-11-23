@@ -7,7 +7,7 @@ extends Resource
 
 ## Broad item groups (useful for sorting / filtering the inventory).
 ## New categories must be added at the END: .tres files store the number, not the name.
-enum Category { FRUIT, OTHER, SAPLING }
+enum Category { FRUIT, OTHER, SAPLING, CUTTING }
 
 ## Unique, never-changing name used in code and save files (e.g. &"gilas").
 @export var id: StringName = &""
@@ -35,5 +35,7 @@ enum Category { FRUIT, OTHER, SAPLING }
 @export var rare: bool = false
 
 @export_group("Planting")
-## For saplings: the tree type this sapling grows into when planted. Empty for other items.
+## For saplings and cuttings: the tree type this item grows into when planted
+## (a cutting can also be grafted onto a common tree — see the propagation decision).
+## Empty for other items.
 @export var grows_into: TreeData
