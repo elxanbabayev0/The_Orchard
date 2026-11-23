@@ -15,6 +15,9 @@ const WORLD_SCENE := "res://scenes/world/main.tscn"
 const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 ## Where the trees live inside the world scene (main.tscn).
 const TREES_PATH := "Entities/Trees"
+## Where the family members standing on the farm live (scenes/world/family_members.gd).
+const FAMILY_PATH := "Entities/Family"
+const PLAYER_PATH := "Entities/Player"
 const FRUIT_TREE_SCENE := preload("res://scenes/trees/fruit_tree.tscn")
 
 
@@ -92,6 +95,12 @@ func save_game(slot: String = DEFAULT_SLOT) -> bool:
 		"characters": Characters.get_save_data(),
 		"trees": trees,
 	}
+	var player := _get_world_node(PLAYER_PATH)
+	if player != null:
+		data["player"] = player.get_save_data()
+	var family := _get_world_node(FAMILY_PATH)
+	if family != null:
+		data["family"] = family.get_save_data()
 	DirAccess.make_dir_recursive_absolute(SAVE_FOLDER)
 	# Safe writing: write a temporary file first, then replace the real one.
 	# If the game crashes while writing, the old save is still fine.
@@ -134,6 +143,13 @@ func load_game(slot: String = DEFAULT_SLOT) -> bool:
 	Progression.load_save_data(data.get("progression", {}))
 	Characters.load_save_data(data.get("characters", {}))
 	_load_trees(trees_container, data.get("trees", []))
+	var player := _get_world_node(PLAYER_PATH)
+	if player != null:
+		player.load_save_data(data.get("player", {}))
+	# After Characters (who is invited / active) and the player (arrivals stand near them).
+	var family := _get_world_node(FAMILY_PATH)
+	if family != null:
+		family.load_save_data(data.get("family", {}))
 	print("Game loaded: %s (day %d)" % [_path(slot), GameClock.day])
 	return true
 
@@ -161,10 +177,15 @@ func _upgrade(data: Dictionary, _from_version: int) -> Dictionary:
 
 
 func _get_trees_container() -> Node:
+	return _get_world_node(TREES_PATH)
+
+
+## A node inside the world scene, or null outside the world (e.g. in a menu).
+func _get_world_node(path: String) -> Node:
 	var scene := get_tree().current_scene
 	if scene == null:
 		return null
-	return scene.get_node_or_null(TREES_PATH)
+	return scene.get_node_or_null(path)
 
 
 func _path(slot: String) -> String:

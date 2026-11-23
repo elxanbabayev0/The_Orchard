@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/characters/family_member.gd" id="1_member"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_feet"]
+size = Vector2(40, 20)
+
+[node name="FamilyMember" type="StaticBody2D"]
+script = ExtResource("1_member")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_feet")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -55)
+
+[node name="NameLabel" type="Label" parent="."]
+auto_translate_mode = 2
+offset_left = -100.0
+offset_top = -142.0
+offset_right = 100.0
+offset_bottom = -116.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1

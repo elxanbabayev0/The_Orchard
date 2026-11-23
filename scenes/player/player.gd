@@ -64,3 +64,16 @@ func _find_nearest_interactable() -> Node2D:
 			nearest = body
 			nearest_distance = distance
 	return nearest
+
+
+# --- Save / load -------------------------------------------------------------
+# Only the position: who the player is comes from Characters.
+
+func get_save_data() -> Dictionary:
+	return {"x": global_position.x, "y": global_position.y}
+
+
+## load_save_data({}) keeps the start position from main.tscn.
+func load_save_data(data: Dictionary) -> void:
+	if data.has("x") and data.has("y"):
+		global_position = Vector2(float(data["x"]), float(data["y"]))
