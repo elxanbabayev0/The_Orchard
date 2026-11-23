@@ -10,6 +10,8 @@ extends Node
 const SAVE_VERSION := 1
 const SAVE_FOLDER := "user://saves/"
 const DEFAULT_SLOT := "slot_1"
+## The world scene the menu starts.
+const WORLD_SCENE := "res://scenes/world/main.tscn"
 ## Where the trees live inside the world scene (main.tscn).
 const TREES_PATH := "Entities/Trees"
 const FRUIT_TREE_SCENE := preload("res://scenes/trees/fruit_tree.tscn")
@@ -17,8 +19,34 @@ const FRUIT_TREE_SCENE := preload("res://scenes/trees/fruit_tree.tscn")
 
 func _ready() -> void:
 	GameClock.day_changed.connect(_on_day_changed)
-	# TEMPORARY until the main menu exists (next step): load the save on start.
-	_load_on_start.call_deferred()
+
+
+## Main menu → "New Game": fresh systems, the world with its starting orchard.
+func new_game() -> void:
+	_start_world(false, DEFAULT_SLOT)
+
+
+## Main menu → "Continue": the world, then the saved state on top of it.
+func continue_game(slot: String = DEFAULT_SLOT) -> void:
+	_start_world(true, slot)
+
+
+func _start_world(load_save: bool, slot: String) -> void:
+	_reset_systems()
+	get_tree().change_scene_to_file(WORLD_SCENE)
+	# Changing scenes takes a moment; wait until the world is really there.
+	await get_tree().scene_changed
+	if load_save:
+		load_game(slot)
+	GameClock.paused = false
+
+
+## Puts every system back to the new-game state (load_save_data({}) = defaults).
+func _reset_systems() -> void:
+	GameClock.load_save_data({})
+	Wallet.load_save_data({})
+	Inventory.load_save_data({})
+	Market.load_save_data({})
 
 
 func has_save(slot: String = DEFAULT_SLOT) -> bool:
@@ -118,11 +146,6 @@ func _get_trees_container() -> Node:
 
 func _path(slot: String) -> String:
 	return SAVE_FOLDER + slot + ".json"
-
-
-func _load_on_start() -> void:
-	if has_save():
-		load_game()
 
 
 func _on_day_changed(_day: int) -> void:

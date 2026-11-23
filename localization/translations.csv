@@ -38,3 +38,9 @@ ITEM_ALBALI_SAPLING,Morello Cherry Sapling
 ITEM_ALBALI_SAPLING_DESC,Plant it to grow a Morello Cherry Tree.
 UI_PLANT,Plant
 UI_PLACEMENT_HINT,Left click: plant   ·   Right click / Esc: cancel
+UI_MENU_CONTINUE,Continue
+UI_MENU_NEW_GAME,New Game
+UI_MENU_QUIT,Quit
+UI_MENU_NEW_GAME_CONFIRM_TEXT,Start a new game? Your current farm will be overwritten.
+UI_MENU_NEW_GAME_CONFIRM_OK,Start over
+UI_CANCEL,Cancel

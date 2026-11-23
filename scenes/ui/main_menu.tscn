@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/main_menu.gd" id="1_mainmenu"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mainmenu")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.45, 0.62, 0.36, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Center/VBox"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.2, 0.3, 0.15, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 96
+text = "The Orchard"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/VBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Center/VBox"]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "UI_MENU_CONTINUE"
+
+[node name="NewGameButton" type="Button" parent="Center/VBox"]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "UI_MENU_NEW_GAME"
+
+[node name="QuitButton" type="Button" parent="Center/VBox"]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "UI_MENU_QUIT"
+
+[node name="ConfirmNewGame" type="ConfirmationDialog" parent="."]
+title = "UI_MENU_NEW_GAME"
+size = Vector2i(560, 180)
+ok_button_text = "UI_MENU_NEW_GAME_CONFIRM_OK"
+dialog_text = "UI_MENU_NEW_GAME_CONFIRM_TEXT"
+dialog_autowrap = true
+cancel_button_text = "UI_CANCEL"
