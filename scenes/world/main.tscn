@@ -13,6 +13,12 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/sell_window.tscn" id="11_sellwindow"]
 [ext_resource type="Resource" path="res://scenes/trees/types/alca.tres" id="12_alca"]
 [ext_resource type="Resource" path="res://scenes/items/types/alca.tres" id="13_alcaitem"]
+[ext_resource type="Resource" path="res://scenes/trees/types/visne.tres" id="14_visne"]
+[ext_resource type="Resource" path="res://scenes/items/types/visne.tres" id="15_visneitem"]
+[ext_resource type="Resource" path="res://scenes/trees/types/tut.tres" id="16_tut"]
+[ext_resource type="Resource" path="res://scenes/items/types/tut.tres" id="17_tutitem"]
+[ext_resource type="Resource" path="res://scenes/trees/types/albali.tres" id="18_albali"]
+[ext_resource type="Resource" path="res://scenes/items/types/albali.tres" id="19_albaliitem"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -78,12 +84,24 @@ data = ExtResource("3_gilas")
 position = Vector2(544, 192)
 data = ExtResource("12_alca")
 
+[node name="Visne1" parent="Entities/Trees" instance=ExtResource("2_fruittree")]
+position = Vector2(352, 448)
+data = ExtResource("14_visne")
+
+[node name="Tut1" parent="Entities/Trees" instance=ExtResource("2_fruittree")]
+position = Vector2(544, 448)
+data = ExtResource("16_tut")
+
+[node name="Albali1" parent="Entities/Trees" instance=ExtResource("2_fruittree")]
+position = Vector2(736, 448)
+data = ExtResource("18_albali")
+
 [node name="NPCs" type="Node2D" parent="Entities"]
 y_sort_enabled = true
 
 [node name="Bruno" parent="Entities/NPCs" instance=ExtResource("9_merchant")]
 position = Vector2(-288, -64)
-buys = Array[Resource]([ExtResource("10_gilasitem"), ExtResource("13_alcaitem")])
+buys = Array[Resource]([ExtResource("10_gilasitem"), ExtResource("13_alcaitem"), ExtResource("15_visneitem"), ExtResource("17_tutitem"), ExtResource("19_albaliitem")])
 
 [node name="Player" parent="Entities" instance=ExtResource("1_player")]
 

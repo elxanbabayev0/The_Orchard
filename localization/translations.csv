@@ -14,3 +14,12 @@ TREE_GILAS,Sweet Cherry Tree
 ITEM_ALCA,Cherry Plum
 ITEM_ALCA_DESC,"Small, sweet-and-sour yellow plums."
 TREE_ALCA,Cherry Plum Tree
+ITEM_VISNE,Sour Cherry
+ITEM_VISNE_DESC,"Bright red, tart cherries."
+TREE_VISNE,Sour Cherry Tree
+ITEM_TUT,Mulberry
+ITEM_TUT_DESC,"Soft, juicy dark mulberries."
+TREE_TUT,Mulberry Tree
+ITEM_ALBALI,Morello Cherry
+ITEM_ALBALI_DESC,"Dark, deep-red sour cherries."
+TREE_ALBALI,Morello Cherry Tree
