@@ -17,12 +17,14 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 [autoload]
 
 Registry="*res://scripts/systems/registry.gd"
+GameEvents="*res://scripts/systems/game_events.gd"
 GameClock="*res://scripts/systems/game_clock.gd"
 Inventory="*res://scripts/systems/inventory.gd"
 Wallet="*res://scripts/systems/wallet.gd"
 Market="*res://scripts/systems/market.gd"
 Progression="*res://scripts/systems/progression.gd"
 Characters="*res://scripts/systems/characters.gd"
+Quests="*res://scripts/systems/quests.gd"
 UIState="*res://scripts/systems/ui_state.gd"
 SaveManager="*res://scripts/systems/save_manager.gd"
 

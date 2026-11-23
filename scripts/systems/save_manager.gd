@@ -69,6 +69,7 @@ func _reset_systems() -> void:
 	Market.load_save_data({})
 	Progression.load_save_data({})
 	Characters.load_save_data({})
+	Quests.load_save_data({})
 
 
 func has_save(slot: String = DEFAULT_SLOT) -> bool:
@@ -93,6 +94,7 @@ func save_game(slot: String = DEFAULT_SLOT) -> bool:
 		"market": Market.get_save_data(),
 		"progression": Progression.get_save_data(),
 		"characters": Characters.get_save_data(),
+		"quests": Quests.get_save_data(),
 		"trees": trees,
 	}
 	var player := _get_world_node(PLAYER_PATH)
@@ -142,6 +144,7 @@ func load_game(slot: String = DEFAULT_SLOT) -> bool:
 	Market.load_save_data(data.get("market", {}))
 	Progression.load_save_data(data.get("progression", {}))
 	Characters.load_save_data(data.get("characters", {}))
+	Quests.load_save_data(data.get("quests", {}))
 	_load_trees(trees_container, data.get("trees", []))
 	var player := _get_world_node(PLAYER_PATH)
 	if player != null:

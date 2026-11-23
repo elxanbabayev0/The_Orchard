@@ -3,8 +3,9 @@ extends Node
 ## (Decision: XP is collected and never spent; every new level gives one
 ## "invitation" — the player chooses which family member to invite.)
 ##
-## All XP rules live here, so other systems only report what happened
-## (on_harvest, on_sale, on_planted). All numbers are TEMPORARY test values —
+## All XP rules live here. Other systems only report what happened through
+## GameEvents signals (fruit_harvested, item_sold, sapling_planted), which are
+## connected to on_harvest / on_sale / on_planted below. All numbers are TEMPORARY test values —
 ## XP amounts and level thresholds are not decided.
 
 ## Emitted whenever XP changes.
@@ -33,6 +34,12 @@ var _sale_money_carry: int = 0
 ## Fraction of an XP point left over from the XP skill (e.g. +25% of 1 XP = 0.25).
 ## Kept so small bonuses add up instead of rounding down to 0.
 var _bonus_xp_carry: float = 0.0
+
+
+func _ready() -> void:
+	GameEvents.fruit_harvested.connect(func(_fruit: ItemData, amount: int) -> void: on_harvest(amount))
+	GameEvents.item_sold.connect(func(_item: ItemData, _amount: int, money: int) -> void: on_sale(money))
+	GameEvents.sapling_planted.connect(func(_sapling: ItemData, _tree: Node2D) -> void: on_planted())
 
 
 # --- What gives XP -----------------------------------------------------------

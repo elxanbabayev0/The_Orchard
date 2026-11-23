@@ -1,5 +1,5 @@
 extends Node
-## Finds every item, tree type and character by its `id`. Registered as the autoload "Registry".
+## Finds every item, tree type, character and quest by its `id`. Registered as the autoload "Registry".
 ##
 ## Save files only store short ids (e.g. "gilas"), not whole resources.
 ## When loading, the Registry turns an id back into its ItemData / TreeData / CharacterData.
@@ -9,6 +9,7 @@ extends Node
 const ITEM_FOLDER := "res://scenes/items/types/"
 const TREE_FOLDER := "res://scenes/trees/types/"
 const CHARACTER_FOLDER := "res://scenes/characters/types/"
+const QUEST_FOLDER := "res://scenes/quests/types/"
 
 ## id -> ItemData
 var _items: Dictionary[StringName, ItemData] = {}
@@ -16,6 +17,8 @@ var _items: Dictionary[StringName, ItemData] = {}
 var _trees: Dictionary[StringName, TreeData] = {}
 ## id -> CharacterData
 var _characters: Dictionary[StringName, CharacterData] = {}
+## id -> QuestData
+var _quests: Dictionary[StringName, QuestData] = {}
 
 
 func _ready() -> void:
@@ -28,6 +31,23 @@ func _ready() -> void:
 	for resource in _load_folder(CHARACTER_FOLDER):
 		if resource is CharacterData:
 			_add(_characters, resource.id, resource)
+	for resource in _load_folder(QUEST_FOLDER):
+		if resource is QuestData:
+			_add(_quests, resource.id, resource)
+
+
+## Returns the quest with this id, or null (with a warning) if there is none.
+func get_quest(id: StringName) -> QuestData:
+	if not _quests.has(id):
+		push_warning("Registry: unknown quest id '%s'." % id)
+		return null
+	return _quests[id]
+
+
+func get_all_quests() -> Array[QuestData]:
+	var result: Array[QuestData] = []
+	result.assign(_quests.values())
+	return result
 
 
 ## Returns the character with this id, or null (with a warning) if there is none.

@@ -70,3 +70,11 @@ SKILL_WALK_SPEED,Walk %d%% faster
 SKILL_PLANT_RANGE,Plant up to %d tiles farther
 SKILL_XP,Earn %d%% more XP
 UI_SKILL_NONE,No special skill
+QUEST_GOAL_PLANT_SAPLINGS,Plant %d saplings
+QUEST_GOAL_PLANT_SAPLINGS_ITEM,Plant %d × %s
+QUEST_GOAL_HARVEST_TIMES,Harvest %d times
+QUEST_GOAL_HARVEST_TIMES_ITEM,Harvest %d times (%s)
+QUEST_GOAL_PICK_FRUIT,Pick %d fruit
+QUEST_GOAL_PICK_FRUIT_ITEM,Pick %d × %s
+QUEST_GOAL_SELL_FRUIT,Sell %d fruit
+QUEST_GOAL_SELL_FRUIT_ITEM,Sell %d × %s

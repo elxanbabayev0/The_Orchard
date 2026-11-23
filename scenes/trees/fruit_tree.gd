@@ -70,7 +70,7 @@ func harvest() -> int:
 	_set_stage(Stage.FLOWERING)
 	if data.fruit != null:
 		Inventory.add_item(data.fruit, amount)
-		Progression.on_harvest(amount)
+		GameEvents.fruit_harvested.emit(data.fruit, amount) # XP, Oona's tasks...
 	# The signal stays for things like sounds or effects later.
 	harvested.emit(data.fruit, amount)
 	return amount

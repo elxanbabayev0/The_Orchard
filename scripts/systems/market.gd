@@ -61,7 +61,7 @@ func sell(item: ItemData, amount: int) -> int:
 	if not Inventory.remove_item(item, amount):
 		return 0
 	Wallet.add_money(total)
-	Progression.on_sale(total)
+	GameEvents.item_sold.emit(item, amount, total) # XP, Oona's tasks...
 	_saturation[item.id] = _get_saturation(item) + amount * _saturation_per_unit()
 	prices_changed.emit(item)
 	return total
