@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" path="res://scenes/characters/character_data.gd" id="1_characterdata"]
 [ext_resource type="Texture2D" path="res://scenes/characters/sprites/test_boy_front.png" id="2_front"]
+[ext_resource type="Texture2D" path="res://scenes/characters/sprites/test_boy_back.png" id="3_back"]
+[ext_resource type="Texture2D" path="res://scenes/characters/sprites/test_boy_left.png" id="4_left"]
+[ext_resource type="Texture2D" path="res://scenes/characters/sprites/test_boy_right.png" id="5_right"]
 
 [resource]
 script = ExtResource("1_characterdata")
@@ -9,4 +12,7 @@ id = &"player"
 display_name = ""
 parent_id = &""
 texture = ExtResource("2_front")
+texture_back = ExtResource("3_back")
+texture_left = ExtResource("4_left")
+texture_right = ExtResource("5_right")
 invitable = false

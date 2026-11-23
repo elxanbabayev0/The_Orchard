@@ -7,6 +7,9 @@ extends CharacterBody2D
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var name_label: Label = $NameLabel
 
+## Which way the player looks. Changes while walking; kept when standing still.
+var facing: CharacterData.Facing = CharacterData.Facing.DOWN
+
 
 func _ready() -> void:
 	_apply_character(Characters.get_active())
@@ -20,12 +23,27 @@ func _ready() -> void:
 func _apply_character(character: CharacterData) -> void:
 	if character == null:
 		return
-	if character.texture != null:
-		sprite.texture = character.texture
-		# "Origin on the ground": the bottom of the picture sits on the feet.
-		sprite.position = Vector2(0, -character.texture.get_height() / 2.0)
+	_update_picture()
 	# A name, not a translation key: shown as it is.
 	name_label.text = Characters.get_display_name(character)
+
+
+func set_facing(new_facing: CharacterData.Facing) -> void:
+	if new_facing == facing:
+		return
+	facing = new_facing
+	_update_picture()
+
+
+## The active character's picture for the current facing.
+func _update_picture() -> void:
+	var character := Characters.get_active()
+	var picture := character.get_texture_for(facing) if character != null else null
+	if picture == null:
+		return
+	sprite.texture = picture
+	# "Origin on the ground": the bottom of the picture sits on the feet.
+	sprite.position = Vector2(0, -picture.get_height() / 2.0)
 
 
 func _physics_process(_delta):
@@ -36,6 +54,8 @@ func _physics_process(_delta):
 		"move_down"
 	)
 
+	if direction != Vector2.ZERO:
+		set_facing(CharacterData.facing_from_vector(direction))
 	# Skill: faster walking while that character is active.
 	velocity = direction * speed * (1.0 + Characters.get_bonus(SkillData.Effect.WALK_SPEED))
 	move_and_slide()

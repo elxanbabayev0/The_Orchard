@@ -8,6 +8,8 @@ extends StaticBody2D
 
 ## Who this is. Set before add_child (or later with set_character).
 var character: CharacterData
+## Which way this character looks while standing.
+var facing: CharacterData.Facing = CharacterData.Facing.DOWN
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var name_label: Label = $NameLabel
@@ -34,15 +36,18 @@ func interact(player: Node2D) -> void:
 	var player_spot := player.global_position
 	player.global_position = global_position
 	global_position = player_spot
+	# The character left behind keeps looking where the player was looking.
+	facing = player.facing
 	set_character(previous)
 
 
 func _update_look() -> void:
 	if character == null:
 		return
-	if character.texture != null:
-		sprite.texture = character.texture
+	var picture := character.get_texture_for(facing)
+	if picture != null:
+		sprite.texture = picture
 		# "Origin on the ground": the bottom of the picture sits on the feet.
-		sprite.position = Vector2(0, -character.texture.get_height() / 2.0)
+		sprite.position = Vector2(0, -picture.get_height() / 2.0)
 	name_label.text = Characters.get_display_name(character)
 	name = "Member_%s" % character.id
