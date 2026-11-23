@@ -11,3 +11,6 @@ UI_MERCHANT_BUYS_NOTHING,This merchant doesn't buy anything.
 ITEM_GILAS,Sweet Cherry
 ITEM_GILAS_DESC,"Sweet, dark red cherries."
 TREE_GILAS,Sweet Cherry Tree
+ITEM_ALCA,Cherry Plum
+ITEM_ALCA_DESC,"Small, sweet-and-sour yellow plums."
+TREE_ALCA,Cherry Plum Tree
