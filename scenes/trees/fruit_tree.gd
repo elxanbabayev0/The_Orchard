@@ -9,7 +9,7 @@ extends StaticBody2D
 enum Stage { SAPLING, YOUNG, FLOWERING, UNRIPE, RIPE }
 
 ## Emitted after a successful harvest. The future inventory will listen to this.
-signal harvested(fruit_id: StringName, amount: int)
+signal harvested(item: ItemData, amount: int)
 
 @export var data: TreeData
 
@@ -25,6 +25,8 @@ func _ready() -> void:
 	if data == null:
 		push_error("FruitTree '%s' has no TreeData assigned." % name)
 		return
+	if data.fruit == null:
+		push_warning("TreeData '%s' has no fruit item assigned." % data.id)
 	_update_visuals()
 	# Grow together with the game clock (also pauses when the clock is paused).
 	GameClock.time_advanced.connect(advance_time)
@@ -64,9 +66,9 @@ func harvest() -> int:
 	var amount := data.harvest_yield
 	stage_time = 0.0
 	_set_stage(Stage.FLOWERING)
-	harvested.emit(data.fruit_id, amount)
+	harvested.emit(data.fruit, amount)
 	# Temporary: there is no inventory yet, so just show it in the Output panel.
-	print("Harvested %d x %s" % [amount, data.fruit_id])
+	print("Harvested %d x %s" % [amount, data.fruit.display_name if data.fruit else "?"])
 	return amount
 
 

@@ -23,9 +23,8 @@ extends Resource
 @export var unripe_days: float = 1.0
 
 @export_group("Harvest")
-## Which fruit this tree gives. Temporary: will become an item reference
-## once the inventory / item system exists.
-@export var fruit_id: StringName = &""
+## Which item (fruit) this tree gives.
+@export var fruit: ItemData
 ## How many fruits one harvest gives.
 @export var harvest_yield: int = 3
 
