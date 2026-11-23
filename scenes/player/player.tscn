@@ -3,24 +3,25 @@
 [ext_resource type="Script" uid="uid://c6x5hphljsyvw" path="res://scenes/player/player.gd" id="1_8afob"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dovo2"]
-size = Vector2(29, 29.5)
+size = Vector2(40, 20)
 
 [sub_resource type="Gradient" id="Gradient_placeholder"]
 colors = PackedColorArray(0.85, 0.45, 0.3, 1, 0.85, 0.45, 0.3, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_placeholder"]
 gradient = SubResource("Gradient_placeholder")
-width = 32
-height = 32
+width = 64
+height = 110
 
 [node name="Player" type="CharacterBody2D" unique_id=1213999816]
 script = ExtResource("1_8afob")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2106856220]
-position = Vector2(-1, 1)
+position = Vector2(0, -10)
 shape = SubResource("RectangleShape2D_dovo2")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1100170800]
+position = Vector2(0, -55)
 texture = SubResource("GradientTexture2D_placeholder")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1777852088]

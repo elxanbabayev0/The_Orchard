@@ -3,15 +3,15 @@
 [ext_resource type="PackedScene" uid="uid://pdqctokjjk66" path="res://scenes/player/player.tscn" id="1_player"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_box"]
-size = Vector2(48, 48)
+size = Vector2(64, 64)
 
 [sub_resource type="Gradient" id="Gradient_box"]
 colors = PackedColorArray(0.45, 0.3, 0.2, 1, 0.45, 0.3, 0.2, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_box"]
 gradient = SubResource("Gradient_box")
-width = 48
-height = 48
+width = 64
+height = 64
 
 [node name="Main" type="Node2D"]
 
@@ -26,7 +26,7 @@ color = Color(0.55, 0.72, 0.4, 1)
 [node name="Obstacles" type="Node2D" parent="."]
 
 [node name="Box1" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(200, -100)
+position = Vector2(224, -96)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacles/Box1"]
 shape = SubResource("RectangleShape2D_box")
@@ -35,7 +35,7 @@ shape = SubResource("RectangleShape2D_box")
 texture = SubResource("GradientTexture2D_box")
 
 [node name="Box2" type="StaticBody2D" parent="Obstacles"]
-position = Vector2(-180, 120)
+position = Vector2(-160, 160)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacles/Box2"]
 shape = SubResource("RectangleShape2D_box")
