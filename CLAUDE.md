@@ -62,7 +62,7 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Exact sprite sizes and art source resolution · map structure and world size · inventory · money and XP balance · tree growth and harvest rules · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · dynamic pricing implementation · save/load · sound and music · target platforms (PC / mobile).
+Exact sprite sizes and art source resolution · map structure and world size · inventory · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · dynamic pricing implementation · save/load · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -115,3 +115,17 @@ Add new decisions here in this format:
 - **Status:** Confirmed
 - **Affected systems:** world scene structure, player, all future trees/buildings/NPCs/props, collision shapes
 - **Notes:** Needed for the 3/4 oblique view: objects lower on screen are drawn in front, and the player can walk behind the top part of trees and buildings.
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Tree growth and harvest rules
+- **Decision:**
+  1. **Time:** in-game time (own game clock with a day cycle). Trees grow in game days. Time stops while the game is closed — no offline progress.
+  2. **Growth:** a tree grows **once** (sapling → young tree → mature tree), then a **repeating fruit cycle** runs: flowering → unripe fruit → ripe fruit → [harvest] → flowering …
+  3. **After harvest:** the tree keeps producing forever (no limited number of harvests, no dying).
+  4. **Unharvested fruit:** waits on the tree indefinitely (no spoiling, no falling).
+  5. **Care:** none for now — the tree grows by itself.
+- **Status:** Confirmed
+- **Affected systems:** trees (`TreeData` resource + `Tree` scene), a future game clock / day cycle system, harvesting, inventory, save/load
+- **Notes:** Real-time timers were rejected (clock cheating, offline-time math, and it is Hay Day's core mechanic). Limited harvests → withering was rejected because it is too close to Hay Day. Length of a game day, stage durations and yields are balance numbers and are **not decided**; the prototype uses temporary test values in seconds. Code must be built so these can be added later without rewriting (status: **Just an idea**): tree health/age affected by care (pruning, fertilizer) instead of dying; fallen fruit that can still be collected at lower quality (possible link to processing, e.g. jam/compote); simple watering; each fruit type bearing fruit in its real-life season (alça in spring, gilas/tut in May–June, albalı/vişnə in June–July) once seasons exist.
