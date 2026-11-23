@@ -30,6 +30,9 @@ var invitations: int = 0
 ## Sale money that has not been turned into XP yet (less than MONEY_PER_XP).
 ## Kept so many small sales add up instead of each rounding down to 0 XP.
 var _sale_money_carry: int = 0
+## Fraction of an XP point left over from the XP skill (e.g. +25% of 1 XP = 0.25).
+## Kept so small bonuses add up instead of rounding down to 0.
+var _bonus_xp_carry: float = 0.0
 
 
 # --- What gives XP -----------------------------------------------------------
@@ -53,7 +56,11 @@ func on_planted() -> void:
 func add_xp(amount: int) -> void:
 	if amount <= 0:
 		return
-	xp += amount
+	# Skill: more XP while that character is active.
+	var bonus := amount * Characters.get_bonus(SkillData.Effect.XP) + _bonus_xp_carry
+	var bonus_whole := floori(bonus)
+	_bonus_xp_carry = bonus - bonus_whole
+	xp += amount + bonus_whole
 	# "while": a big reward can pass several levels at once.
 	while xp >= get_level_start_xp(level + 1):
 		level += 1
@@ -94,13 +101,19 @@ func use_invitation() -> bool:
 # recalculated from XP, so the two can never disagree.
 
 func get_save_data() -> Dictionary:
-	return {"xp": xp, "invitations": invitations, "sale_money_carry": _sale_money_carry}
+	return {
+		"xp": xp,
+		"invitations": invitations,
+		"sale_money_carry": _sale_money_carry,
+		"bonus_xp_carry": _bonus_xp_carry,
+	}
 
 
 func load_save_data(data: Dictionary) -> void:
 	xp = maxi(0, int(data.get("xp", 0)))
 	invitations = maxi(0, int(data.get("invitations", 0)))
 	_sale_money_carry = clampi(int(data.get("sale_money_carry", 0)), 0, MONEY_PER_XP - 1)
+	_bonus_xp_carry = clampf(float(data.get("bonus_xp_carry", 0.0)), 0.0, 0.999)
 	level = 1
 	while xp >= get_level_start_xp(level + 1):
 		level += 1

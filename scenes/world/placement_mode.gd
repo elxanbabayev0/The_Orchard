@@ -85,9 +85,14 @@ static func snap_to_grid(point: Vector2) -> Vector2:
 	return Vector2(column * TILE_SIZE + TILE_SIZE / 2.0, (row + 1) * TILE_SIZE)
 
 
+## Planting range in pixels, plus the active skill's extra tiles.
+func get_plant_range() -> float:
+	return PLANT_RANGE + Characters.get_bonus(SkillData.Effect.PLANT_RANGE) * TILE_SIZE
+
+
 func can_place_at(spot: Vector2) -> bool:
 	# 1) Close enough to the player.
-	if player.global_position.distance_to(spot) > PLANT_RANGE:
+	if player.global_position.distance_to(spot) > get_plant_range():
 		return false
 	# 2) On the farm ground (checked at the middle of the tile).
 	if ground != null and not ground.get_global_rect().has_point(spot - Vector2(0, TILE_SIZE / 2.0)):

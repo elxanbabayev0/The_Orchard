@@ -2,7 +2,7 @@ class_name CharacterData
 extends Resource
 ## Data for one playable character: the player's own character or a family member.
 ## Each character is a separate .tres file in scenes/characters/types/, so new
-## characters can be added without new code. Skills come later.
+## characters can be added without new code.
 
 ## Unique, never-changing name used in code and save files (e.g. &"elio").
 @export var id: StringName = &""
@@ -17,3 +17,6 @@ extends Resource
 ## Can this character be invited with a level invitation?
 ## False for Rosa (background character) and for the player's own character.
 @export var invitable: bool = false
+## Passive bonus while this character is active (null = no skill, e.g. the player's own).
+## Written inside this file. Systems use Characters.get_bonus(), not this directly.
+@export var skill: SkillData

@@ -37,7 +37,8 @@ func _ready() -> void:
 func advance_time(amount: float) -> void:
 	if stage == Stage.RIPE:
 		return # Ripe fruit waits on the tree until harvested.
-	stage_time += amount
+	# Skill: trees grow faster (e.g. +20%) while that character is active.
+	stage_time += amount * (1.0 + Characters.get_bonus(SkillData.Effect.GROWTH_SPEED))
 	# "while", not "if": a big time jump can pass several stages at once.
 	while stage != Stage.RIPE and stage_time >= _get_stage_duration(stage):
 		stage_time -= _get_stage_duration(stage)
@@ -63,7 +64,8 @@ func can_harvest() -> bool:
 func harvest() -> int:
 	if not can_harvest():
 		return 0
-	var amount := data.harvest_yield
+	# Skill: extra fruit per harvest (all fruit, or one fruit specialty).
+	var amount := data.harvest_yield + roundi(Characters.get_bonus(SkillData.Effect.HARVEST_BONUS, data.fruit))
 	stage_time = 0.0
 	_set_stage(Stage.FLOWERING)
 	if data.fruit != null:

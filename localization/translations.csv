@@ -59,3 +59,13 @@ UI_INVITATIONS_LEFT,Invitations left: %d
 UI_CHILD_OF,%s's child
 UI_INVITE,Invite
 UI_CHARACTER_JOINED,%s has come to the orchard!
+SKILL_SELL_PRICE_ALL,All fruit sells for %d%% more
+SKILL_SELL_PRICE_FRUIT,%s sells for %d%% more
+SKILL_SAPLING_PRICE,Saplings cost %d%% less
+SKILL_PRICE_DROP,Selling lowers prices %d%% slower
+SKILL_HARVEST_BONUS_ALL,+%d fruit on every harvest
+SKILL_HARVEST_BONUS_FRUIT,+%d %s on every harvest
+SKILL_GROWTH_SPEED,Trees grow %d%% faster
+SKILL_WALK_SPEED,Walk %d%% faster
+SKILL_PLANT_RANGE,Plant up to %d tiles farther
+SKILL_XP,Earn %d%% more XP

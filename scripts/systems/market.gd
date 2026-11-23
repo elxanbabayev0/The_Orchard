@@ -47,7 +47,7 @@ func get_sell_total(item: ItemData, amount: int) -> int:
 	var total := 0
 	var saturation := _get_saturation(item)
 	for i in amount:
-		total += _unit_price(item, saturation + i)
+		total += _unit_price(item, saturation + i * _saturation_per_unit())
 	return total
 
 
@@ -62,7 +62,7 @@ func sell(item: ItemData, amount: int) -> int:
 		return 0
 	Wallet.add_money(total)
 	Progression.on_sale(total)
-	_saturation[item.id] = _get_saturation(item) + amount
+	_saturation[item.id] = _get_saturation(item) + amount * _saturation_per_unit()
 	prices_changed.emit(item)
 	return total
 
@@ -70,8 +70,12 @@ func sell(item: ItemData, amount: int) -> int:
 ## Shop price of ONE unit the player can buy (e.g. a sapling). Fixed for now.
 ## 0 = this item cannot be bought.
 func get_buy_price(item: ItemData) -> int:
-	if item == null:
+	if item == null or item.base_price <= 0:
 		return 0
+	if item.category == ItemData.Category.SAPLING:
+		# Skill: cheaper saplings while that character is active.
+		var discount := Characters.get_bonus(SkillData.Effect.SAPLING_PRICE)
+		return maxi(1, roundi(item.base_price * (1.0 - discount)))
 	return item.base_price
 
 
@@ -100,8 +104,15 @@ func _unit_price(item: ItemData, saturation: float) -> int:
 	if item == null or item.base_price <= 0:
 		return 0
 	var sales_factor := maxf(MIN_SALES_FACTOR, 1.0 - saturation * DROP_PER_UNIT)
-	var price := item.base_price * get_daily_factor(item) * sales_factor
+	# Skill: better sell price (all fruit, or one fruit specialty).
+	var skill_factor := 1.0 + Characters.get_bonus(SkillData.Effect.SELL_PRICE, item)
+	var price := item.base_price * get_daily_factor(item) * sales_factor * skill_factor
 	return maxi(1, roundi(price))
+
+
+## How much one sold unit lowers the price. Skill: "selling lowers prices slower".
+func _saturation_per_unit() -> float:
+	return maxf(0.0, 1.0 - Characters.get_bonus(SkillData.Effect.PRICE_DROP))
 
 
 func _get_saturation(item: ItemData) -> float:

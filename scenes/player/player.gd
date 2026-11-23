@@ -36,7 +36,8 @@ func _physics_process(_delta):
 		"move_down"
 	)
 
-	velocity = direction * speed
+	# Skill: faster walking while that character is active.
+	velocity = direction * speed * (1.0 + Characters.get_bonus(SkillData.Effect.WALK_SPEED))
 	move_and_slide()
 
 

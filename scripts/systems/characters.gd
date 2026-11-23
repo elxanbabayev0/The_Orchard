@@ -67,6 +67,26 @@ func get_display_name(character: CharacterData) -> String:
 	return character.display_name if character != null else ""
 
 
+# --- Skills ------------------------------------------------------------------
+# (Decision: a skill works only while its character is active.)
+
+## The active character's skill (null = none, e.g. the player's own character).
+func get_active_skill() -> SkillData:
+	var active := get_active()
+	return active.skill if active != null else null
+
+
+## How big the active skill's bonus is for `effect` (and `item`, for fruit
+## specialties). 0.0 if the active skill does something else.
+## Systems call this instead of reading skills themselves, e.g.
+##   Characters.get_bonus(SkillData.Effect.HARVEST_BONUS, fruit)
+func get_bonus(effect: SkillData.Effect, item: ItemData = null) -> float:
+	var skill := get_active_skill()
+	if skill == null or skill.effect != effect or not skill.applies_to(item):
+		return 0.0
+	return skill.value
+
+
 # --- Invitations ---------------------------------------------------------------
 
 func is_unlocked(character: CharacterData) -> bool:
