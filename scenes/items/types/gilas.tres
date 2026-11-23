@@ -17,3 +17,4 @@ display_name = "Gilas"
 category = 0
 icon = SubResource("GradientTexture2D_icon")
 description = "Şirin, tünd qırmızı gilas."
+base_price = 10

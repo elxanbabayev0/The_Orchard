@@ -16,3 +16,9 @@ enum Category { FRUIT, OTHER }
 ## Picture shown in the inventory and pop-ups.
 @export var icon: Texture2D
 @export_multiline var description: String = ""
+
+@export_group("Economy")
+## The "normal" price of one item. The merchant's real price changes every day
+## around this value and drops when the player sells a lot (see the market system).
+## 0 = cannot be sold. Values are TEMPORARY test numbers — balance is not decided.
+@export_range(0, 100000, 1) var base_price: int = 0
