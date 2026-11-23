@@ -10,3 +10,6 @@ extends Resource
 @export var number: int = 1
 ## The player needs at least this level before the chapter's first task is given.
 @export var required_level: int = 1
+## Features Oona teaches when this chapter is complete (e.g. &"cuttings").
+## Each feature has a dialogue line "UI_OONA_UNLOCK_<FEATURE>" (e.g. UI_OONA_UNLOCK_CUTTINGS).
+@export var unlocks: Array[StringName] = []

@@ -48,6 +48,9 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 		OonaVisits.Talk.REWARD_AND_TASK:
 			_add_reward()
 			if _chapter_done != null:
+				# What she teaches at the end of the chapter (e.g. cuttings), then her journey.
+				for feature in _chapter_done.unlocks:
+					_add_line(tr("UI_OONA_UNLOCK_%s" % String(feature).to_upper()), HIGHLIGHT)
 				_add_line(tr("UI_OONA_CHAPTER_DONE")) # she "goes on a journey"
 			_add_line(tr("UI_OONA_NEXT_TASK"))
 			_add_task()
@@ -98,8 +101,8 @@ func _add_reward() -> void:
 	lines.add_child(row)
 
 
-func _add_line(text: String) -> void:
-	var label := _make_label(text)
+func _add_line(text: String, color: Color = Color.WHITE) -> void:
+	var label := _make_label(text, color)
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lines.add_child(label)
 

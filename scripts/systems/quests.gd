@@ -25,6 +25,8 @@ signal quest_done(quest: QuestData)
 signal quest_rewarded(quest: QuestData)
 ## The last task of a story chapter was rewarded (Oona "goes on a journey").
 signal chapter_completed(chapter: ChapterData)
+## Oona taught something new at the end of a chapter (e.g. &"cuttings").
+signal feature_unlocked(feature: StringName)
 
 ## The task being worked on (null = none).
 var _active: QuestData = null
@@ -108,6 +110,16 @@ func get_current_chapter() -> ChapterData:
 	return null
 
 
+## Has Oona taught this feature yet? True when a complete chapter unlocks it.
+## Derived from the finished tasks, so nothing extra is saved (and older saves
+## that already finished the chapter get it automatically).
+func is_feature_unlocked(feature: StringName) -> bool:
+	for chapter in Registry.get_all_chapters():
+		if chapter.unlocks.has(feature) and is_chapter_complete(chapter.number):
+			return true
+	return false
+
+
 ## The level the player needs for the next story chapter, or 0 if no chapter is
 ## waiting for a level (one is open, or all are done). Oona mentions it.
 func get_next_chapter_level() -> int:
@@ -155,6 +167,8 @@ func claim_reward() -> bool:
 		var chapter := Registry.get_chapter(quest.chapter)
 		if chapter != null:
 			chapter_completed.emit(chapter)
+			for feature in chapter.unlocks:
+				feature_unlocked.emit(feature)
 	return true
 
 
