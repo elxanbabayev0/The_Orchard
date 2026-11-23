@@ -37,15 +37,16 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 ## Confirmed content
 - **Fruits:** alça (cherry plum), vişnə (sour cherry), tut (mulberry), albalı (morello cherry), gilas (sweet cherry) and its varieties. The system must support adding more trees, fruits and varieties later. **In the game, fruit names are shown in English** (Cherry Plum, Sour Cherry, Mulberry, Morello Cherry, Sweet Cherry) — confirmed 2026-11-23, see Decision log.
 - **Characters:** the player starts with their own character. Other characters are unlocked with XP. Each character will have unique skills that affect gameplay (the skill list, XP costs and unlock order are **not decided**).
-- **Merchant** (was "Orxan" — the user asked to rename him; new name **pending**, see Decision log): buys the player's produce. Prices are **dynamic**: daily market price + the player's own sales (confirmed 2026-11-23, see Decision log). Prices based on other real players would need multiplayer/a server, which is **not decided** — do not assume multiplayer exists.
+- **Merchant Bruno** (was "Orxan"; renamed 2026-11-23, see Decision log): buys the player's produce. Prices are **dynamic**: daily market price + the player's own sales (confirmed 2026-11-23, see Decision log). Prices based on other real players would need multiplayer/a server, which is **not decided** — do not assume multiplayer exists.
 - **Buyer NPCs:** more buyers with their own personalities are planned. Names, looks, dialogue and order mechanics are not decided.
-- **Family tree** — keep the **relations** exactly as written. The **names below are old working names**: all names in the game must be foreign (mixed international) names (confirmed 2026-11-23, see Decision log). New names are **pending** — do not invent them without the user's approval. Roles/ages/personalities are not decided.
+- **Family tree** (names confirmed 2026-11-23, see Decision log) — keep names and relations exactly as written. Each branch has its own cultural origin. Roles/ages/personalities are not decided.
   ```
-  Zöhrə
-  ├── Gulnarə: Elman, Elxan, Elnaz, Eltac
-  ├── İlqar: Duyğu, Səid, Ülkər
-  └── Aytən: Vüqar, Nubar, Zəhrə
+  Rosa (grandmother)
+  ├── Sofia (Mediterranean branch): Elio, Elias, Elena, Eloy
+  ├── Henrik (Scandinavian branch): Freya, Nils, Astrid
+  └── Yuki (Japanese branch): Kenji, Hana, Aiko
   ```
+  Old working names (only for reading `docs/The_Orchard_Project_Context.md`): Zöhrə → Rosa; Gulnarə → Sofia (Elman → Elio, Elxan → Elias, Elnaz → Elena, Eltac → Eloy); İlqar → Henrik (Duyğu → Freya, Səid → Nils, Ülkər → Astrid); Aytən → Yuki (Vüqar → Kenji, Nubar → Hana, Zəhrə → Aiko). Do not use the old names in the game.
 
 ## Technical conventions (confirmed)
 **Origin on the ground (Y-sort rule)** — applies to every object that stands in the world (player, trees, buildings, NPCs, bushes, props):
@@ -74,7 +75,7 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · save/load · new character names (pending, user approves) · UI language (fruit names are English; rest not decided) · sound and music · target platforms (PC / mobile).
+Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · save/load · names of future characters / buyer NPCs (foreign, user approves) · UI language (fruit names are English; rest not decided) · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -191,3 +192,19 @@ Add new decisions here in this format:
 - **Status:** Confirmed
 - **Affected systems:** characters / NPCs, family tree, merchant, `ItemData.display_name` of every fruit (e.g. `items/types/gilas.tres` "Gilas" → "Sweet Cherry"), harvest pop-ups and inventory panel (they show `display_name`)
 - **Notes:** The new names themselves are **not chosen yet** — the user approves every name; do not invent official names. The old names (Orxan, Zöhrə, Gulnarə, …) remain only in `docs/The_Orchard_Project_Context.md` as original notes. **Not decided:** the language of the rest of the UI (currently placeholder Azerbaijani texts such as "İnventar", "Boşdur", "Gün"), and whether internal ids / file names (e.g. `&"gilas"`, `gilas.tres`) should also become English — ids are never shown to the player.
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** New character names
+- **Decision:** Variant A — each family branch has its own cultural origin; the merchant is **Bruno**.
+  ```
+  Rosa (grandmother)
+  ├── Sofia (Mediterranean): Elio, Elias, Elena, Eloy
+  ├── Henrik (Scandinavian): Freya, Nils, Astrid
+  └── Yuki (Japanese): Kenji, Hana, Aiko
+  ```
+  Mapping from the old names: Zöhrə → Rosa · Gulnarə → Sofia · Elman → Elio · Elxan → Elias · Elnaz → Elena · Eltac → Eloy · İlqar → Henrik · Duyğu → Freya · Səid → Nils · Ülkər → Astrid · Aytən → Yuki · Vüqar → Kenji · Nubar → Hana · Zəhrə → Aiko · Orxan → Bruno.
+- **Status:** Confirmed
+- **Affected systems:** characters / NPCs, family tree, merchant, future dialogue and UI texts
+- **Notes:** Genders were kept from the old names (female: Rosa, Sofia, Elena, Yuki, Freya, Astrid, Hana, Aiko; male: Elio, Elias, Eloy, Henrik, Nils, Kenji, Bruno). The "El-" pattern of Sofia's four children was kept on purpose. Future characters and buyer NPCs also get foreign names, approved by the user. `docs/The_Orchard_Project_Context.md` still contains the old names as original notes.
