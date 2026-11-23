@@ -10,6 +10,7 @@ const ITEM_FOLDER := "res://scenes/items/types/"
 const TREE_FOLDER := "res://scenes/trees/types/"
 const CHARACTER_FOLDER := "res://scenes/characters/types/"
 const QUEST_FOLDER := "res://scenes/quests/types/"
+const QUEST_TEMPLATE_FOLDER := "res://scenes/quests/templates/"
 
 ## id -> ItemData
 var _items: Dictionary[StringName, ItemData] = {}
@@ -19,6 +20,8 @@ var _trees: Dictionary[StringName, TreeData] = {}
 var _characters: Dictionary[StringName, CharacterData] = {}
 ## id -> QuestData
 var _quests: Dictionary[StringName, QuestData] = {}
+## Templates for generated tasks (no ids: they are never saved by id).
+var _quest_templates: Array[QuestTemplate] = []
 
 
 func _ready() -> void:
@@ -34,6 +37,9 @@ func _ready() -> void:
 	for resource in _load_folder(QUEST_FOLDER):
 		if resource is QuestData:
 			_add(_quests, resource.id, resource)
+	for resource in _load_folder(QUEST_TEMPLATE_FOLDER):
+		if resource is QuestTemplate:
+			_quest_templates.append(resource)
 
 
 ## Returns the quest with this id, or null (with a warning) if there is none.
@@ -42,6 +48,10 @@ func get_quest(id: StringName) -> QuestData:
 		push_warning("Registry: unknown quest id '%s'." % id)
 		return null
 	return _quests[id]
+
+
+func get_all_quest_templates() -> Array[QuestTemplate]:
+	return _quest_templates.duplicate()
 
 
 func get_all_quests() -> Array[QuestData]:

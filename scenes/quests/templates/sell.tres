@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="QuestTemplate" format=3]
+
+[ext_resource type="Script" path="res://scenes/quests/quest_template.gd" id="1_template"]
+
+[resource]
+script = ExtResource("1_template")
+goal = 3
+base_target = 15
+target_per_level = 5.0
+filter_chance = 0.3
+xp_per_unit = 2.0
+weight = 3

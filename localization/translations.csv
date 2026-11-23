@@ -94,3 +94,10 @@ QUEST_GOAL_GROW_SAPLINGS,Grow %d saplings into fruit trees
 QUEST_GOAL_GROW_SAPLINGS_ITEM,Grow %d saplings into fruit trees (%s)
 QUEST_GOAL_HAVE_TREES,Have %d fruit trees in your orchard
 QUEST_GOAL_HAVE_TREES_ITEM,Have %d %s trees
+QUEST_GOAL_PLANT_SAPLINGS_ONE,Plant a sapling
+QUEST_GOAL_HARVEST_TIMES_ONE,Harvest once
+QUEST_GOAL_HARVEST_TIMES_ITEM_ONE,Harvest once (%s)
+QUEST_GOAL_GROW_SAPLINGS_ONE,Grow a sapling into a fruit tree
+QUEST_GOAL_GROW_SAPLINGS_ITEM_ONE,Grow a sapling into a fruit tree (%s)
+QUEST_GOAL_HAVE_TREES_ONE,Have a fruit tree in your orchard
+QUEST_GOAL_HAVE_TREES_ITEM_ONE,Have a %s tree

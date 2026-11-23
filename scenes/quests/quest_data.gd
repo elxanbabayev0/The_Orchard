@@ -48,8 +48,15 @@ func counts_tree(tree_type: TreeData) -> bool:
 
 
 ## Player-facing task text, e.g. "Plant 2 saplings" or "Sell 10 × Mulberry".
+## For a target of 1 a "_ONE" key is used if it exists ("Plant a sapling"),
+## because the CSV translation table has no plural forms.
 func get_description() -> String:
-	var key: String = Goal.keys()[goal]
+	var key := "QUEST_GOAL_%s" % Goal.keys()[goal]
 	if filter_item != null:
-		return tr("QUEST_GOAL_%s_ITEM" % key) % [target, tr(filter_item.display_name)]
-	return tr("QUEST_GOAL_%s" % key) % target
+		key += "_ITEM"
+	if target == 1 and tr(key + "_ONE") != key + "_ONE":
+		key += "_ONE"
+	var text := tr(key)
+	if filter_item != null:
+		return text % [target, tr(filter_item.display_name)] if text.count("%") >= 2 else text % tr(filter_item.display_name)
+	return text % target if text.contains("%") else text
