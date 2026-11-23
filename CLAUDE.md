@@ -16,12 +16,12 @@ The full original design notes (in Azerbaijani) are in `docs/The_Orchard_Project
 - **Goal:** a long-playing, expandable game, not a short fixed story.
 
 ## Visual style (confirmed)
-- 2D, **hand-painted** look: colorful, soft, atmospheric.
-- **Not** pixel art. Not an overly flat/simple 2D style either.
+- 2D **pixel art** (changed 2026-11-23 from "hand-painted, not pixel art" — see Decision log "Art style: pixel art"): colorful, warm, atmospheric.
+- **Pixel scale:** 1 art pixel = 2 × 2 screen pixels. The world grid stays 64 px (= 32 × 32 art pixels per tile), base resolution stays 1920 × 1080. Textures use the **Nearest** filter (sharp pixels, no blur).
 - All assets (trees, fruit, soil, buildings, characters, environment) must look like they belong to the same game.
 - **Camera angle (confirmed 2026-11-23):** 3/4 top-down oblique view — see Decision log.
 - **Tile size (confirmed 2026-11-23):** 64 × 64 px, square. **Base resolution:** 1920 × 1080 — see Decision log.
-- Not decided yet: color palette, exact sprite sizes, art source resolution (1× or 2×), animation standards.
+- Not decided yet: color palette, exact sprite sizes, the full animation standard (frame counts, frame rate).
 
 ## Core gameplay loop (concept)
 1. The player works in the orchard.
@@ -105,7 +105,7 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money balance · XP amounts and level thresholds · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quest types, rewards and the old woman's visit schedule · name of the visiting old woman (foreign, user approves) · NPC dialogue and AI · skill bonus numbers (the skill list is decided, numbers are test values) · where newly invited characters appear on the farm · the player character's parent in the family tree (left open) · Rosa's role as a background NPC · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · sapling prices · planting range / farm boundaries · moving or removing trees (later) · separate sapling-seller NPC (later, name approved by user) · manual save / multiple save slots UI (later) · settings menu (later) · whether placement mode should pause time (suggestion: no) · names of future characters / buyer NPCs (foreign, user approves) · more UI languages later (e.g. Azerbaijani) and whether fruit names get translated then · game font (must support all chosen languages) · sound and music · target platforms (PC / mobile).
+Exact sprite sizes · the color palette · walk-cycle frames (real frame-by-frame animation later) · which test sprite becomes the player's look (boy/girl choice?) · map structure and world size · inventory capacity limits / slots / storage building (later) · money balance · XP amounts and level thresholds · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quest types, rewards and the old woman's visit schedule · name of the visiting old woman (foreign, user approves) · NPC dialogue and AI · skill bonus numbers (the skill list is decided, numbers are test values) · where newly invited characters appear on the farm · the player character's parent in the family tree (left open) · Rosa's role as a background NPC · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · sapling prices · planting range / farm boundaries · moving or removing trees (later) · separate sapling-seller NPC (later, name approved by user) · manual save / multiple save slots UI (later) · settings menu (later) · whether placement mode should pause time (suggestion: no) · names of future characters / buyer NPCs (foreign, user approves) · more UI languages later (e.g. Azerbaijani) and whether fruit names get translated then · game font (must support all chosen languages) · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -330,3 +330,24 @@ Add new decisions here in this format:
   - Gardening — **Henrik**: +1 fruit on every harvest · Freya: trees grow 20% faster · Nils: Sour Cherry harvest +2 · Astrid: Cherry Plum harvest +2
   - Movement / planting — **Yuki**: walking speed +25% · Kenji: Mulberry harvest +2 · Hana: planting range +2 tiles · Aiko: all XP +25%
 - **Notes:** Each fruit has one specialist among the grandchildren; the parent holds the general branch skill. Where unlocked characters stand when they arrive (spawn spot) is a technical detail (suggestion: near the player / a fixed spot). Helper AI (characters working on their own) is still a later topic.
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Art style: pixel art
+- **Decision:** The game switches from "hand-painted, not pixel art" to **pixel art**. Pixel scale: **1 art pixel = 2 screen pixels**; the 64 px world grid (= 32 × 32 art-pixel tiles) and the 1920 × 1080 base resolution stay, so existing code and positions do not change. Textures are drawn with the **Nearest** filter.
+- **Status:** Confirmed
+- **Affected systems:** all art (characters, trees, fruit, ground, buildings, UI icons), `project.godot` (default texture filter), sprite import, the earlier "Visual style" and "Tile size" entries (the 64 px grid is kept; the art is drawn at 32 px and shown at 2×)
+- **Notes:** Triggered by the user's Gemini character sheets (`art/Gemini_Generated_Image_*.jfif`: 4-direction pixel-art turnarounds, about 30 × 55 art pixels → about 60 × 110 on screen, the same size as the old placeholder). Those images have white JPEG backgrounds; the game uses cleaned PNG copies with transparency. Known flaws of the AI sheets (for later art): the first sheet's hairstyle differs between views; side-view arms look stiff; AI pixel art is not aligned to a clean pixel grid. The palette, exact sprite sizes and UI font style for pixel art are not decided.
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Walking animation and ground effects
+- **Decision:**
+  1. **Walk animation:** a procedural "bob" animation now (one picture per direction: rhythmic hop, a little squash/stretch and sway while moving; the picture changes with the walking direction — front, back, left, right). Built so that real frame-by-frame walk cycles (`AnimatedSprite2D` / sprite sheets) can replace it later.
+  2. **Test sprites:** both Gemini characters are TEST sprites for the player's own character for now; one is used (can be swapped any time). Who they finally are is not decided.
+  3. **Ground:** a real ground system with a `TileMapLayer` (64 px tiles, grass and dirt), each tile has a **surface type**. While walking, small particles appear at the feet depending on the surface under them: **dust on dirt, grass bits on grass**.
+- **Status:** Confirmed
+- **Affected systems:** player scene (sprite per direction, walk animation), `FamilyMember` (standing picture), `CharacterData` (pictures per direction), world scene (`Ground` `ColorRect` → `TileMapLayer` with a `TileSet` and a surface custom data layer), `PlacementMode` (farm ground check used the `Ground` rect), `FamilyMembers` (arrival ground check), new particle effects (`CPUParticles2D`)
+- **Notes:** Real walk frames are hard to get consistent from AI image tools; they may need hand clean-up. The ground tiles are placeholders until real pixel-art tiles exist.
