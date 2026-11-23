@@ -6,6 +6,7 @@ extends PanelContainer
 
 const PORTRAIT_SIZE := Vector2(48, 82)
 const FONT_SIZE := 22
+const SKILL_COLOR := Color(1.0, 0.88, 0.35)
 
 @onready var close_button: Button = $Margin/VBox/Header/CloseButton
 @onready var invitations_label: Label = $Margin/VBox/InvitationsLabel
@@ -37,7 +38,7 @@ func _refresh() -> void:
 		cards.add_child(_make_card(character))
 
 
-## One card: picture, name, "Rosa's child", [Invite]
+## One card: picture, name, "Rosa's child", skill, [Invite]
 func _make_card(character: CharacterData) -> VBoxContainer:
 	var card := VBoxContainer.new()
 	card.custom_minimum_size = Vector2(150, 0)
@@ -59,6 +60,14 @@ func _make_card(character: CharacterData) -> VBoxContainer:
 		var relation := _make_label(tr("UI_CHILD_OF") % parent.display_name)
 		relation.add_theme_font_size_override("font_size", FONT_SIZE - 4)
 		card.add_child(relation)
+
+	# What this character would bring: their skill.
+	var skill := _make_label(Characters.get_skill_text(character))
+	skill.add_theme_font_size_override("font_size", FONT_SIZE - 4)
+	skill.add_theme_color_override("font_color", SKILL_COLOR)
+	skill.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	skill.custom_minimum_size = Vector2(150, 0)
+	card.add_child(skill)
 
 	var invite_button := Button.new()
 	invite_button.text = tr("UI_INVITE")

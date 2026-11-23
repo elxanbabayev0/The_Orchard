@@ -76,6 +76,14 @@ func get_active_skill() -> SkillData:
 	return active.skill if active != null else null
 
 
+## Player-facing skill text (used by the HUD and the invitation cards):
+## the skill's description, or "No special skill".
+func get_skill_text(character: CharacterData) -> String:
+	if character == null or character.skill == null:
+		return tr("UI_SKILL_NONE")
+	return character.skill.get_description()
+
+
 ## How big the active skill's bonus is for `effect` (and `item`, for fruit
 ## specialties). 0.0 if the active skill does something else.
 ## Systems call this instead of reading skills themselves, e.g.

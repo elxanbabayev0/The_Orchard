@@ -69,3 +69,4 @@ SKILL_GROWTH_SPEED,Trees grow %d%% faster
 SKILL_WALK_SPEED,Walk %d%% faster
 SKILL_PLANT_RANGE,Plant up to %d tiles farther
 SKILL_XP,Earn %d%% more XP
+UI_SKILL_NONE,No special skill
