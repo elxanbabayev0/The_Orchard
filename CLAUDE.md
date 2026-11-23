@@ -86,7 +86,7 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · save/load · names of future characters / buyer NPCs (foreign, user approves) · more UI languages later (e.g. Azerbaijani) and whether fruit names get translated then · game font (must support all chosen languages) · sound and music · target platforms (PC / mobile).
+Exact sprite sizes and art source resolution · map structure and world size · inventory capacity limits / slots / storage building (later) · money and XP balance · tree balance numbers (stage durations, yields) and length of a game day · sleep / energy / day-start mechanic (later) · tree care, fallen/overripe fruit and quality (later) · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · price balance (base prices, random range, drop/recovery speed, starting money) · currency name · merchant schedule (later) · sapling prices · planting range / farm boundaries · moving or removing trees (later) · separate sapling-seller NPC (later, name approved by user) · save/load · names of future characters / buyer NPCs (foreign, user approves) · more UI languages later (e.g. Azerbaijani) and whether fruit names get translated then · game font (must support all chosen languages) · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -228,3 +228,17 @@ Add new decisions here in this format:
 - **Status:** Confirmed
 - **Affected systems:** all UI texts (clock label, inventory panel, item pop-ups, sell window, merchant name label), `ItemData.display_name` (becomes a key, e.g. `ITEM_GILAS` → "Sweet Cherry"), a new translation CSV registered in Project Settings → Localization → Translations, code uses `tr("KEY")` for texts built in scripts
 - **Notes:** Rule for new code: never hard-code player-facing text; always add a key to the translation table. Debug `print` messages and code comments stay plain English (not translated). Character names (Bruno, Rosa, …) are names, not translated. **Not decided:** which other languages come later (e.g. Azerbaijani), whether fruit names would be translated in those languages (the earlier decision says fruit names are shown in English), and the game font — it must support every chosen language's letters (for Azerbaijani: ə, ğ, ı, ö, ü, ç, ş).
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Spending money — buying and planting saplings
+- **Decision:**
+  1. **What to buy first:** saplings (new fruit trees).
+  2. **Who sells them:** Bruno for now. The `Merchant` scene gets a separate `sells` list, so a different NPC (e.g. a nursery seller) can take it over later without code changes.
+  3. **Where to plant:** freely, anywhere on the farm ground, snapped to the 64 px grid, only if the spot is free (no tree, prop, stall, etc.).
+  4. **How to plant:** placement mode with the mouse — the chosen sapling shows a half-transparent "ghost" under the cursor, snapped to the grid, green = can plant, red = cannot; click to plant. Only works within a range around the player character.
+  5. **Bought saplings go into the inventory** as items (e.g. "Sweet Cherry Sapling ×2") and are planted from there.
+- **Status:** Confirmed
+- **Affected systems:** `ItemData` (sapling items, category `SAPLING`, link to the `TreeData` they grow into), `Merchant` (`sells` list), trade/sell window (needs a buy side), `Wallet.spend_money`, `Inventory`, new placement mode (ghost preview, grid snap, free-spot check, range check), `FruitTree` instances created at runtime under `Entities/Trees`, translation keys for sapling names and buy UI
+- **Notes:** Sapling prices, the planting range and farm boundaries are **not decided** (test values; the current ground is the placeholder `Ground` rect). Moving/removing trees, land expansion, tools, processing and buildings are later topics. Tilling soil with a tool before planting was not chosen (too close to other well-known farming games). Saplings planted at runtime will need save/load later (not decided).
