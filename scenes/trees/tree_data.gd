@@ -28,3 +28,12 @@ extends Resource
 @export var fruit_id: StringName = &""
 ## How many fruits one harvest gives.
 @export var harvest_yield: int = 3
+
+@export_group("Visuals")
+## One picture per stage. The bottom edge of each picture is placed on the
+## tree's origin (the bottom of the trunk), following the "origin on the ground" rule.
+@export var sapling_texture: Texture2D
+@export var young_texture: Texture2D
+@export var flowering_texture: Texture2D
+@export var unripe_texture: Texture2D
+@export var ripe_texture: Texture2D

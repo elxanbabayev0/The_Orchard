@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/trees/fruit_tree.gd" id="1_fruittree"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_trunk"]
+size = Vector2(32, 16)
+
+[node name="FruitTree" type="StaticBody2D"]
+script = ExtResource("1_fruittree")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_trunk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="StageLabel" type="Label" parent="."]
+offset_left = -80.0
+offset_top = -232.0
+offset_right = 80.0
+offset_bottom = -206.0
+horizontal_alignment = 1

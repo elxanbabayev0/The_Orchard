@@ -1,6 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" uid="uid://pdqctokjjk66" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/trees/fruit_tree.tscn" id="2_fruittree"]
+[ext_resource type="Resource" path="res://scenes/trees/types/gilas.tres" id="3_gilas"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_box"]
 size = Vector2(64, 32)
@@ -50,5 +52,12 @@ shape = SubResource("RectangleShape2D_box")
 [node name="Sprite2D" type="Sprite2D" parent="Entities/Obstacles/Box2"]
 position = Vector2(0, -32)
 texture = SubResource("GradientTexture2D_box")
+
+[node name="Trees" type="Node2D" parent="Entities"]
+y_sort_enabled = true
+
+[node name="Gilas1" parent="Entities/Trees" instance=ExtResource("2_fruittree")]
+position = Vector2(352, 192)
+data = ExtResource("3_gilas")
 
 [node name="Player" parent="Entities" instance=ExtResource("1_player")]
