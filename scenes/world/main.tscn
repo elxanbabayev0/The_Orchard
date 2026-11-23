@@ -32,6 +32,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/active_character_display.tscn" id="30_activechar"]
 [ext_resource type="PackedScene" path="res://scenes/world/ground/ground.tscn" id="31_ground"]
 [ext_resource type="PackedScene" path="res://scenes/npc/oona.tscn" id="32_oona"]
+[ext_resource type="PackedScene" path="res://scenes/ui/oona_dialog.tscn" id="33_oonadialog"]
+[ext_resource type="PackedScene" path="res://scenes/ui/quest_tracker.tscn" id="34_questtracker"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -152,6 +154,8 @@ script = ExtResource("4_clocklabel")
 
 [node name="ActiveCharacterDisplay" parent="UI" instance=ExtResource("30_activechar")]
 
+[node name="QuestTracker" parent="UI" instance=ExtResource("34_questtracker")]
+
 [node name="InventoryPanel" parent="UI" instance=ExtResource("6_invpanel")]
 
 [node name="ItemPopups" parent="UI" instance=ExtResource("7_itempopups")]
@@ -160,6 +164,9 @@ script = ExtResource("4_clocklabel")
 
 [node name="InvitationWindow" parent="UI" instance=ExtResource("28_invitation")]
 
+[node name="OonaDialog" parent="UI" instance=ExtResource("33_oonadialog")]
+
 [connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/TradeWindow" method="open"]
 [connection signal="plant_requested" from="UI/InventoryPanel" to="PlacementMode" method="start"]
 [connection signal="invite_requested" from="UI/LevelDisplay" to="UI/InvitationWindow" method="open"]
+[connection signal="talked" from="Entities/NPCs/Oona" to="UI/OonaDialog" method="open"]

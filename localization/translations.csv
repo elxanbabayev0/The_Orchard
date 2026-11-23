@@ -78,6 +78,15 @@ QUEST_GOAL_PICK_FRUIT,Pick %d fruit
 QUEST_GOAL_PICK_FRUIT_ITEM,Pick %d × %s
 QUEST_GOAL_SELL_FRUIT,Sell %d fruit
 QUEST_GOAL_SELL_FRUIT_ITEM,Sell %d × %s
-UI_QUEST_NEW,Oona's task: %s
 UI_QUEST_DONE,Task done! Oona will come back soon.
-UI_QUEST_REWARD,Oona thanks you! +%d XP
+UI_OONA_GIVE_TASK,"Ah, there you are. I have a task for you:"
+UI_OONA_REMINDER,How is my task coming along?
+UI_OONA_REWARD,Well done! This is for you:
+UI_OONA_NEXT_TASK,And here is my next task:
+UI_OONA_NO_TASKS,"I have no more tasks for now. Thank you, dear."
+UI_QUEST_PROGRESS,%d / %d
+UI_QUEST_TRACKER_TITLE,Oona's task
+UI_QUEST_TRACKER_DONE,Done! Oona will come back.
+UI_REWARD_XP,+%d XP
+UI_QUEST_TRACKER_DONE_HERE,Done! Talk to Oona.
+UI_QUEST_DONE_HERE,Task done! Talk to Oona.

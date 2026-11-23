@@ -3,11 +3,12 @@ extends StaticBody2D
 ## OonaVisits.is_present(). Pressing E near her = OonaVisits.talk().
 ## Placeholder look until real pixel art exists.
 
-## Emitted after every talk, with the result (OonaVisits.Talk).
-## The dialogue window will listen to this (next step).
-signal talked(result: int)
+## Emitted after every talk, with the result (OonaVisits.Talk) and her picture.
+## Connected to OonaDialog.open in main.tscn.
+signal talked(result: int, portrait: Texture2D)
 
 @onready var collision: CollisionShape2D = $CollisionShape2D
+@onready var sprite: Sprite2D = $Sprite2D
 
 
 func _ready() -> void:
@@ -18,7 +19,7 @@ func _ready() -> void:
 func interact(_player: Node2D) -> void:
 	var result := OonaVisits.talk()
 	if result != OonaVisits.Talk.NOTHING:
-		talked.emit(result)
+		talked.emit(result, sprite.texture)
 
 
 func _update_presence(present: bool) -> void:
