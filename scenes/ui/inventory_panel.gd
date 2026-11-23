@@ -24,10 +24,16 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_inventory"):
+		# Do not open on top of another window (trade window, pause menu).
+		if not visible and UIState.is_blocking():
+			return
 		visible = not visible
 		if visible:
 			_refresh()
 		# Stop other nodes from also reacting to this key press.
+		get_viewport().set_input_as_handled()
+	elif visible and event.is_action_pressed("ui_cancel"):
+		hide() # Esc closes the panel (and does not open the pause menu)
 		get_viewport().set_input_as_handled()
 
 

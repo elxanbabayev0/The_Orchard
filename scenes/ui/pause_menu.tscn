@@ -1,0 +1,70 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/pause_menu.gd" id="1_pausemenu"]
+
+[node name="PauseLayer" type="CanvasLayer"]
+layer = 10
+
+[node name="PauseMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pausemenu")
+
+[node name="Dim" type="ColorRect" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Center" type="CenterContainer" parent="PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="PauseMenu/Center"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="PauseMenu/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="PauseMenu/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="PauseMenu/Center/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "UI_PAUSE_TITLE"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="PauseMenu/Center/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(320, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "UI_PAUSE_RESUME"
+
+[node name="MainMenuButton" type="Button" parent="PauseMenu/Center/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(320, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "UI_PAUSE_MAIN_MENU"
+
+[node name="QuitButton" type="Button" parent="PauseMenu/Center/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(320, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "UI_MENU_QUIT"

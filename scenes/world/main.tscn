@@ -25,6 +25,7 @@
 [ext_resource type="Resource" path="res://scenes/items/types/tut_sapling.tres" id="23_tutsapling"]
 [ext_resource type="Resource" path="res://scenes/items/types/albali_sapling.tres" id="24_albalisapling"]
 [ext_resource type="PackedScene" path="res://scenes/world/placement_mode.tscn" id="25_placement"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="26_pausemenu"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -42,6 +43,8 @@ width = 64
 height = 64
 
 [node name="Main" type="Node2D"]
+
+[node name="PauseLayer" parent="." instance=ExtResource("26_pausemenu")]
 
 [node name="Ground" type="ColorRect" parent="."]
 offset_left = -1000.0

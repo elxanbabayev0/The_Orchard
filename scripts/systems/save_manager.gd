@@ -12,6 +12,7 @@ const SAVE_FOLDER := "user://saves/"
 const DEFAULT_SLOT := "slot_1"
 ## The world scene the menu starts.
 const WORLD_SCENE := "res://scenes/world/main.tscn"
+const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 ## Where the trees live inside the world scene (main.tscn).
 const TREES_PATH := "Entities/Trees"
 const FRUIT_TREE_SCENE := preload("res://scenes/trees/fruit_tree.tscn")
@@ -39,6 +40,19 @@ func _start_world(load_save: bool, slot: String) -> void:
 	if load_save:
 		load_game(slot)
 	GameClock.paused = false
+
+
+## Pause menu → "Main Menu": save, then leave the world.
+func return_to_main_menu() -> void:
+	save_game()
+	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
+
+
+## Pause menu → "Quit": save, then close the game.
+## (get_tree().quit() does not send the "window closing" notification, so save here.)
+func quit_game() -> void:
+	save_game()
+	get_tree().quit()
 
 
 ## Puts every system back to the new-game state (load_save_data({}) = defaults).
