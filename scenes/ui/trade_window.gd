@@ -25,6 +25,8 @@ var _merchant: Merchant
 
 func _ready() -> void:
 	hide()
+	# While this window is open the game is paused (it keeps working itself).
+	UIState.track(self)
 	close_button.pressed.connect(close)
 	# Rebuild when amounts, prices or money change (after a trade, on a new day...).
 	# unbind() drops the signal's arguments, which we do not need here.

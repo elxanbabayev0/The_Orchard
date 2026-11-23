@@ -17,6 +17,8 @@ const FONT_SIZE := 26
 
 func _ready() -> void:
 	hide()
+	# While this panel is open the game is paused (it keeps working itself).
+	UIState.track(self)
 	Inventory.inventory_changed.connect(_on_inventory_changed)
 
 
