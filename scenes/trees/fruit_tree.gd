@@ -8,7 +8,7 @@ extends StaticBody2D
 ## which starts again from FLOWERING after a harvest.
 enum Stage { SAPLING, YOUNG, FLOWERING, UNRIPE, RIPE }
 
-## Emitted after a successful harvest. The future inventory will listen to this.
+## Emitted after a successful harvest (the fruit is already in the Inventory by then).
 signal harvested(item: ItemData, amount: int)
 
 @export var data: TreeData
@@ -66,9 +66,10 @@ func harvest() -> int:
 	var amount := data.harvest_yield
 	stage_time = 0.0
 	_set_stage(Stage.FLOWERING)
+	if data.fruit != null:
+		Inventory.add_item(data.fruit, amount)
+	# The signal stays for things like sounds or effects later.
 	harvested.emit(data.fruit, amount)
-	# Temporary: there is no inventory yet, so just show it in the Output panel.
-	print("Harvested %d x %s" % [amount, data.fruit.display_name if data.fruit else "?"])
 	return amount
 
 
