@@ -90,3 +90,7 @@ UI_QUEST_TRACKER_DONE,Done! Oona will come back.
 UI_REWARD_XP,+%d XP
 UI_QUEST_TRACKER_DONE_HERE,Done! Talk to Oona.
 UI_QUEST_DONE_HERE,Task done! Talk to Oona.
+QUEST_GOAL_GROW_SAPLINGS,Grow %d saplings into fruit trees
+QUEST_GOAL_GROW_SAPLINGS_ITEM,Grow %d saplings into fruit trees (%s)
+QUEST_GOAL_HAVE_TREES,Have %d fruit trees in your orchard
+QUEST_GOAL_HAVE_TREES_ITEM,Have %d %s trees

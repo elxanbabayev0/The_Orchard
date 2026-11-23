@@ -11,6 +11,9 @@ enum Stage { SAPLING, YOUNG, FLOWERING, UNRIPE, RIPE }
 ## Emitted after a successful harvest (the fruit is already in the Inventory by then).
 signal harvested(item: ItemData, amount: int)
 
+## Every fruit tree is in this group (e.g. Quests counts the trees of the orchard).
+const GROUP := &"fruit_trees"
+
 @export var data: TreeData
 
 var stage: Stage = Stage.SAPLING
@@ -25,6 +28,7 @@ func _ready() -> void:
 	if data == null:
 		push_error("FruitTree '%s' has no TreeData assigned." % name)
 		return
+	add_to_group(GROUP)
 	if data.fruit == null:
 		push_warning("TreeData '%s' has no fruit item assigned." % data.id)
 	_update_visuals()
@@ -77,8 +81,11 @@ func harvest() -> int:
 
 
 func _set_stage(new_stage: Stage) -> void:
+	var grew_up := stage == Stage.YOUNG and new_stage == Stage.FLOWERING
 	stage = new_stage
 	_update_visuals()
+	if grew_up:
+		GameEvents.tree_grown.emit(data, self) # Oona's tasks...
 
 
 func _get_stage_duration(for_stage: Stage) -> float:

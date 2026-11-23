@@ -20,3 +20,7 @@ signal item_sold(item: ItemData, amount: int, money: int)
 ## (Typed as Node2D: autoloads compile before scene classes in some situations.)
 @warning_ignore("unused_signal")
 signal sapling_planted(sapling: ItemData, tree: Node2D)
+## A tree grew up: from YOUNG to FLOWERING (its first fruit cycle starts).
+## Happens only once in every tree's life.
+@warning_ignore("unused_signal")
+signal tree_grown(tree_type: TreeData, tree: Node2D)

@@ -24,10 +24,15 @@ var _progress: int = 0
 var _finished: Array[StringName] = []
 
 
+## Same as FruitTree.GROUP (not referenced directly: autoloads compile early).
+const TREE_GROUP := &"fruit_trees"
+
+
 func _ready() -> void:
 	GameEvents.fruit_harvested.connect(_on_fruit_harvested)
 	GameEvents.item_sold.connect(_on_item_sold)
 	GameEvents.sapling_planted.connect(_on_sapling_planted)
+	GameEvents.tree_grown.connect(_on_tree_grown)
 
 
 # --- State -------------------------------------------------------------------
@@ -73,6 +78,7 @@ func start_next() -> QuestData:
 	_progress = 0
 	quest_started.emit(quest)
 	quest_progressed.emit(quest, _progress)
+	_refresh_tree_count() # HAVE_TREES: trees already there count
 	return quest
 
 
@@ -112,6 +118,24 @@ func _on_item_sold(item: ItemData, amount: int, _money: int) -> void:
 func _on_sapling_planted(sapling: ItemData, _tree: Node2D) -> void:
 	if _active != null and _active.goal == QuestData.Goal.PLANT_SAPLINGS and _active.counts_item(sapling):
 		_add_progress(1)
+	_refresh_tree_count()
+
+
+func _on_tree_grown(tree_type: TreeData, _tree: Node2D) -> void:
+	if _active != null and _active.goal == QuestData.Goal.GROW_SAPLINGS and _active.counts_tree(tree_type):
+		_add_progress(1)
+
+
+## HAVE_TREES is a state, not an event: count the matching trees in the world.
+func _refresh_tree_count() -> void:
+	if _active == null or _active.goal != QuestData.Goal.HAVE_TREES or is_done():
+		return
+	var count := 0
+	for tree in get_tree().get_nodes_in_group(TREE_GROUP):
+		if not tree.is_queued_for_deletion() and _active.counts_tree(tree.get("data")):
+			count += 1
+	if count > _progress:
+		_add_progress(count - _progress)
 
 
 func _add_progress(amount: int) -> void:
@@ -149,3 +173,5 @@ func load_save_data(data: Dictionary) -> void:
 		_active = null
 	_progress = clampi(int(data.get("progress", 0)), 0, _active.target) if _active != null else 0
 	quest_progressed.emit(_active, _progress)
+	# The saved trees are put back into the world right after this: count them then.
+	_refresh_tree_count.call_deferred()

@@ -14,6 +14,9 @@ enum Goal {
 	HARVEST_TIMES,  ## harvest trees `target` times (trees of `filter_item` fruit, if set)
 	PICK_FRUIT,     ## pick `target` pieces of fruit in total (only `filter_item`, if set)
 	SELL_FRUIT,     ## sell `target` pieces of fruit to a merchant (only `filter_item`, if set)
+	GROW_SAPLINGS,  ## `target` saplings grow up into fruit trees (trees of `filter_item` fruit, if set)
+	HAVE_TREES,     ## have `target` fruit trees in the orchard (of `filter_item` fruit, if set) —
+	                ## counts the trees that are there, also the ones planted before the task
 }
 
 ## Unique, never-changing name used in save files (e.g. &"plant_two").
@@ -24,7 +27,7 @@ enum Goal {
 ## How many (saplings, harvests, fruit...). TEMPORARY test values.
 @export var target: int = 1
 ## Optional: only this item counts (a sapling for PLANT_SAPLINGS, a fruit for
-## the others). Empty = any.
+## the others; for tree goals: trees that grow this fruit). Empty = any.
 @export var filter_item: ItemData
 
 @export_group("Reward")
@@ -37,6 +40,11 @@ enum Goal {
 ## Does an event with this item count for the task?
 func counts_item(item: ItemData) -> bool:
 	return filter_item == null or filter_item == item
+
+
+## Does a tree of this type count (tree goals: compared by its fruit)?
+func counts_tree(tree_type: TreeData) -> bool:
+	return tree_type != null and counts_item(tree_type.fruit)
 
 
 ## Player-facing task text, e.g. "Plant 2 saplings" or "Sell 10 × Mulberry".
