@@ -4,11 +4,14 @@ extends Node
 ## (Decision: she comes, gives one task and leaves; she comes back 1–2 days
 ## after the task is done with the reward and the next task. No rush.)
 ##
-## Suggestions, NOT confirmed by the user (TEMPORARY values):
+## Rules (confirmed, see Decision log "Oona's visit rules and journey"):
 ## - she waits on the farm until the player talks to her,
 ## - after talking she leaves when the next day starts,
-## - she returns RETURN_DELAY_DAYS after the task is done (in the morning),
-## - in a new game she is there on day 1.
+## - she returns in the morning SMALL_TASK_RETURN_DAYS after a small task is
+##   done, BIG_TASK_RETURN_DAYS after a big one (reward XP >= BIG_TASK_XP),
+## - after the last task of a story chapter she goes on a real journey: no new
+##   task that day, back after JOURNEY_DAYS with an everyday task.
+## Suggestion (not confirmed): in a new game she is there on day 1.
 ##
 ## The task state itself lives in Quests; the Oona NPC scene only shows her
 ## while is_present() and calls talk().
@@ -16,8 +19,13 @@ extends Node
 ## Emitted when she arrives or leaves (the NPC shows / hides itself).
 signal presence_changed(present: bool)
 
-## Game days after a finished task before she comes back. TEMPORARY test value.
-const RETURN_DELAY_DAYS := 1
+## A task with at least this much reward XP counts as "big". TEMPORARY test value.
+const BIG_TASK_XP := 40
+## Game days after a finished task before she comes back. TEMPORARY test values.
+const SMALL_TASK_RETURN_DAYS := 1
+const BIG_TASK_RETURN_DAYS := 2
+## Game days she is away on her journey after a story chapter. TEMPORARY test value.
+const JOURNEY_DAYS := 3
 
 ## What happened in a talk (for the dialogue window in the next step).
 enum Talk {
@@ -27,6 +35,7 @@ enum Talk {
 	REWARD_AND_TASK, ## reward for the done task + the next task
 	REWARD_LAST,     ## reward, and she has no more tasks
 	NO_TASKS,        ## nothing left to give
+	REWARD_JOURNEY,  ## reward for a chapter's last task; she goes on her journey (no new task)
 }
 
 var _present := false
@@ -51,18 +60,28 @@ func talk() -> Talk:
 		return Talk.NOTHING
 	_talked_today = true
 	if Quests.is_done():
+		var quest := Quests.get_active()
 		Quests.claim_reward()
 		_next_visit_day = 0
+		if not Quests.is_generated(quest) and Quests.is_chapter_complete(quest.chapter):
+			# End of a story chapter: she really travels and comes back later.
+			_next_visit_day = GameClock.day + JOURNEY_DAYS
+			return Talk.REWARD_JOURNEY
 		return Talk.REWARD_AND_TASK if Quests.start_next() != null else Talk.REWARD_LAST
 	if Quests.get_active() != null:
 		return Talk.REMINDER
 	return Talk.GAVE_TASK if Quests.start_next() != null else Talk.NO_TASKS
 
 
-func _on_quest_done(_quest: QuestData) -> void:
+func _on_quest_done(quest: QuestData) -> void:
 	# If she is still here she can reward right away; otherwise she comes back later.
 	if not _present:
-		_next_visit_day = GameClock.day + RETURN_DELAY_DAYS
+		_next_visit_day = GameClock.day + get_return_days(quest)
+
+
+## 1 day after a small task, 2 days after a big one (decision: by reward XP).
+func get_return_days(quest: QuestData) -> int:
+	return BIG_TASK_RETURN_DAYS if quest.reward_xp >= BIG_TASK_XP else SMALL_TASK_RETURN_DAYS
 
 
 func _on_day_changed(day: int) -> void:

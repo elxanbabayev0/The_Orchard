@@ -54,6 +54,13 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 				_add_line(tr("UI_OONA_CHAPTER_DONE")) # she "goes on a journey"
 			_add_line(tr("UI_OONA_NEXT_TASK"))
 			_add_task()
+		OonaVisits.Talk.REWARD_JOURNEY:
+			# End of a story chapter: reward, what she teaches, then she travels.
+			_add_reward()
+			if _chapter_done != null:
+				for feature in _chapter_done.unlocks:
+					_add_line(tr("UI_OONA_UNLOCK_%s" % String(feature).to_upper()), HIGHLIGHT)
+			_add_line(tr("UI_OONA_CHAPTER_DONE"))
 		OonaVisits.Talk.REWARD_LAST:
 			_add_reward()
 			_add_line(tr("UI_OONA_NO_TASKS"))
