@@ -2,7 +2,8 @@ extends VBoxContainer
 ## Short messages at the bottom of the screen that fade out after a moment:
 ## - "[icon] +3 Sweet Cherry" every time items are added to the Inventory,
 ## - "Level up! Level 2" when the player gains a level,
-## - "Sofia has come to the orchard!" when a family member accepts an invitation.
+## - "Sofia has come to the orchard!" when a family member accepts an invitation,
+## - Oona's task messages: new task, task done, reward.
 ## Texts come from translation keys (localization/translations.csv); the look is a placeholder.
 
 ## How long a message stays fully visible (seconds).
@@ -18,6 +19,12 @@ func _ready() -> void:
 	Inventory.item_added.connect(_on_item_added)
 	Progression.level_up.connect(_on_level_up)
 	Characters.character_unlocked.connect(_on_character_unlocked)
+	Quests.quest_started.connect(func(quest: QuestData) -> void:
+		show_message(tr("UI_QUEST_NEW") % quest.get_description(), null, LEVEL_UP_COLOR))
+	Quests.quest_done.connect(func(_quest: QuestData) -> void:
+		show_message(tr("UI_QUEST_DONE"), null, LEVEL_UP_COLOR))
+	Quests.quest_rewarded.connect(func(quest: QuestData) -> void:
+		show_message(tr("UI_QUEST_REWARD") % quest.reward_xp, null, LEVEL_UP_COLOR))
 
 
 func _on_item_added(item: ItemData, amount: int) -> void:

@@ -25,6 +25,7 @@ Market="*res://scripts/systems/market.gd"
 Progression="*res://scripts/systems/progression.gd"
 Characters="*res://scripts/systems/characters.gd"
 Quests="*res://scripts/systems/quests.gd"
+OonaVisits="*res://scripts/systems/oona_visits.gd"
 UIState="*res://scripts/systems/ui_state.gd"
 SaveManager="*res://scripts/systems/save_manager.gd"
 

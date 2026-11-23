@@ -31,6 +31,7 @@
 [ext_resource type="Script" path="res://scenes/world/family_members.gd" id="29_family"]
 [ext_resource type="PackedScene" path="res://scenes/ui/active_character_display.tscn" id="30_activechar"]
 [ext_resource type="PackedScene" path="res://scenes/world/ground/ground.tscn" id="31_ground"]
+[ext_resource type="PackedScene" path="res://scenes/npc/oona.tscn" id="32_oona"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -117,6 +118,9 @@ y_sort_enabled = true
 script = ExtResource("29_family")
 player = NodePath("../Player")
 ground = NodePath("../../Ground")
+
+[node name="Oona" parent="Entities/NPCs" instance=ExtResource("32_oona")]
+position = Vector2(64, 256)
 
 [node name="Player" parent="Entities" instance=ExtResource("1_player")]
 

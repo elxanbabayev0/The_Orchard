@@ -70,6 +70,7 @@ func _reset_systems() -> void:
 	Progression.load_save_data({})
 	Characters.load_save_data({})
 	Quests.load_save_data({})
+	OonaVisits.load_save_data({})
 
 
 func has_save(slot: String = DEFAULT_SLOT) -> bool:
@@ -95,6 +96,7 @@ func save_game(slot: String = DEFAULT_SLOT) -> bool:
 		"progression": Progression.get_save_data(),
 		"characters": Characters.get_save_data(),
 		"quests": Quests.get_save_data(),
+		"oona": OonaVisits.get_save_data(),
 		"trees": trees,
 	}
 	var player := _get_world_node(PLAYER_PATH)
@@ -145,6 +147,7 @@ func load_game(slot: String = DEFAULT_SLOT) -> bool:
 	Progression.load_save_data(data.get("progression", {}))
 	Characters.load_save_data(data.get("characters", {}))
 	Quests.load_save_data(data.get("quests", {}))
+	OonaVisits.load_save_data(data.get("oona", {}))
 	_load_trees(trees_container, data.get("trees", []))
 	var player := _get_world_node(PLAYER_PATH)
 	if player != null:
