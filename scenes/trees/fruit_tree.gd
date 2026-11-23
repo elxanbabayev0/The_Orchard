@@ -13,12 +13,20 @@ signal harvested(item: ItemData, amount: int)
 
 ## Every fruit tree is in this group (e.g. Quests counts the trees of the orchard).
 const GROUP := &"fruit_trees"
+## Game days before the same tree gives another cutting. TEMPORARY test value.
+const CUTTING_COOLDOWN_DAYS := 3.0
+## Same as TreeActionMenu.GROUP (the harvest / cutting choice menu).
+const ACTION_MENU_GROUP := &"tree_action_menu"
+## Same as the feature id in chapter_1.tres (Oona teaches cuttings).
+const CUTTINGS_FEATURE := &"cuttings"
 
 @export var data: TreeData
 
 var stage: Stage = Stage.SAPLING
 ## Game days spent in the current stage.
 var stage_time: float = 0.0
+## Game days until this tree can give a cutting again (0 = ready).
+var cutting_cooldown: float = 0.0
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var stage_label: Label = $StageLabel
@@ -39,6 +47,8 @@ func _ready() -> void:
 ## Moves the tree forward by `amount` game days.
 ## Called by GameClock.time_advanced; can also be called directly (tests, sleeping).
 func advance_time(amount: float) -> void:
+	# The cutting cooldown counts plain game days (not sped up by growth bonuses).
+	cutting_cooldown = maxf(0.0, cutting_cooldown - amount)
 	if stage == Stage.RIPE:
 		return # Ripe fruit waits on the tree until harvested.
 	# Skill: trees grow faster (e.g. +20%) while that character is active.
@@ -53,11 +63,48 @@ func advance_time(amount: float) -> void:
 
 
 ## Called by the player when they press the interact key near this tree.
+## A grown rare tree (once Oona taught cuttings) opens the choice menu
+## (Harvest / Take cutting); every other tree just harvests when ripe.
 func interact(_player: Node) -> void:
-	if can_harvest():
+	var menu := get_tree().get_first_node_in_group(ACTION_MENU_GROUP)
+	if menu != null and _offers_cuttings():
+		menu.open(self)
+	elif can_harvest():
 		harvest()
 	else:
 		print("%s is not ripe yet (%s)." % [tr(data.display_name), Stage.keys()[stage]])
+
+
+# --- Cuttings (propagating rare trees) -----------------------------------------
+# Decision: a grown rare tree gives a cutting; then it skips one fruit cycle
+# (back to FLOWERING) and needs CUTTING_COOLDOWN_DAYS before the next one.
+
+## A grown rare tree whose cuttings Oona has taught (cooldown or not).
+func _offers_cuttings() -> bool:
+	return stage >= Stage.FLOWERING \
+		and Registry.get_cutting_for(data) != null \
+		and Quests.is_feature_unlocked(CUTTINGS_FEATURE)
+
+
+func can_take_cutting() -> bool:
+	return _offers_cuttings() and cutting_cooldown <= 0.0
+
+
+## Whole game days until the next cutting (0 = ready now).
+func get_cutting_days_left() -> int:
+	return ceili(cutting_cooldown)
+
+
+## Gives one cutting to the Inventory. The tree goes back to FLOWERING (any
+## unripe or ripe fruit is lost) and the cooldown starts. Returns false if not possible.
+func take_cutting() -> bool:
+	if not can_take_cutting():
+		return false
+	Inventory.add_item(Registry.get_cutting_for(data), 1)
+	cutting_cooldown = CUTTING_COOLDOWN_DAYS
+	stage_time = 0.0
+	_set_stage(Stage.FLOWERING)
+	return true
 
 
 func can_harvest() -> bool:
@@ -139,6 +186,7 @@ func get_save_data() -> Dictionary:
 		"y": global_position.y,
 		"stage": stage,
 		"stage_time": stage_time,
+		"cutting_cooldown": cutting_cooldown,
 	}
 
 
@@ -146,4 +194,5 @@ func load_save_data(saved: Dictionary) -> void:
 	# clampi(): a broken or very old save can never put the tree in a stage that does not exist.
 	stage = clampi(int(saved.get("stage", Stage.SAPLING)), 0, Stage.size() - 1) as Stage
 	stage_time = float(saved.get("stage_time", 0.0))
+	cutting_cooldown = clampf(float(saved.get("cutting_cooldown", 0.0)), 0.0, CUTTING_COOLDOWN_DAYS)
 	_update_visuals()

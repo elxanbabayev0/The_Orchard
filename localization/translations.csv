@@ -125,3 +125,7 @@ ITEM_SNOW_TUT_CUTTING,Snow Mulberry Cutting
 ITEM_SNOW_TUT_CUTTING_DESC,"Plant it, or graft it onto a Mulberry Tree."
 ITEM_MIDNIGHT_ALBALI_CUTTING,Midnight Morello Cutting
 ITEM_MIDNIGHT_ALBALI_CUTTING_DESC,"Plant it, or graft it onto a Morello Cherry Tree."
+UI_TREE_HARVEST,Harvest
+UI_TREE_TAKE_CUTTING,Take cutting
+UI_TREE_CUTTING_WAIT,Take cutting (%d days)
+UI_TREE_CUTTING_WAIT_ONE,Take cutting (1 day)

@@ -37,6 +37,7 @@
 [ext_resource type="Resource" path="res://scenes/items/types/golden_gilas.tres" id="35_goldengilas"]
 [ext_resource type="Resource" path="res://scenes/items/types/snow_tut.tres" id="36_snowtut"]
 [ext_resource type="Resource" path="res://scenes/items/types/midnight_albali.tres" id="37_midnightalbali"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tree_action_menu.tscn" id="38_treemenu"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -168,6 +169,8 @@ script = ExtResource("4_clocklabel")
 [node name="InvitationWindow" parent="UI" instance=ExtResource("28_invitation")]
 
 [node name="OonaDialog" parent="UI" instance=ExtResource("33_oonadialog")]
+
+[node name="TreeActionMenu" parent="UI" instance=ExtResource("38_treemenu")]
 
 [connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/TradeWindow" method="open"]
 [connection signal="plant_requested" from="UI/InventoryPanel" to="PlacementMode" method="start"]
