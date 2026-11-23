@@ -26,6 +26,7 @@
 [ext_resource type="Resource" path="res://scenes/items/types/albali_sapling.tres" id="24_albalisapling"]
 [ext_resource type="PackedScene" path="res://scenes/world/placement_mode.tscn" id="25_placement"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="26_pausemenu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/level_display.tscn" id="27_leveldisplay"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -138,6 +139,8 @@ text = ""
 script = ExtResource("4_clocklabel")
 
 [node name="MoneyDisplay" parent="UI" instance=ExtResource("8_moneydisplay")]
+
+[node name="LevelDisplay" parent="UI" instance=ExtResource("27_leveldisplay")]
 
 [node name="InventoryPanel" parent="UI" instance=ExtResource("6_invpanel")]
 

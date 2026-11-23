@@ -124,6 +124,7 @@ func _try_plant() -> void:
 	tree.data = _item.grows_into # must be set before add_child (FruitTree._ready reads it)
 	tree.position = trees_parent.to_local(_target)
 	trees_parent.add_child(tree)
+	Progression.on_planted()
 	# Keep placing while saplings of this kind are left.
 	if not Inventory.has_item(_item):
 		cancel()

@@ -61,6 +61,7 @@ func _reset_systems() -> void:
 	Wallet.load_save_data({})
 	Inventory.load_save_data({})
 	Market.load_save_data({})
+	Progression.load_save_data({})
 
 
 func has_save(slot: String = DEFAULT_SLOT) -> bool:
@@ -83,6 +84,7 @@ func save_game(slot: String = DEFAULT_SLOT) -> bool:
 		"wallet": Wallet.get_save_data(),
 		"inventory": Inventory.get_save_data(),
 		"market": Market.get_save_data(),
+		"progression": Progression.get_save_data(),
 		"trees": trees,
 	}
 	DirAccess.make_dir_recursive_absolute(SAVE_FOLDER)
@@ -124,6 +126,7 @@ func load_game(slot: String = DEFAULT_SLOT) -> bool:
 	Wallet.load_save_data(data.get("wallet", {}))
 	Inventory.load_save_data(data.get("inventory", {}))
 	Market.load_save_data(data.get("market", {}))
+	Progression.load_save_data(data.get("progression", {}))
 	_load_trees(trees_container, data.get("trees", []))
 	print("Game loaded: %s (day %d)" % [_path(slot), GameClock.day])
 	return true

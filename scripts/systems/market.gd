@@ -61,6 +61,7 @@ func sell(item: ItemData, amount: int) -> int:
 	if not Inventory.remove_item(item, amount):
 		return 0
 	Wallet.add_money(total)
+	Progression.on_sale(total)
 	_saturation[item.id] = _get_saturation(item) + amount
 	prices_changed.emit(item)
 	return total

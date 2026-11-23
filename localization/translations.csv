@@ -47,3 +47,5 @@ UI_CANCEL,Cancel
 UI_PAUSE_TITLE,Paused
 UI_PAUSE_RESUME,Resume
 UI_PAUSE_MAIN_MENU,Main Menu
+UI_LEVEL,Level %d
+UI_LEVEL_UP,Level up! Level %d
