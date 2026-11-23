@@ -21,6 +21,7 @@ GameClock="*res://scripts/systems/game_clock.gd"
 Inventory="*res://scripts/systems/inventory.gd"
 Wallet="*res://scripts/systems/wallet.gd"
 Market="*res://scripts/systems/market.gd"
+SaveManager="*res://scripts/systems/save_manager.gd"
 
 [display]
 
