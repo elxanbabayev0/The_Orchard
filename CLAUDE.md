@@ -10,7 +10,7 @@ The full original design notes (in Azerbaijani) are in `docs/The_Orchard_Project
 ## Project overview
 - **Name:** The Orchard
 - **Genre:** 2D farming / life simulation / management game
-- **Engine:** Godot (exact version not confirmed yet — check `project.godot` or ask before writing version-specific code)
+- **Engine:** Godot **4.7** (confirmed 2026-11-23; the installed build is the .NET/mono one, but the project uses GDScript only)
 - **Platform:** Developed on Windows. Version control with Git / GitHub (repo: `The_Orchard.git`).
 - **Inspiration:** Hay Day — but this must be an **original** game. Never copy its mechanics, UI or art one-to-one.
 - **Goal:** a long-playing, expandable game, not a short fixed story.
@@ -19,7 +19,8 @@ The full original design notes (in Azerbaijani) are in `docs/The_Orchard_Project
 - 2D, **hand-painted** look: colorful, soft, atmospheric.
 - **Not** pixel art. Not an overly flat/simple 2D style either.
 - All assets (trees, fruit, soil, buildings, characters, environment) must look like they belong to the same game.
-- Not decided yet: color palette, camera angle, tile size, sprite sizes, animation standards.
+- **Camera angle (confirmed 2026-11-23):** 3/4 top-down oblique view — see Decision log.
+- Not decided yet: color palette, tile size, sprite sizes, animation standards.
 
 ## Core gameplay loop (concept)
 1. The player works in the orchard.
@@ -51,7 +52,7 @@ Balance details (growth times, energy, inventory size, currency, levels) are **n
 - Check the real files before relying on this.
 
 ## Open questions (do not treat as decided)
-Godot version · camera perspective and sizes · map structure and world size · inventory · money and XP balance · tree growth and harvest rules · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · dynamic pricing implementation · save/load · sound and music · target platforms (PC / mobile).
+Tile and sprite sizes · map structure and world size · inventory · money and XP balance · tree growth and harvest rules · seasons and weather · crafting / processing · buildings and farm expansion · quests · NPC dialogue and AI · character skills · multiplayer or not · dynamic pricing implementation · save/load · sound and music · target platforms (PC / mobile).
 
 When one of these comes up, present options with pros and cons and let the user choose. Do not turn a suggestion into an official decision without the user's approval.
 
@@ -77,3 +78,12 @@ Add new decisions here in this format:
 - **Status:** Confirmed / Testing / Just an idea
 - **Affected systems:**
 - **Notes:**
+
+---
+
+- **Date:** 2026-11-23
+- **Topic:** Camera angle / perspective
+- **Decision:** 3/4 top-down oblique view. The ground is a square grid; trees, buildings and characters are drawn from the front (trunk, branches and fruit visible). Not isometric, not pure top-down.
+- **Status:** Confirmed
+- **Affected systems:** art (all sprites drawn front-facing), world/tiles (`TileMapLayer` with square tiles), draw order (Y-sort), player movement (stays as is: `Input.get_vector` with `move_*` actions)
+- **Notes:** Chosen because it shows fruit and tree growth stages clearly, suits the hand-painted style, is the simplest for a solo developer, and looks clearly different from Hay Day (isometric). Tile size and sprite sizes are still open.
