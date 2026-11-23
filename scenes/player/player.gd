@@ -4,6 +4,27 @@ extends CharacterBody2D
 
 ## Finds things around the player's feet that can be interacted with.
 @onready var interaction_area: Area2D = $InteractionArea
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var name_label: Label = $NameLabel
+
+
+func _ready() -> void:
+	_apply_character(Characters.get_active())
+	Characters.player_name_changed.connect(func(_new_name: String) -> void:
+		_apply_character(Characters.get_active())
+	)
+
+
+## Shows the active character: its picture and its name above the head.
+func _apply_character(character: CharacterData) -> void:
+	if character == null:
+		return
+	if character.texture != null:
+		sprite.texture = character.texture
+		# "Origin on the ground": the bottom of the picture sits on the feet.
+		sprite.position = Vector2(0, -character.texture.get_height() / 2.0)
+	# A name, not a translation key: shown as it is.
+	name_label.text = Characters.get_display_name(character)
 
 
 func _physics_process(_delta):

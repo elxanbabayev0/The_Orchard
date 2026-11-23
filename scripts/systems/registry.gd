@@ -1,18 +1,21 @@
 extends Node
-## Finds every item and tree type by its `id`. Registered as the autoload "Registry".
+## Finds every item, tree type and character by its `id`. Registered as the autoload "Registry".
 ##
 ## Save files only store short ids (e.g. "gilas"), not whole resources.
-## When loading, the Registry turns an id back into its ItemData / TreeData.
+## When loading, the Registry turns an id back into its ItemData / TreeData / CharacterData.
 ## It reads all .tres files in the type folders once, when the game starts,
-## so new items/trees are found automatically — no list to keep up to date.
+## so new content is found automatically — no list to keep up to date.
 
 const ITEM_FOLDER := "res://scenes/items/types/"
 const TREE_FOLDER := "res://scenes/trees/types/"
+const CHARACTER_FOLDER := "res://scenes/characters/types/"
 
 ## id -> ItemData
 var _items: Dictionary[StringName, ItemData] = {}
 ## id -> TreeData
 var _trees: Dictionary[StringName, TreeData] = {}
+## id -> CharacterData
+var _characters: Dictionary[StringName, CharacterData] = {}
 
 
 func _ready() -> void:
@@ -22,6 +25,23 @@ func _ready() -> void:
 	for resource in _load_folder(TREE_FOLDER):
 		if resource is TreeData:
 			_add(_trees, resource.id, resource)
+	for resource in _load_folder(CHARACTER_FOLDER):
+		if resource is CharacterData:
+			_add(_characters, resource.id, resource)
+
+
+## Returns the character with this id, or null (with a warning) if there is none.
+func get_character(id: StringName) -> CharacterData:
+	if not _characters.has(id):
+		push_warning("Registry: unknown character id '%s'." % id)
+		return null
+	return _characters[id]
+
+
+func get_all_characters() -> Array[CharacterData]:
+	var result: Array[CharacterData] = []
+	result.assign(_characters.values())
+	return result
 
 
 ## Returns the item with this id, or null (with a warning) if there is none.

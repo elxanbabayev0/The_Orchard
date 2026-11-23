@@ -22,18 +22,21 @@ func _ready() -> void:
 	GameClock.day_changed.connect(_on_day_changed)
 
 
-## Main menu → "New Game": fresh systems, the world with its starting orchard.
-func new_game() -> void:
-	_start_world(false, DEFAULT_SLOT)
+## Main menu → "New Game": fresh systems, the world with its starting orchard,
+## and the name the player typed in for their character.
+func new_game(player_name: String = "") -> void:
+	_start_world(false, DEFAULT_SLOT, player_name)
 
 
 ## Main menu → "Continue": the world, then the saved state on top of it.
 func continue_game(slot: String = DEFAULT_SLOT) -> void:
-	_start_world(true, slot)
+	_start_world(true, slot, "")
 
 
-func _start_world(load_save: bool, slot: String) -> void:
+func _start_world(load_save: bool, slot: String, player_name: String) -> void:
 	_reset_systems()
+	if not load_save:
+		Characters.set_player_name(player_name)
 	get_tree().change_scene_to_file(WORLD_SCENE)
 	# Changing scenes takes a moment; wait until the world is really there.
 	await get_tree().scene_changed
@@ -62,6 +65,7 @@ func _reset_systems() -> void:
 	Inventory.load_save_data({})
 	Market.load_save_data({})
 	Progression.load_save_data({})
+	Characters.load_save_data({})
 
 
 func has_save(slot: String = DEFAULT_SLOT) -> bool:
@@ -85,6 +89,7 @@ func save_game(slot: String = DEFAULT_SLOT) -> bool:
 		"inventory": Inventory.get_save_data(),
 		"market": Market.get_save_data(),
 		"progression": Progression.get_save_data(),
+		"characters": Characters.get_save_data(),
 		"trees": trees,
 	}
 	DirAccess.make_dir_recursive_absolute(SAVE_FOLDER)
@@ -127,6 +132,7 @@ func load_game(slot: String = DEFAULT_SLOT) -> bool:
 	Inventory.load_save_data(data.get("inventory", {}))
 	Market.load_save_data(data.get("market", {}))
 	Progression.load_save_data(data.get("progression", {}))
+	Characters.load_save_data(data.get("characters", {}))
 	_load_trees(trees_container, data.get("trees", []))
 	print("Game loaded: %s (day %d)" % [_path(slot), GameClock.day])
 	return true

@@ -22,6 +22,7 @@ Inventory="*res://scripts/systems/inventory.gd"
 Wallet="*res://scripts/systems/wallet.gd"
 Market="*res://scripts/systems/market.gd"
 Progression="*res://scripts/systems/progression.gd"
+Characters="*res://scripts/systems/characters.gd"
 UIState="*res://scripts/systems/ui_state.gd"
 SaveManager="*res://scripts/systems/save_manager.gd"
 
