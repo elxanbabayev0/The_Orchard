@@ -36,6 +36,9 @@ enum Goal {
 ## Optional: only this item counts (a sapling for PLANT_SAPLINGS, a fruit for
 ## the others; for tree goals: trees that grow this fruit). Empty = any.
 @export var filter_item: ItemData
+## Oona's line when she gives this task (a translation KEY; empty = her general
+## "I have a task for you" line — generated tasks have none).
+@export var line: String = ""
 
 @export_group("Reward")
 @export var reward_xp: int = 0

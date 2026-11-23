@@ -40,24 +40,20 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 		child.queue_free()
 	match result:
 		OonaVisits.Talk.GAVE_TASK:
-			_add_line(tr("UI_OONA_GIVE_TASK"))
-			_add_task()
+			_add_new_task("UI_OONA_GIVE_TASK")
 		OonaVisits.Talk.REMINDER:
 			_add_line(tr("UI_OONA_REMINDER"))
 			_add_task()
 		OonaVisits.Talk.REWARD_AND_TASK:
 			_add_reward()
-			if _chapter_done != null:
-				# What she teaches at the end of the chapter (e.g. cuttings), then her journey.
-				for feature in _chapter_done.unlocks:
-					_add_line(tr("UI_OONA_UNLOCK_%s" % String(feature).to_upper()), HIGHLIGHT)
-				_add_line(tr("UI_OONA_CHAPTER_DONE")) # she "goes on a journey"
-			_add_line(tr("UI_OONA_NEXT_TASK"))
-			_add_task()
+			_add_new_task("UI_OONA_NEXT_TASK")
 		OonaVisits.Talk.REWARD_JOURNEY:
-			# End of a story chapter: reward, what she teaches, then she travels.
+			# End of a story chapter: reward, her memory of Rosa (end scene),
+			# what she teaches (e.g. cuttings), then she travels.
 			_add_reward()
 			if _chapter_done != null:
+				for key in _chapter_done.end_lines:
+					_add_line(tr(key))
 				for feature in _chapter_done.unlocks:
 					_add_line(tr("UI_OONA_UNLOCK_%s" % String(feature).to_upper()), HIGHLIGHT)
 			_add_line(tr("UI_OONA_CHAPTER_DONE"))
@@ -70,6 +66,19 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 	_chapter_done = null
 	show()
 	close_button.grab_focus() # Enter / Space closes too
+
+
+## The task Oona just gave: the chapter's start scene first (if it is the
+## chapter's first task), then her line for the task (or a general line), then the task.
+func _add_new_task(general_line_key: String) -> void:
+	var quest := Quests.get_active()
+	if quest != null and Quests.is_first_task_of_chapter(quest):
+		var chapter := Registry.get_chapter(quest.chapter)
+		if chapter != null:
+			for key in chapter.start_lines:
+				_add_line(tr(key))
+	_add_line(tr(quest.line) if quest != null and quest.line != "" else tr(general_line_key))
+	_add_task()
 
 
 ## "  Plant 2 saplings   1 / 2"

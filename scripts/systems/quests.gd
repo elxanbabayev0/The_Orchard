@@ -112,6 +112,17 @@ func is_chapter_open(number: int) -> bool:
 	return _everyday_since_chapter >= EVERYDAY_TASKS_BETWEEN_CHAPTERS
 
 
+## True when `quest` is the first task of its story chapter (Oona then tells
+## the chapter's start scene). Call it right after the task was started.
+func is_first_task_of_chapter(quest: QuestData) -> bool:
+	if quest == null or is_generated(quest):
+		return false
+	for other in Registry.get_all_quests():
+		if other.chapter == quest.chapter and other != quest and is_finished(other):
+			return false
+	return true
+
+
 func _has_started(number: int) -> bool:
 	if _active != null and not is_generated(_active) and _active.chapter == number:
 		return true

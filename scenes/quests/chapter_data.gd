@@ -12,3 +12,9 @@ extends Resource
 ## Features Oona teaches when this chapter is complete (e.g. &"cuttings").
 ## Each feature has a dialogue line "UI_OONA_UNLOCK_<FEATURE>" (e.g. UI_OONA_UNLOCK_CUTTINGS).
 @export var unlocks: Array[StringName] = []
+## Oona's small scene when the chapter's first task is given (2–4 translation
+## KEYS, shown in order) — where she found the chapter's variety.
+@export var start_lines: Array[String] = []
+## Her small scene after the chapter's last reward (2–4 translation KEYS) — a
+## memory of Rosa and Oona's youth.
+@export var end_lines: Array[String] = []
