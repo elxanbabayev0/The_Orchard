@@ -84,6 +84,7 @@ UI_OONA_REMINDER,How is my task coming along?
 UI_OONA_REWARD,Well done! This is for you:
 UI_OONA_NEXT_TASK,And here is my next task:
 UI_OONA_NO_TASKS,"I have no more tasks for now. Thank you, dear."
+UI_OONA_PACKING,"I'm packing my bag for the road, dear. Look after the orchard while I'm away."
 UI_QUEST_PROGRESS,%d / %d
 UI_QUEST_TRACKER_TITLE,Oona's task
 UI_QUEST_TRACKER_DONE,Done! Oona will come back.

@@ -59,6 +59,8 @@ func open(result: int, portrait_texture: Texture2D) -> void:
 			# After the LAST chapter its own end scene already says goodbye.
 			if Quests.get_current_chapter() != null:
 				_add_line(tr("UI_OONA_CHAPTER_DONE"))
+		OonaVisits.Talk.JOURNEY_PACKING:
+			_add_line(tr("UI_OONA_PACKING"))
 		OonaVisits.Talk.REWARD_LAST:
 			_add_reward()
 			_add_line(tr("UI_OONA_NO_TASKS"))

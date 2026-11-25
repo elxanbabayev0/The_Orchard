@@ -36,6 +36,7 @@ enum Talk {
 	REWARD_LAST,     ## reward, and she has no more tasks
 	NO_TASKS,        ## nothing left to give
 	REWARD_JOURNEY,  ## reward for a chapter's last task; she goes on her journey (no new task)
+	JOURNEY_PACKING, ## talked again on the day she leaves for her journey: no task yet
 }
 
 var _present := false
@@ -70,6 +71,10 @@ func talk() -> Talk:
 		return Talk.REWARD_AND_TASK if Quests.start_next() != null else Talk.REWARD_LAST
 	if Quests.get_active() != null:
 		return Talk.REMINDER
+	# She already said goodbye for her journey (her return day is planned):
+	# she only packs today and brings the next task when she comes back.
+	if _next_visit_day > GameClock.day:
+		return Talk.JOURNEY_PACKING
 	return Talk.GAVE_TASK if Quests.start_next() != null else Talk.NO_TASKS
 
 
