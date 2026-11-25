@@ -16,9 +16,19 @@ signal time_advanced(delta_days: float)
 
 const MINUTES_PER_DAY := 1440.0
 
-## How many REAL seconds one game day lasts.
-## TEMPORARY test value — the real length of a game day is not decided yet.
-var real_seconds_per_day: float = 120.0
+## Emitted when the debug time speed changes (the clock label shows it).
+signal debug_speed_changed(speed: float)
+
+## How many REAL seconds one game day lasts: 12 real minutes
+## (decision "Day / night rework"; a balance number that may change later).
+var real_seconds_per_day: float = 720.0
+
+## Debug builds only (editor runs): F4 cycles these time speeds, so trees and
+## Oona's visits can be tested without waiting. Never active in a release build.
+const DEBUG_SPEEDS: Array[float] = [1.0, 10.0, 60.0]
+const DEBUG_SPEED_KEY := KEY_F4
+## Current debug multiplier (1.0 = normal speed). Not saved.
+var debug_speed: float = 1.0
 ## The hour a new game starts at.
 var start_hour: int = 6
 
@@ -37,7 +47,19 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if paused:
 		return
-	advance(delta / real_seconds_per_day)
+	advance(delta * debug_speed / real_seconds_per_day)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not OS.is_debug_build():
+		return
+	var key := event as InputEventKey
+	if key != null and key.pressed and not key.echo and key.physical_keycode == DEBUG_SPEED_KEY:
+		var next := (DEBUG_SPEEDS.find(debug_speed) + 1) % DEBUG_SPEEDS.size()
+		debug_speed = DEBUG_SPEEDS[next]
+		print("GameClock: debug time speed ×%d" % int(debug_speed))
+		debug_speed_changed.emit(debug_speed)
+		get_viewport().set_input_as_handled()
 
 
 ## Moves game time forward by `days` game days (0.5 = half a day).
