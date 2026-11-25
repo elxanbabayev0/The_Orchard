@@ -29,6 +29,12 @@ const DEBUG_SPEEDS: Array[float] = [1.0, 10.0, 60.0]
 const DEBUG_SPEED_KEY := KEY_F4
 ## Current debug multiplier (1.0 = normal speed). Not saved.
 var debug_speed: float = 1.0
+
+## Sleep (decision "Day / night rework"): the player may sleep from
+## SLEEP_START_HOUR until WAKE_HOUR; sleeping skips to WAKE_HOUR. Staying up
+## has no penalty. TEMPORARY values.
+const SLEEP_START_HOUR := 20
+const WAKE_HOUR := 6
 ## The hour a new game starts at.
 var start_hour: int = 6
 
@@ -78,6 +84,29 @@ func advance(days: float) -> void:
 	time_advanced.emit(days)
 	if int(minute_of_day) != old_minute or day != old_day:
 		minute_changed.emit(day, get_hour(), get_minute())
+
+
+## Is it late enough to sleep (SLEEP_START_HOUR .. WAKE_HOUR, over midnight)?
+func can_sleep() -> bool:
+	var hour := get_hour()
+	return hour >= SLEEP_START_HOUR or hour < WAKE_HOUR
+
+
+## Skips time to the next WAKE_HOUR. Everything that listens to the clock
+## (trees, market, Oona) gets the whole night at once through advance().
+## Returns false (nothing happens) if it is too early to sleep.
+func sleep_until_morning() -> bool:
+	if not can_sleep():
+		return false
+	var wake_minute := WAKE_HOUR * 60.0
+	var minutes := wake_minute - minute_of_day # before midnight: negative
+	if minutes <= 0.0:
+		minutes += MINUTES_PER_DAY
+	advance(minutes / MINUTES_PER_DAY)
+	# Float rounding can stop at 05:59.999: put the clock exactly on the hour.
+	minute_of_day = wake_minute
+	minute_changed.emit(day, get_hour(), get_minute())
+	return true
 
 
 func get_hour() -> int:

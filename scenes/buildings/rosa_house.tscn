@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/buildings/rosa_house.gd" id="1_house"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(192, 40)
+
+[node name="RosaHouse" type="StaticBody2D"]
+script = ExtResource("1_house")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_base")
+
+[node name="Walls" type="Polygon2D" parent="."]
+color = Color(0.82, 0.68, 0.5, 1)
+polygon = PackedVector2Array(-96, -112, 96, -112, 96, 0, -96, 0)
+
+[node name="Roof" type="Polygon2D" parent="."]
+color = Color(0.62, 0.26, 0.2, 1)
+polygon = PackedVector2Array(-112, -108, 112, -108, 0, -196)
+
+[node name="Door" type="Polygon2D" parent="."]
+color = Color(0.42, 0.26, 0.16, 1)
+polygon = PackedVector2Array(-20, -68, 20, -68, 20, 0, -20, 0)
+
+[node name="Windows" type="Node2D" parent="."]
+
+[node name="WindowLeft" type="Polygon2D" parent="Windows"]
+color = Color(0.45, 0.6, 0.75, 1)
+polygon = PackedVector2Array(-76, -92, -44, -92, -44, -60, -76, -60)
+
+[node name="WindowRight" type="Polygon2D" parent="Windows"]
+color = Color(0.45, 0.6, 0.75, 1)
+polygon = PackedVector2Array(44, -92, 76, -92, 76, -60, 44, -60)
