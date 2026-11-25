@@ -134,14 +134,18 @@ position = Vector2(64, 256)
 [node name="Buildings" type="Node2D" parent="Entities"]
 y_sort_enabled = true
 
+[node name="Props" type="Node2D" parent="Entities"]
+y_sort_enabled = true
+
 [node name="RosaHouse" parent="Entities/Buildings" instance=ExtResource("40_rosahouse")]
 position = Vector2(-704, -128)
 
 [node name="Player" parent="Entities" instance=ExtResource("1_player")]
 
-[node name="PlacementMode" parent="." node_paths=PackedStringArray("player", "trees_parent", "ground") instance=ExtResource("25_placement")]
+[node name="PlacementMode" parent="." node_paths=PackedStringArray("player", "trees_parent", "props_parent", "ground") instance=ExtResource("25_placement")]
 player = NodePath("../Entities/Player")
 trees_parent = NodePath("../Entities/Trees")
+props_parent = NodePath("../Entities/Props")
 ground = NodePath("../Ground")
 
 [node name="DayNightTint" type="CanvasModulate" parent="."]

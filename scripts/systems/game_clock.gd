@@ -35,6 +35,14 @@ var debug_speed: float = 1.0
 ## has no penalty. TEMPORARY values.
 const SLEEP_START_HOUR := 20
 const WAKE_HOUR := 6
+
+## Night lights (lamps, windows) fade in between these hours in the evening
+## and fade out in the morning — roughly where DayNightTint gets dark/light.
+## TEMPORARY values, in hours (18.5 = 18:30).
+const LIGHTS_ON_START := 18.5
+const LIGHTS_ON_FULL := 20.0
+const LIGHTS_OFF_START := 5.0
+const LIGHTS_OFF_END := 6.5
 ## The hour a new game starts at.
 var start_hour: int = 6
 
@@ -84,6 +92,19 @@ func advance(days: float) -> void:
 	time_advanced.emit(days)
 	if int(minute_of_day) != old_minute or day != old_day:
 		minute_changed.emit(day, get_hour(), get_minute())
+
+
+## How "night" it is for lights: 0.0 = day (lights off), 1.0 = night (full),
+## in between while they fade in the evening / out in the morning.
+func get_night_amount() -> float:
+	var hour := minute_of_day / 60.0
+	if hour >= LIGHTS_ON_FULL or hour < LIGHTS_OFF_START:
+		return 1.0
+	if hour >= LIGHTS_ON_START:
+		return (hour - LIGHTS_ON_START) / (LIGHTS_ON_FULL - LIGHTS_ON_START)
+	if hour < LIGHTS_OFF_END:
+		return 1.0 - (hour - LIGHTS_OFF_START) / (LIGHTS_OFF_END - LIGHTS_OFF_START)
+	return 0.0
 
 
 ## Is it late enough to sleep (SLEEP_START_HOUR .. WAKE_HOUR, over midnight)?

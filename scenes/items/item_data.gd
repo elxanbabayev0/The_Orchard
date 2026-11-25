@@ -7,7 +7,7 @@ extends Resource
 
 ## Broad item groups (useful for sorting / filtering the inventory).
 ## New categories must be added at the END: .tres files store the number, not the name.
-enum Category { FRUIT, OTHER, SAPLING, CUTTING }
+enum Category { FRUIT, OTHER, SAPLING, CUTTING, PLACEABLE }
 
 ## Unique, never-changing name used in code and save files (e.g. &"gilas").
 @export var id: StringName = &""
@@ -39,3 +39,9 @@ enum Category { FRUIT, OTHER, SAPLING, CUTTING }
 ## (a cutting can also be grafted onto a common tree — see the propagation decision).
 ## Empty for other items.
 @export var grows_into: TreeData
+
+@export_group("Placing")
+## For PLACEABLE items (e.g. the path lantern): the scene put into the world
+## when the item is placed. Its root must use placed_prop.gd (PlacedProp), so
+## it can be saved and loaded. Empty for other items.
+@export var places: PackedScene

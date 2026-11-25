@@ -78,7 +78,7 @@ func _make_row(item: ItemData) -> HBoxContainer:
 
 	if _is_plantable(item):
 		var plant_button := Button.new()
-		plant_button.text = tr("UI_PLANT")
+		plant_button.text = tr("UI_PLACE") if item.places != null else tr("UI_PLANT")
 		plant_button.add_theme_font_size_override("font_size", FONT_SIZE)
 		plant_button.pressed.connect(func() -> void:
 			hide() # close the panel so the player can see where to plant
@@ -91,5 +91,7 @@ func _make_row(item: ItemData) -> HBoxContainer:
 
 ## Saplings and cuttings that grow into a tree can be planted.
 func _is_plantable(item: ItemData) -> bool:
+	if item.category == ItemData.Category.PLACEABLE:
+		return item.places != null # props: "Place" button
 	var kind_ok := item.category == ItemData.Category.SAPLING or item.category == ItemData.Category.CUTTING
 	return kind_ok and item.grows_into != null

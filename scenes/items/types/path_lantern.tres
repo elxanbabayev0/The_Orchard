@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scenes/items/item_data.gd" id="1_itemdata"]
+[ext_resource type="PackedScene" path="res://scenes/props/path_lantern.tscn" id="2_scene"]
+
+[sub_resource type="Gradient" id="Gradient_icon"]
+colors = PackedColorArray(1, 0.85, 0.45, 1, 0.25, 0.2, 0.18, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_icon"]
+gradient = SubResource("Gradient_icon")
+width = 48
+height = 48
+fill = 1
+fill_from = Vector2(0.5, 0.4)
+fill_to = Vector2(0.5, 1)
+
+[resource]
+script = ExtResource("1_itemdata")
+id = &"path_lantern"
+display_name = "ITEM_PATH_LANTERN"
+category = 4
+icon = SubResource("GradientTexture2D_icon")
+description = "ITEM_PATH_LANTERN_DESC"
+places = ExtResource("2_scene")

@@ -21,6 +21,14 @@ const MONEY_PER_XP := 10
 const XP_PER_PLANTED_SAPLING := 5
 ## XP needed to go from level L to L+1 = XP_PER_LEVEL_STEP × L (50, 100, 150...).
 const XP_PER_LEVEL_STEP := 50
+## Item gifts for reaching a level: level → [item id, amount] (decision: path
+## lanterns are earned through levels). TEMPORARY test values. Given only when
+## the level is really gained (add_xp), never again when a save is loaded.
+const LEVEL_ITEM_REWARDS := {
+	3: [&"path_lantern", 1],
+	5: [&"path_lantern", 1],
+	8: [&"path_lantern", 1],
+}
 
 ## Total XP ever earned.
 var xp: int = 0
@@ -74,7 +82,19 @@ func add_xp(amount: int) -> void:
 		invitations += 1
 		level_up.emit(level)
 		invitations_changed.emit(invitations)
+		_give_level_reward(level)
 	xp_changed.emit(xp, level)
+
+
+## The item gift for a level (if any) goes to the inventory; the "+1 Path
+## Lantern" pop-up comes from Inventory.item_added like every other item.
+func _give_level_reward(for_level: int) -> void:
+	if not LEVEL_ITEM_REWARDS.has(for_level):
+		return
+	var reward: Array = LEVEL_ITEM_REWARDS[for_level]
+	var item := Registry.get_item(reward[0])
+	if item != null:
+		Inventory.add_item(item, reward[1])
 
 
 # --- Level math --------------------------------------------------------------

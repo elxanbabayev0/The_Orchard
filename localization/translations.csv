@@ -84,6 +84,10 @@ UI_OONA_REMINDER,How is my task coming along?
 UI_OONA_REWARD,Well done! This is for you:
 UI_OONA_NEXT_TASK,And here is my next task:
 UI_OONA_NO_TASKS,"I have no more tasks for now. Thank you, dear."
+ITEM_PATH_LANTERN,Path Lantern
+ITEM_PATH_LANTERN_DESC,"A lantern on a post. Place it anywhere on the farm, and it lights up at night."
+UI_PLACE,Place
+UI_PLACEMENT_HINT_PROP,Left click: place   ·   Right click / Esc: cancel
 UI_SLEEP_QUESTION,It's getting late. Go to sleep until morning?
 UI_SLEEP_YES,Sleep
 UI_SLEEP_TOO_EARLY,It's too early to sleep. You can rest from %02d:00.

@@ -21,6 +21,7 @@ const TREES_PATH := "Entities/Trees"
 ## Where the family members standing on the farm live (scenes/world/family_members.gd).
 const FAMILY_PATH := "Entities/Family"
 const PLAYER_PATH := "Entities/Player"
+const PROPS_PATH := "Entities/Props"
 const FRUIT_TREE_SCENE := preload("res://scenes/trees/fruit_tree.tscn")
 
 
@@ -115,6 +116,13 @@ func save_game(slot: String = "") -> bool:
 		"oona": OonaVisits.get_save_data(),
 		"trees": trees,
 	}
+	var props_container := _get_world_node(PROPS_PATH)
+	if props_container != null:
+		var props := []
+		for prop in props_container.get_children():
+			if prop is PlacedProp:
+				props.append(prop.get_save_data())
+		data["props"] = props
 	var player := _get_world_node(PLAYER_PATH)
 	if player != null:
 		data["player"] = player.get_save_data()
@@ -167,6 +175,9 @@ func load_game(slot: String = "") -> bool:
 	Quests.load_save_data(data.get("quests", {}))
 	OonaVisits.load_save_data(data.get("oona", {}))
 	_load_trees(trees_container, data.get("trees", []))
+	var props_container := _get_world_node(PROPS_PATH)
+	if props_container != null:
+		_load_props(props_container, data.get("props", [])) # older saves: no props
 	var player := _get_world_node(PLAYER_PATH)
 	if player != null:
 		player.load_save_data(data.get("player", {}))
@@ -193,6 +204,26 @@ func _load_trees(container: Node, saved_trees: Array) -> void:
 		container.add_child(tree)
 		tree.load_save_data(saved) # after add_child: needs its child nodes
 		tree.name = "%s_%d" % [String(tree_type.id).capitalize(), container.get_child_count()]
+
+
+## Replaces every placed prop in the world with the saved ones. Each is rebuilt
+## from its item's `places` scene; unknown items are skipped.
+func _load_props(container: Node, saved_props: Array) -> void:
+	for old_prop in container.get_children():
+		container.remove_child(old_prop)
+		old_prop.queue_free()
+	for saved in saved_props:
+		if not saved is Dictionary:
+			continue
+		var item := Registry.get_item(StringName(str(saved.get("item", ""))))
+		if item == null or item.places == null:
+			continue
+		var prop := item.places.instantiate() as PlacedProp
+		if prop == null:
+			continue # the scene's root is not a PlacedProp
+		prop.item = item
+		prop.position = container.to_local(Vector2(float(saved.get("x", 0)), float(saved.get("y", 0))))
+		container.add_child(prop)
 
 
 ## Converts an old save to the current layout. Nothing to do yet (only version 1 exists).
