@@ -531,3 +531,16 @@ Add new decisions here in this format:
 - **Status:** Confirmed (waiting for the new picture in `art/`). **Tool built 2026-11-26:** `tools/make_tree_sprites.gd` — `cut <picture> <ids in reading order> [height in art px, default 88]` (background = corner colour, flood fill; the N biggest pieces in reading order; one scale for all trees; fruit = crown pixels that are not leaf / wood / outline, grown by their dark rim; writes `scenes/trees/sprites/<id>_<stage>.png` at 2× and `_preview.png`), then `--import`, then `apply <ids>` (sets the 5 stage textures in each `TreeData` and saves it, other fields kept). Tested end-to-end on the old `art/agaclar.jfif` with its grass removed (test sprites were deleted again). Ids for the planned picture: `gilas,alca,visne,albali,tut,golden_gilas,snow_tut,midnight_albali,frost_visne`.
 - **Affected systems:** `TreeData` textures of all 9 tree types, a new cutting / stage tool in `tools/`, `FruitTree` sprite size and collision (real art size), `PlacementMode` ghost (uses `sapling_texture`)
 - **Notes:** Exact tree size on screen is not decided yet (suggestion from the tile decision: about 2 tiles wide × 3 tiles tall).
+
+---
+
+- **Date:** 2026-11-26
+- **Topic:** Family members' looks and ages
+- **Decision:** Ages: **Rosa** about 75; her children **Sofia, Henrik, Yuki** 45–50; the **grandchildren** 16–25 (the player's own age group). Looks (pixel art, made with Gemini as 4-view sheets in the style of the player's test sprite, one picture per character, saved as `art/family_<id>.jfif`):
+  - **Rosa:** white hair in a bun, glasses, purple-grey cardigan, apron
+  - **Sofia** (Mediterranean, trade): curly dark-brown hair, terracotta dress, neck scarf, market basket · **Elio:** short curly hair, olive shirt, waistcoat · **Elias:** wavy hair, white shirt, red neckerchief · **Elena:** long braid, yellow summer dress, shoulder bag · **Eloy:** youngest, cap, dark-red shirt
+  - **Henrik** (Scandinavian, gardening): blond beard, blue work overalls, spade · **Freya:** light-blond braids, sky-blue jacket, flower pot · **Nils:** golden hair, grey-blue sweater, basket · **Astrid:** almost white-blond hair, pink beanie, basket of yellow plums
+  - **Yuki** (Japanese, movement / planting): black hair in a bun, indigo work clothes, straw hat · **Kenji:** short black hair, dark-blue vest, mulberry basket · **Hana:** black bob, pink jacket, sapling pot · **Aiko:** long black hair, lilac shirt, notebook
+- **Status:** Confirmed (pictures to be made by the user)
+- **Affected systems:** `CharacterData` textures (front / back / left / right) of the 14 family members via `tools/cut_character_sheet.gd`, invitation cards, active character HUD, family members on the farm
+- **Notes:** Personalities are still not decided. Rosa is not playable, but gets a sprite for later (background NPC).
