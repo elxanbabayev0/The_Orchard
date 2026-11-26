@@ -520,3 +520,14 @@ Add new decisions here in this format:
 - **Affected systems:** `GameClock.get_night_amount()`, `NightLight` / `NightGlow`, `RosaHouse`, `ItemData` (`PLACEABLE`, `places`), `PlacedProp`, `PlacementMode` (props), `InventoryPanel` ("Place"), `SaveManager` (`props`), `Progression` (`LEVEL_ITEM_REWARDS`), translation keys
 - **Fireflies (confirmed 2026-11-26):** a few fly around the player everywhere at night, and a small swarm gathers at every Path Lantern (atmosphere only). **Crickets are postponed** until sound and music are decided as a whole (no sound files exist yet). Built 2026-11-26.
 - **Notes:** Buying lanterns from Bruno after a level was not chosen (level-unlocked shop items are Hay Day's model). Picking up / moving a placed lantern is a later topic (trees cannot be moved either). Built 2026-11-26.
+
+---
+
+- **Date:** 2026-11-26
+- **Topic:** Tree art: AI pixel-art trees, growth stages derived from the ripe tree
+- **Decision:**
+  1. **Source:** the user makes the tree art with Gemini in the style of `art/agaclar.jfif` (first try: 8 ripe trees on grass — the grass background could not be removed cleanly, leaf highlights are too close to the grass colour). The new picture is **9 ripe trees on a plain white background**, 3×3 grid, in this order: row 1 Sweet Cherry, Cherry Plum, Sour Cherry · row 2 Morello Cherry, Mulberry, Golden Sweet Cherry · row 3 Snow Mulberry, Midnight Morello, Frost Cherry.
+  2. **Stages:** only the RIPE tree is drawn; the other stages are **made from it by a tool**: UNRIPE = fruit recoloured green, FLOWERING = fruit turned into white / pink blossoms, YOUNG = the tree without fruit, a bit smaller; SAPLING = the small saplings from the art.
+- **Status:** Confirmed (waiting for the new picture in `art/`). **Tool built 2026-11-26:** `tools/make_tree_sprites.gd` — `cut <picture> <ids in reading order> [height in art px, default 88]` (background = corner colour, flood fill; the N biggest pieces in reading order; one scale for all trees; fruit = crown pixels that are not leaf / wood / outline, grown by their dark rim; writes `scenes/trees/sprites/<id>_<stage>.png` at 2× and `_preview.png`), then `--import`, then `apply <ids>` (sets the 5 stage textures in each `TreeData` and saves it, other fields kept). Tested end-to-end on the old `art/agaclar.jfif` with its grass removed (test sprites were deleted again). Ids for the planned picture: `gilas,alca,visne,albali,tut,golden_gilas,snow_tut,midnight_albali,frost_visne`.
+- **Affected systems:** `TreeData` textures of all 9 tree types, a new cutting / stage tool in `tools/`, `FruitTree` sprite size and collision (real art size), `PlacementMode` ghost (uses `sapling_texture`)
+- **Notes:** Exact tree size on screen is not decided yet (suggestion from the tile decision: about 2 tiles wide × 3 tiles tall).
