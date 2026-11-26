@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c6x5hphljsyvw" path="res://scenes/player/player.gd" id="1_8afob"]
 [ext_resource type="Script" path="res://scenes/characters/walk_bob.gd" id="2_walkbob"]
 [ext_resource type="PackedScene" path="res://scenes/characters/footstep_effects.tscn" id="3_footsteps"]
+[ext_resource type="PackedScene" path="res://scenes/world/effects/fireflies.tscn" id="4_fireflies"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dovo2"]
 size = Vector2(40, 20)
@@ -53,3 +54,6 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
+
+[node name="Fireflies" parent="." instance=ExtResource("4_fireflies")]
+position = Vector2(0, -40)

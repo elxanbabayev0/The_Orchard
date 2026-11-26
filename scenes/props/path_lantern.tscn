@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scenes/world/lights/night_glow.gd" id="2_glow"]
 [ext_resource type="Script" path="res://scenes/world/lights/night_light.gd" id="3_light"]
 [ext_resource type="Texture2D" path="res://scenes/world/lights/light_glow.tres" id="4_glowtex"]
+[ext_resource type="PackedScene" path="res://scenes/world/effects/fireflies.tscn" id="5_fireflies"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
 size = Vector2(24, 16)
@@ -43,3 +44,12 @@ texture = ExtResource("4_glowtex")
 texture_scale = 1.4
 script = ExtResource("3_light")
 max_energy = 1.0
+
+[node name="Fireflies" parent="." instance=ExtResource("5_fireflies")]
+position = Vector2(0, -84)
+amount = 6
+lifetime = 4.0
+emission_shape = 1
+emission_sphere_radius = 48.0
+initial_velocity_min = 3.0
+initial_velocity_max = 8.0
