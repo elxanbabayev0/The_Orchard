@@ -8,6 +8,9 @@ UI_OWNED,You have: %d
 UI_SELL,Sell
 UI_CLOSE,Close
 UI_MERCHANT_NOTHING_TO_TRADE,This merchant has nothing to trade.
+UI_MERCHANT_CLOSED,%s's stall is closed. Open %02d:00–%02d:00.
+UI_FRESH_SUFFIX," (%d fresh)"
+UI_FRESH_PRICE_SUFFIX," (fresh %d)"
 UI_TRADE_SELL_HEADER,Sell to %s
 UI_TRADE_BUY_HEADER,Buy from %s
 UI_BUY,Buy

@@ -64,13 +64,19 @@ func _refresh() -> void:
 		child.queue_free()
 	if _merchant == null:
 		return
-	var has_sell := not _merchant.buys.is_empty()
-	var has_buy := not _merchant.sells.is_empty()
+	# Closed stall (night): only a message, no trading.
+	var is_open := _merchant.is_open()
+	var has_sell := is_open and not _merchant.buys.is_empty()
+	var has_buy := is_open and not _merchant.sells.is_empty()
 	sell_header.visible = has_sell
 	sell_rows.visible = has_sell
 	buy_header.visible = has_buy
 	buy_rows.visible = has_buy
 	empty_label.visible = not has_sell and not has_buy
+	if not is_open:
+		empty_label.text = tr("UI_MERCHANT_CLOSED") % [_merchant.display_name, _merchant.open_hour, _merchant.close_hour]
+		return
+	empty_label.text = "UI_MERCHANT_NOTHING_TO_TRADE"
 	sell_header.text = tr("UI_TRADE_SELL_HEADER") % _merchant.display_name
 	buy_header.text = tr("UI_TRADE_BUY_HEADER") % _merchant.display_name
 	for item in _merchant.buys:
@@ -83,8 +89,15 @@ func _refresh() -> void:
 func _make_sell_row(item: ItemData) -> HBoxContainer:
 	var owned := Inventory.get_count(item)
 	var row := _make_row_start(item)
-	row.add_child(_make_label(tr("UI_PRICE") % Market.get_price(item)))
-	row.add_child(_make_label(tr("UI_OWNED") % owned))
+	var fresh := Inventory.get_fresh_count(item)
+	# With fresh fruit: "Price: 10 (fresh 12)" and "You have: 7 (3 fresh)".
+	var price_text := tr("UI_PRICE") % Market.get_price(item)
+	var owned_text := tr("UI_OWNED") % owned
+	if fresh > 0:
+		price_text += tr("UI_FRESH_PRICE_SUFFIX") % Market.get_fresh_price(item)
+		owned_text += tr("UI_FRESH_SUFFIX") % fresh
+	row.add_child(_make_label(price_text))
+	row.add_child(_make_label(owned_text))
 	# Limited to what the player owns; defaults to selling everything.
 	var amount_box := _make_amount_box(owned, owned)
 	row.add_child(amount_box)

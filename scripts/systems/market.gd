@@ -22,6 +22,16 @@ const MIN_SALES_FACTOR := 0.5
 ## How many units of saturation disappear per game day (prices recover).
 const RECOVERY_PER_DAY := 25.0
 
+## Fresh fruit (decision "Day / night rework"): fruit harvested from
+## FRESH_PICK_START_HOUR until FRESH_PICK_END_HOUR is fresh, stays fresh until
+## FRESH_UNTIL_HOUR the same day and sells FRESH_PRICE_BONUS higher.
+## Bruno opens at 08:00, so there is a short morning window to sell it.
+## TEMPORARY test values.
+const FRESH_PICK_START_HOUR := 5
+const FRESH_PICK_END_HOUR := 9
+const FRESH_UNTIL_HOUR := 12
+const FRESH_PRICE_BONUS := 0.2
+
 ## id -> today's random factor
 var _daily_factor: Dictionary[StringName, float] = {}
 ## id -> how many units were sold "recently" (fades over time)
@@ -34,20 +44,35 @@ func _ready() -> void:
 	_rng.randomize()
 	GameClock.day_changed.connect(_on_day_changed)
 	GameClock.time_advanced.connect(_on_time_advanced)
+	GameClock.minute_changed.connect(_on_minute_changed)
 
 
-## Price of ONE unit right now. 0 = this item cannot be sold.
+## Price of ONE normal unit right now. 0 = this item cannot be sold.
 func get_price(item: ItemData) -> int:
 	return _unit_price(item, _get_saturation(item))
 
 
+## Price of ONE fresh unit right now (FRESH_PRICE_BONUS higher).
+func get_fresh_price(item: ItemData) -> int:
+	return _unit_price(item, _get_saturation(item), true)
+
+
+## Is fruit harvested right now fresh? (FruitTree.harvest asks this.)
+func is_fresh_picking_time() -> bool:
+	var hour := GameClock.get_hour()
+	return hour >= FRESH_PICK_START_HOUR and hour < FRESH_PICK_END_HOUR
+
+
 ## Total money for selling `amount` units now. Each unit is a bit cheaper
-## than the one before, because every sold unit adds saturation.
+## than the one before, because every sold unit adds saturation. The fresh
+## units in the Inventory are sold first (like Inventory.remove_item) and
+## each of them is worth FRESH_PRICE_BONUS more.
 func get_sell_total(item: ItemData, amount: int) -> int:
 	var total := 0
 	var saturation := _get_saturation(item)
+	var fresh := Inventory.get_fresh_count(item)
 	for i in amount:
-		total += _unit_price(item, saturation + i * _saturation_per_unit(item))
+		total += _unit_price(item, saturation + i * _saturation_per_unit(item), i < fresh)
 	return total
 
 
@@ -100,14 +125,22 @@ func get_daily_factor(item: ItemData) -> float:
 	return _daily_factor[item.id]
 
 
-func _unit_price(item: ItemData, saturation: float) -> int:
+func _unit_price(item: ItemData, saturation: float, fresh: bool = false) -> int:
 	if item == null or item.base_price <= 0:
 		return 0
 	var sales_factor := maxf(MIN_SALES_FACTOR, 1.0 - saturation * DROP_PER_UNIT)
 	# Skill: better sell price (all fruit, or one fruit specialty).
 	var skill_factor := 1.0 + Characters.get_bonus(SkillData.Effect.SELL_PRICE, item)
-	var price := item.base_price * get_daily_factor(item) * sales_factor * skill_factor
+	var fresh_factor := 1.0 + FRESH_PRICE_BONUS if fresh else 1.0
+	var price := item.base_price * get_daily_factor(item) * sales_factor * skill_factor * fresh_factor
 	return maxi(1, roundi(price))
+
+
+## When freshness ends (FRESH_UNTIL_HOUR), all fresh fruit becomes normal.
+## minute_changed also fires after a big jump (sleeping), so it is never missed.
+func _on_minute_changed(_day: int, hour: int, _minute: int) -> void:
+	if hour >= FRESH_UNTIL_HOUR:
+		Inventory.clear_fresh()
 
 
 ## How much one sold unit lowers the price: the item's own factor (e.g. Midnight

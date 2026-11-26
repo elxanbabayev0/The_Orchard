@@ -155,7 +155,8 @@ func harvest() -> int:
 	stage_time = 0.0
 	_set_stage(Stage.FLOWERING)
 	if data.fruit != null:
-		Inventory.add_item(data.fruit, amount)
+		# Picked early in the morning = fresh (sells higher until noon; see Market).
+		Inventory.add_item(data.fruit, amount, Market.is_fresh_picking_time())
 		GameEvents.fruit_harvested.emit(data.fruit, amount) # XP, Oona's tasks...
 	# The signal stays for things like sounds or effects later.
 	harvested.emit(data.fruit, amount)

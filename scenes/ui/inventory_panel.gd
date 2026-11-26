@@ -73,6 +73,9 @@ func _make_row(item: ItemData) -> HBoxContainer:
 
 	var amount_label := Label.new()
 	amount_label.text = "× %d" % Inventory.get_count(item)
+	var fresh := Inventory.get_fresh_count(item)
+	if fresh > 0: # fruit picked this morning (sells higher until noon)
+		amount_label.text += tr("UI_FRESH_SUFFIX") % fresh
 	amount_label.add_theme_font_size_override("font_size", FONT_SIZE)
 	row.add_child(amount_label)
 
