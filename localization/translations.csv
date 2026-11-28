@@ -87,10 +87,29 @@ UI_OONA_REMINDER,How is my task coming along?
 UI_OONA_REWARD,Well done! This is for you:
 UI_OONA_NEXT_TASK,And here is my next task:
 UI_OONA_NO_TASKS,"I have no more tasks for now. Thank you, dear."
+ITEM_GILAS_JAM,Sweet Cherry Jam
+ITEM_ALCA_JAM,Cherry Plum Jam
+ITEM_VISNE_JAM,Sour Cherry Jam
+ITEM_TUT_JAM,Mulberry Jam
+ITEM_ALBALI_JAM,Morello Cherry Jam
+ITEM_GOLDEN_GILAS_JAM,Golden Sweet Cherry Jam
+ITEM_SNOW_TUT_JAM,Snow Mulberry Jam
+ITEM_MIDNIGHT_ALBALI_JAM,Midnight Morello Jam
+ITEM_FROST_VISNE_JAM,Frost Cherry Jam
+ITEM_JAM_DESC,A jar of jam made with Rosa's old recipe.
 ITEM_PATH_LANTERN,Path Lantern
 ITEM_PATH_LANTERN_DESC,"A lantern on a post. Place it anywhere on the farm, and it lights up at night."
 UI_PLACE,Place
 UI_PLACEMENT_HINT_PROP,Left click: place   ·   Right click / Esc: cancel
+UI_HOUSE_TITLE,Rosa's House
+UI_HOUSE_SLEEP,Sleep
+UI_HOUSE_KITCHEN,Kitchen
+UI_KITCHEN_TITLE,Rosa's Kitchen
+UI_KITCHEN_HINT,Jam sets overnight: start a pot today and the jar is ready tomorrow morning.
+UI_KITCHEN_POTS,Pots in use: %d / %d
+UI_KITCHEN_COOKING,%s — ready at %02d:00
+UI_KITCHEN_NEEDS,%d × %s
+UI_KITCHEN_COOK,Cook
 UI_SLEEP_QUESTION,It's getting late. Go to sleep until morning?
 UI_SLEEP_YES,Sleep
 UI_SLEEP_TOO_EARLY,It's too early to sleep. You can rest from %02d:00.

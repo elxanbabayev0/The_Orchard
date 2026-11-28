@@ -41,6 +41,17 @@
 [ext_resource type="Resource" path="res://scenes/items/types/frost_visne.tres" id="39_frostvisne"]
 [ext_resource type="PackedScene" path="res://scenes/buildings/rosa_house.tscn" id="40_rosahouse"]
 [ext_resource type="PackedScene" path="res://scenes/ui/sleep_prompt.tscn" id="41_sleepprompt"]
+[ext_resource type="Resource" path="res://scenes/items/types/gilas_jam.tres" id="42_gilasjam"]
+[ext_resource type="Resource" path="res://scenes/items/types/alca_jam.tres" id="43_alcajam"]
+[ext_resource type="Resource" path="res://scenes/items/types/visne_jam.tres" id="44_visnejam"]
+[ext_resource type="Resource" path="res://scenes/items/types/tut_jam.tres" id="45_tutjam"]
+[ext_resource type="Resource" path="res://scenes/items/types/albali_jam.tres" id="46_albalijam"]
+[ext_resource type="Resource" path="res://scenes/items/types/golden_gilas_jam.tres" id="47_goldengilasjam"]
+[ext_resource type="Resource" path="res://scenes/items/types/snow_tut_jam.tres" id="48_snowtutjam"]
+[ext_resource type="Resource" path="res://scenes/items/types/midnight_albali_jam.tres" id="49_midnightalbalijam"]
+[ext_resource type="Resource" path="res://scenes/items/types/frost_visne_jam.tres" id="50_frostvisnejam"]
+[ext_resource type="PackedScene" path="res://scenes/ui/house_menu.tscn" id="51_housemenu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/kitchen_window.tscn" id="52_kitchenwindow"]
 
 [sub_resource type="Gradient" id="Gradient_daynight"]
 offsets = PackedFloat32Array(0, 0.2, 0.25, 0.3, 0.72, 0.78, 0.86, 1)
@@ -119,7 +130,7 @@ y_sort_enabled = true
 
 [node name="Bruno" parent="Entities/NPCs" instance=ExtResource("9_merchant")]
 position = Vector2(-288, -64)
-buys = Array[Resource]([ExtResource("10_gilasitem"), ExtResource("13_alcaitem"), ExtResource("15_visneitem"), ExtResource("17_tutitem"), ExtResource("19_albaliitem"), ExtResource("35_goldengilas"), ExtResource("36_snowtut"), ExtResource("37_midnightalbali"), ExtResource("39_frostvisne")])
+buys = Array[Resource]([ExtResource("10_gilasitem"), ExtResource("13_alcaitem"), ExtResource("15_visneitem"), ExtResource("17_tutitem"), ExtResource("19_albaliitem"), ExtResource("35_goldengilas"), ExtResource("36_snowtut"), ExtResource("37_midnightalbali"), ExtResource("39_frostvisne"), ExtResource("42_gilasjam"), ExtResource("43_alcajam"), ExtResource("44_visnejam"), ExtResource("45_tutjam"), ExtResource("46_albalijam"), ExtResource("47_goldengilasjam"), ExtResource("48_snowtutjam"), ExtResource("49_midnightalbalijam"), ExtResource("50_frostvisnejam")])
 sells = Array[Resource]([ExtResource("20_gilassapling"), ExtResource("21_alcasapling"), ExtResource("22_visnesapling"), ExtResource("23_tutsapling"), ExtResource("24_albalisapling")])
 
 [node name="Family" type="Node2D" parent="Entities" node_paths=PackedStringArray("player", "ground")]
@@ -185,10 +196,16 @@ script = ExtResource("4_clocklabel")
 
 [node name="TreeActionMenu" parent="UI" instance=ExtResource("38_treemenu")]
 
+[node name="HouseMenu" parent="UI" instance=ExtResource("51_housemenu")]
+
+[node name="KitchenWindow" parent="UI" instance=ExtResource("52_kitchenwindow")]
+
 [node name="SleepPrompt" parent="UI" instance=ExtResource("41_sleepprompt")]
 
 [connection signal="trade_requested" from="Entities/NPCs/Bruno" to="UI/TradeWindow" method="open"]
 [connection signal="plant_requested" from="UI/InventoryPanel" to="PlacementMode" method="start"]
 [connection signal="invite_requested" from="UI/LevelDisplay" to="UI/InvitationWindow" method="open"]
 [connection signal="talked" from="Entities/NPCs/Oona" to="UI/OonaDialog" method="open"]
-[connection signal="sleep_requested" from="Entities/Buildings/RosaHouse" to="UI/SleepPrompt" method="open"]
+[connection signal="menu_requested" from="Entities/Buildings/RosaHouse" to="UI/HouseMenu" method="open"]
+[connection signal="sleep_chosen" from="UI/HouseMenu" to="UI/SleepPrompt" method="open"]
+[connection signal="kitchen_chosen" from="UI/HouseMenu" to="UI/KitchenWindow" method="open"]

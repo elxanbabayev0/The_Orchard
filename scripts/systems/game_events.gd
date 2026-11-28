@@ -34,3 +34,8 @@ signal cutting_taken(cutting: ItemData, tree: Node2D)
 ## NOT the active-character refresh after loading a save).
 @warning_ignore("unused_signal")
 signal character_switched(character: CharacterData)
+
+## The kitchen finished `amount` × `item` (e.g. a jar of jam) — for future
+## tasks, sounds or achievements.
+@warning_ignore("unused_signal")
+signal item_produced(item: ItemData, amount: int)

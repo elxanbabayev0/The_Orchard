@@ -82,6 +82,7 @@ func _reset_systems() -> void:
 	Characters.load_save_data({})
 	Quests.load_save_data({})
 	OonaVisits.load_save_data({})
+	Kitchen.load_save_data({})
 
 
 func has_save(slot: String = DEFAULT_SLOT) -> bool:
@@ -114,6 +115,7 @@ func save_game(slot: String = "") -> bool:
 		"characters": Characters.get_save_data(),
 		"quests": Quests.get_save_data(),
 		"oona": OonaVisits.get_save_data(),
+		"kitchen": Kitchen.get_save_data(),
 		"trees": trees,
 	}
 	var props_container := _get_world_node(PROPS_PATH)
@@ -174,6 +176,7 @@ func load_game(slot: String = "") -> bool:
 	Characters.load_save_data(data.get("characters", {}))
 	Quests.load_save_data(data.get("quests", {}))
 	OonaVisits.load_save_data(data.get("oona", {}))
+	Kitchen.load_save_data(data.get("kitchen", {})) # older saves: empty pots
 	_load_trees(trees_container, data.get("trees", []))
 	var props_container := _get_world_node(PROPS_PATH)
 	if props_container != null:

@@ -7,7 +7,7 @@ extends Resource
 
 ## Broad item groups (useful for sorting / filtering the inventory).
 ## New categories must be added at the END: .tres files store the number, not the name.
-enum Category { FRUIT, OTHER, SAPLING, CUTTING, PLACEABLE }
+enum Category { FRUIT, OTHER, SAPLING, CUTTING, PLACEABLE, PRODUCT }
 
 ## Unique, never-changing name used in code and save files (e.g. &"gilas").
 @export var id: StringName = &""

@@ -12,6 +12,7 @@ const CHARACTER_FOLDER := "res://scenes/characters/types/"
 const QUEST_FOLDER := "res://scenes/quests/types/"
 const QUEST_TEMPLATE_FOLDER := "res://scenes/quests/templates/"
 const CHAPTER_FOLDER := "res://scenes/quests/chapters/"
+const RECIPE_FOLDER := "res://scenes/kitchen/recipes/"
 
 ## id -> ItemData
 var _items: Dictionary[StringName, ItemData] = {}
@@ -29,6 +30,8 @@ var _chapters: Array[ChapterData] = []
 ## Built from the cuttings' `grows_into`, because a TreeData cannot point to its
 ## cutting directly (tree -> cutting -> tree would be a circular resource reference).
 var _cuttings: Dictionary[StringName, ItemData] = {}
+## id -> RecipeData (Rosa's kitchen)
+var _recipes: Dictionary[StringName, RecipeData] = {}
 
 
 func _ready() -> void:
@@ -51,6 +54,9 @@ func _ready() -> void:
 		if resource is ChapterData:
 			_chapters.append(resource)
 	_chapters.sort_custom(func(a: ChapterData, b: ChapterData) -> bool: return a.number < b.number)
+	for resource in _load_folder(RECIPE_FOLDER):
+		if resource is RecipeData:
+			_add(_recipes, resource.id, resource)
 	for item in _items.values():
 		if item.category == ItemData.Category.CUTTING and item.grows_into != null:
 			_cuttings[item.grows_into.id] = item
@@ -61,6 +67,22 @@ func get_cutting_for(tree_type: TreeData) -> ItemData:
 	if tree_type == null:
 		return null
 	return _cuttings.get(tree_type.id, null)
+
+
+## Returns the recipe with this id, or null (with a warning) if there is none.
+func get_recipe(id: StringName) -> RecipeData:
+	if not _recipes.has(id):
+		push_warning("Registry: unknown recipe id '%s'." % id)
+		return null
+	return _recipes[id]
+
+
+## All kitchen recipes, sorted by their `order`.
+func get_all_recipes() -> Array[RecipeData]:
+	var result: Array[RecipeData] = []
+	result.assign(_recipes.values())
+	result.sort_custom(func(a: RecipeData, b: RecipeData) -> bool: return a.order < b.order)
+	return result
 
 
 ## Returns the quest with this id, or null (with a warning) if there is none.

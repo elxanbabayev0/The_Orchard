@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3]
+
+[ext_resource type="Script" path="res://scenes/kitchen/recipe_data.gd" id="1_recipe"]
+[ext_resource type="Resource" path="res://scenes/items/types/visne.tres" id="2_input"]
+[ext_resource type="Resource" path="res://scenes/items/types/visne_jam.tres" id="3_output"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = &"visne_jam"
+order = 3
+input = ExtResource("2_input")
+input_amount = 5
+output = ExtResource("3_output")
+output_amount = 1
